@@ -20,7 +20,26 @@ export default defineConfig({
 				{
 					name: 'player',
 					description: 'Link for players',
-					clientContext: {}
+					clientContext: {
+						mode: 'player'
+					}
+				},
+				{
+					name: 'presenter',
+					description: 'Link for presenters',
+					clientContext: {
+						mode: 'presenter',
+						playerCode: '$player'
+					}
+				},
+				{
+					name: 'host',
+					description: 'Link for hosts',
+					clientContext: {
+						mode: 'host',
+						playerCode: '$player',
+						presenterCode: '$presenter'
+					}
 				}
 			],
 			defaultProjectConfigPath: './default.config.yaml',
