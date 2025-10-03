@@ -9,7 +9,7 @@ import type { ClientContext } from '@/types';
  */
 export function generateLink(code: string, fallbackContext: ClientContext) {
 	if (kmEnv.dev) {
-		return `?key=${code}&context=${btoa(JSON.stringify(fallbackContext))}`;
+		return `${window.location.origin}?key=${code}&context=${btoa(JSON.stringify(fallbackContext))}`;
 	}
 
 	return `${window.location.origin}/${code}`;
