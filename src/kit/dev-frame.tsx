@@ -1,5 +1,6 @@
 import type { ClientContext } from '@/types';
 import { useCallback, useEffect, useRef, useState, type FC } from 'react';
+import { generateLink } from './generate-link';
 
 interface Props {
 	clientKey: string;
@@ -9,9 +10,7 @@ interface Props {
 const DevFrame: FC<Props> = ({ clientKey, context }) => {
 	const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
-	const [contextBase64, setContextBase64] = useState(
-		btoa(JSON.stringify(context))
-	);
+	const [link, setLink] = useState('');
 
 	const onMessage = useCallback(
 		(event: MessageEvent) => {
@@ -37,8 +36,9 @@ const DevFrame: FC<Props> = ({ clientKey, context }) => {
 	}, [onMessage]);
 
 	useEffect(() => {
-		setContextBase64(btoa(JSON.stringify(context)));
-	}, [context]);
+		// setContextBase64(btoa(JSON.stringify(context)));
+		setLink(generateLink(clientKey, context));
+	}, [clientKey, context]);
 
 	function clearStorage() {
 		iframeRef.current?.contentWindow?.postMessage('km:clearStorage', '*');
@@ -50,7 +50,7 @@ const DevFrame: FC<Props> = ({ clientKey, context }) => {
 				<div className="font-semibold">{clientKey}</div>
 
 				<a
-					href={`?key=${clientKey}&context=${contextBase64}`}
+					href={link}
 					className="hover:link"
 					target="_blank"
 					rel="noopener noreferrer"
@@ -66,7 +66,7 @@ const DevFrame: FC<Props> = ({ clientKey, context }) => {
 				ref={iframeRef}
 				className="h-full w-full"
 				title={clientKey}
-				src={`?key=${clientKey}&context=${contextBase64}`}
+				src={link}
 			/>
 		</div>
 	);

@@ -26,13 +26,13 @@ function Dev({ nPlayerWindows = 4 }: Props) {
 					clientKey="host"
 					context={{
 						mode: 'host',
-						playerCode: 'play',
-						presenterCode: 'present'
+						playerCode: 'player',
+						presenterCode: 'presenter'
 					}}
 				/>
 				<DevFrame
 					clientKey="presenter"
-					context={{ mode: 'presenter', playerCode: 'play' }}
+					context={{ mode: 'presenter', playerCode: 'player' }}
 				/>
 			</div>
 			<div className="grid grid-flow-col auto-rows-fr gap-0.5">
