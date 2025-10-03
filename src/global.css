@@ -1,0 +1,19 @@
+/* Font imports */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* Imports */
+@import 'tailwindcss';
+@plugin "@tailwindcss/typography";
+
+@import '@kokimoki/shared/styles.css';
+@import './daisyui.css';
+
+/* NOTE: Setup shared styles here */
+html,
+body {
+	@apply bg-base-200;
+}
+
+body {
+	font-family: 'Noto Sans', sans-serif;
+}
