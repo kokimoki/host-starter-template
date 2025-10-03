@@ -1,12 +1,12 @@
 import { kmClient } from '@/services/km-client';
 
 export interface PlayerState {
-	lobbyId: string | null;
+	name: string;
 	currentView: 'welcome-message' | 'connections' | 'shared-state';
 }
 
 const initialState: PlayerState = {
-	lobbyId: null,
+	name: '',
 	currentView: 'welcome-message'
 };
 

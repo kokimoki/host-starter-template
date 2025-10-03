@@ -1,23 +1,23 @@
+import useGlobalController from '@/hooks/useGlobalController';
+import OnlinePlayersView from '@/views/online-players-view';
 import * as React from 'react';
 import { config } from '../config';
 import useDocumentTitle from '../hooks/useDocumentTitle';
 
 const App: React.FC = () => {
+	const isGlobalController = useGlobalController();
 	const { title } = config;
-	// const { lobbyId, currentView } = useSnapshot(playerStore.proxy);
-
 	useDocumentTitle(title);
 
-	// React.useEffect(() => {
-	// 	const unsubscribe = devtools(playerStore.proxy, {
-	// 		name: 'player-store',
-	// 		enabled: kmEnv.dev
-	// 	});
-
-	// 	return () => unsubscribe?.();
-	// }, []);
-
-	return <div>this the presenter mode</div>;
+	return (
+		<div>
+			<p>
+				PRESENTER MODE -{' '}
+				{isGlobalController ? 'Global Controller' : 'Not Global Controller'}
+			</p>
+			<OnlinePlayersView />
+		</div>
+	);
 };
 
 export default App;

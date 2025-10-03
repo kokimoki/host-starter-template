@@ -1,23 +1,23 @@
+import useGlobalController from '@/hooks/useGlobalController';
+import GlobalSharedStateView from '@/views/global-shared-state-view';
 import * as React from 'react';
 import { config } from '../config';
 import useDocumentTitle from '../hooks/useDocumentTitle';
 
 const App: React.FC = () => {
+	const isGlobalController = useGlobalController();
 	const { title } = config;
-	// const { lobbyId, currentView } = useSnapshot(playerStore.proxy);
-
 	useDocumentTitle(title);
 
-	// React.useEffect(() => {
-	// 	const unsubscribe = devtools(playerStore.proxy, {
-	// 		name: 'player-store',
-	// 		enabled: kmEnv.dev
-	// 	});
-
-	// 	return () => unsubscribe?.();
-	// }, []);
-
-	return <div>this the host mode</div>;
+	return (
+		<div>
+			<p>
+				HOST MODE -{' '}
+				{isGlobalController ? 'Global Controller' : 'Not Global Controller'}
+			</p>
+			<GlobalSharedStateView />
+		</div>
+	);
 };
 
 export default App;

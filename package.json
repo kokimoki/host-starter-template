@@ -1,9 +1,9 @@
 {
-	"name": "@kokimoki/lobby-starter",
+	"name": "@kokimoki/host-starter",
 	"private": true,
-	"version": "1.0.1",
+	"version": "1.0.0",
 	"type": "module",
-	"description": "A starter template for building a lobby-based games using Kokimoki SDK",
+	"description": "A starter template for building a host-based games using Kokimoki SDK",
 	"scripts": {
 		"dev": "vite --clearScreen false",
 		"build": "tsc && vite build",

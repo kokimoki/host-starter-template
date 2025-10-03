@@ -37,15 +37,17 @@ welcomeMessageMd: |
   # Welcome!
   This is my awesome game.
 
-lobbyConnectionsMd: |
+globalConnectionsMd: |
   # Connections
-  Lobby connections example.
+  Global connections example.
 players: 'Players'
 sharedStateMd: |
   # Shared State
-  Lobby shared state example.
+  Global shared state example.
 timeElapsed: 'Time elapsed'
 buttonPresses: 'Button presses'
+startButton: 'Start Game'
+stopButton: 'Stop Game'
 incrementButton: 'Increment'
 decrementButton: 'Decrement'
 
@@ -55,18 +57,11 @@ share: 'Share:'
 copy: 'Copy'
 copied: 'Copied!'
 
-hostGameTitle: 'Host new game'
-hostButton: 'Host'
-host: "You're the host"
-
-joinGameTitle: 'Join existing game'
-joinInputPlaceholder: 'Enter code...'
-joinButton: 'Join'
-
-connecting: 'Connecting to lobby...'
-
 menuTitle: 'Menu'
 menuWelcomeMessage: 'Welcome Message'
 menuConnections: 'Connections'
 menuSharedState: 'Shared State'
-menuExitLobby: 'Exit Lobby'
+
+playerNameTitle: 'Enter Your Name'
+playerNamePlaceholder: 'Your name...'
+playerNameButton: 'Continue'

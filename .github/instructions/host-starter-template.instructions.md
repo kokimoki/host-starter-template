@@ -1,18 +1,17 @@
 ---
-description: 'Instruction for Lobby starter template structure and development using Kokimoki SDK'
+description: 'Instruction for host starter template structure and development using Kokimoki SDK'
 applyTo: '**'
 ---
 
-# Instructions for @kokimoki/lobby-starter
+# Instructions for @kokimoki/host-starter
 
 ## Project overview
 
-This project is based on a lobby starter template using [Kokimoki SDK](./kokimoki-sdk.instructions.md)
+This project is based on a host starter template using [Kokimoki SDK](./kokimoki-sdk.instructions.md)
 The template provides the following functionality:
 
-- Lobby management - create or join a [lobby](../../src/views/create-or-join-lobby.tsx)
-- Players in the same lobby can communicate in real time by using [lobbyStore](../../src/state/stores/lobby-store.ts)
-- Players in the same lobby can be aware of each others' presence using `lobbyAwareness` from [LobbyProvider](../../src/components/lobby/provider.tsx)
+- Players can communicate in real time by using [globalStore](../../src/state/stores/global-store.ts)
+- Players can be aware of each others' presence using [globalAwareness](../../src/state/stores/global-awareness.ts)
 - Each player has a local state that is not synced to the server [playerStore](../../src/state/stores/player-store.ts)
 
 ## Spec-driven development
@@ -29,12 +28,19 @@ The project is developed in a spec-driven manner
 - Follow React and TypeScript [best practices](./reactjs.instructions.md)
 - ALWAYS use [@kokimoki/shared](./kokimoki-shared.instructions.md) components FIRST if they exist before creating new UI components
 - Prefer [DaisyUI class names](./daisyui.instructions.md) for common UI components over writing custom CSS or Tailwind utility classes
-- Use [LobbyProvider](../../src/components/lobby/provider.tsx) for lobby state and awareness
 - IMPORTANT! Do not modify `src/kit/` directory
 - Use utility functions from `src/utils/`
 - Keep configuration files (`src/config/`, `vite.config.ts`, `tsconfig*.json`) up to date and consistent
 - For time-sensitive game logic, always use `kmClient.serverTimestamp()` instead of local timestamps to maintain synchronization between all players
 - Prefer `lucide-react` icons instead of custom SVGs
+
+## Modes
+
+The app has three modes: host, player, and presenter. The mode is provided by the server and can be accessed using `kmClient.clientContext.mode`. Based on the mode, one of the following files is used as the root component:
+
+- Host mode: [app.host.tsx](../../src/modes/app.host.tsx)
+- Player mode: [app.player.tsx](../../src/modes/app.player.tsx)
+- Presenter mode: [app.presenter.tsx](../../src/modes/app.presenter.tsx)
 
 ## Game state management
 
@@ -57,70 +63,70 @@ await kmClient.transact([playerStore], ([playerState]) => {
 const playerState = useSnapshot(playerStore.proxy);
 ```
 
-### Lobby Store
+### Global Store
 
-- The [lobbyStore](../../src/state/stores/lobby-store.ts) contains data shared among all players in a lobby
-- The lobby store instance itself is created by [lobby/provider.tsx](../../src/components/lobby/provider.tsx)
-- The lobby state actions should be defined in [lobby-actions.ts](../../src/state/actions/lobby-actions.ts)
+- The [globalStore](../../src/state/stores/global-store.ts) contains data shared among all players in the game
+- The global state actions should be defined in [global-actions.ts](../../src/state/actions/global-actions.ts)
 
 #### Example
 
 ```typescript
-// Update lobby state
-await kmClient.transact([lobbyStore], ([lobbyState]) => {
-	lobbyState.name = 'My Lobby';
+// Update global state
+await kmClient.transact([globalStore], ([globalState]) => {
+	globalState.someValue = 'new-value';
 });
 
-// Get reactive snapshot of lobby state in a React component
-const { lobbyConnected, lobbyAwareness, lobbyStore } = useLobbyContext();
-const lobbyState = useSnapshot(lobbyStore.proxy);
+// Get reactive snapshot of global state in a React component
+const globalState = useSnapshot(globalStore.proxy);
 ```
 
 ### Client ID
 
 - Each player has a unique `clientId` accessible as `kmClient.id`
 - The `clientId` is persistent across sessions
-- Use `clientId` to identify players in the lobby store
+- Use `clientId` to identify players in the global store
 
 #### Example
 
-Modify data by player in the lobby store
+Modify data by player in the global store
 
 ```typescript
-interface LobbyStore {
+interface GlobalStore {
 	players: Record<
 		string, // clientId
 		{ score: number }
 	>;
 }
 
-// Update player score in the lobby store
-await kmClient.transact([lobbyStore], ([lobbyState]) => {
-	if (!lobbyState.players[kmClient.id]) {
-		lobbyState.players[kmClient.id] = { score: 0 };
+// Update player score in the global store
+await kmClient.transact([globalStore], ([globalState]) => {
+	if (!globalState.players[kmClient.id]) {
+		globalState.players[kmClient.id] = { score: 0 };
 	}
-	lobbyState.players[kmClient.id].score += 1;
+	globalState.players[kmClient.id].score += 1;
 });
 ```
 
 ### Combining Stores
 
-- Prefer to update stores (`playerStore`, `lobbyStore`) in a single transaction
-- Create such actions in [lobby-actions.ts](../../src/state/actions/lobby-actions.ts)
+- Prefer to update stores (`playerStore`, `globalStore`) in a single transaction
+- Create such actions in [global-actions.ts](../../src/state/actions/global-actions.ts)
 
-### Lobby Awareness
+### Global Awareness
 
-- Use `lobbyAwareness` from [LobbyProvider](../../src/components/lobby/provider.tsx) to track players connected to the lobby
-- ALWAYS when working with lobby connections, group by `clientId` because each player can open multiple tabs
-- Use `Object.entries(lobbyClients).length` for the number of unique players.
+- Use [globalAwareness](../../src/state/stores/global-awareness.ts) to track players connected to the global state
+- ALWAYS when working with global connections, group by `clientId` because each player can open multiple tabs
+- Use `Object.entries(globalClients).length` for the number of unique players.
 
 #### Example
 
 ```typescript
-const { lobbyConnected, lobbyAwareness, lobbyStore } = useLobbyContext();
-const lobbyConnections = useSnapshot(lobbyAwareness.proxy);
-const lobbyClients = Object.values(lobbyConnections).reduce<
-	Record<string, { lastPing: number; clientId: string }>
+const globalConnections = useSnapshot(globalAwareness.proxy);
+const globalClients = Object.values(globalConnections).reduce<
+	Record<
+		string,
+		{ lastPing: number; clientId: string; data: GlobalAwarenessData }
+	>
 >((acc, connection) => {
 	if (!acc[connection.clientId]) {
 		acc[connection.clientId] = connection;
@@ -131,12 +137,13 @@ const lobbyClients = Object.values(lobbyConnections).reduce<
 
 ## Using timers
 
-- Store `kmClient.serverTimestamp()` in the lobby store to create a timestamp accessible to all players
-- Use [useServerTimer.ts](../../src/hooks/useServerTime.ts) to create timers that are synced across all players in a lobby
+- Store `kmClient.serverTimestamp()` in the global store to create a timestamp accessible to all players
+- Use [useServerTimer.ts](../../src/hooks/useServerTime.ts) to create timers that are synced across all players
 
 ## Configuration
 
 - For parameters that should be configurable, use the [schema.ts](../../src/config/schema.ts) and `zod/v4` to manage a configuration
+- Run `npm run build` after modifying the schema to generate the yaml schema specification
 - ALWAYS provide default values for all parameters
 - Actual default configuration should be in [default.config.yaml](../../default.config.yaml) following the schema
 - Check existing configuration before adding new values to `schema.ts`
@@ -145,7 +152,7 @@ const lobbyClients = Object.values(lobbyConnections).reduce<
 - Use `Md` suffix (e.g. `welcomeMessageMd`) for fields containing Markdown
 - Render Markdown using `react-markdown` with `prose` class from Tailwind CSS
 
-## Host controller
+## Global controller
 
-- The [useHostController.ts](../../src/hooks/useHostController.ts) ALWAYS maintains a single connection that is the host
-- This connection can run logic that would not make sense to run on multiple devices (e.g. affecting lobby state after a timeout is reached)
+- The [useGlobalController.ts](../../src/hooks/useGlobalController.ts) ALWAYS maintains a single connection that is the global state controller
+- This connection can run logic that would not make sense to run on multiple devices (e.g. affecting global state after a timeout is reached)
