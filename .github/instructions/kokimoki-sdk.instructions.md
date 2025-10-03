@@ -13,10 +13,10 @@ The Kokimoki SDK is a comprehensive development toolkit for building real-time c
 - The `clientId` is a unique identifier for each client (player)
 - Use `kmClient.store` for global stores and `kmClient.localStore` for local stores
 - Use `kmClient.transact` for atomic state updates across single store or multiple stores
-- Use `kokimoki.upload` and related methods to handle file uploads in your application
+- Use `kokimoki.upload` and related API methods to handle file uploads in your application
 - Use `kmClient.serverTimestamp()` for time-related matters as this will be synced among players
 - Use `useSnapshot` hook to get reactive state inside React components
-- Use `kmClient.chat` and `kmClient.transformImage` for AI features
+- Use `kmClient.chat` and `kmClient.transformImage` API methods for AI features
 
 ## Kokimoki Client
 
@@ -136,7 +136,7 @@ Kokimoki SDK implements a time synchronization system to ensure consistent times
 
 ## Uploads
 
-Kokimoki SDK provides built-in file storage service to handle file uploads
+Kokimoki SDK provides built-in file storage service to handle file uploads by API methods. No setup required
 
 ### API Methods
 
@@ -277,7 +277,6 @@ await kmClient.transact([store], (state) => {
 
 ### Key Points
 
-- **No setup**: Storage is managed outside of application
 - **CDN**: `upload.url` is public and can be used directly
 - **Tags**: Use tag system to organize uploads
 - **Pagination**: Use skip/limit ti paginate results
@@ -285,7 +284,7 @@ await kmClient.transact([store], (state) => {
 
 ## AI Features
 
-Built-in AI for text generation and image transformation. No API keys required
+Built-in API methods for AI text generation and image transformation. No API keys required
 
 ### API Methods
 
