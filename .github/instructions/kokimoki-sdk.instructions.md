@@ -134,9 +134,9 @@ Kokimoki SDK implements a time synchronization system to ensure consistent times
 - The timestamp is a Epoch Unix Timestamp
 - Use server timestamps for time-related matters like event scheduling, timeouts, timers, etc.
 
-## Uploads
+## File Uploads
 
-Kokimoki SDK provides built-in file storage service to handle file uploads by API methods. No setup required
+Kokimoki SDK provides built-in file storage service to handle file uploads. No setup required
 
 ### API Methods
 
@@ -284,7 +284,7 @@ await kmClient.transact([store], (state) => {
 
 ## AI Features
 
-Built-in API methods for AI text generation and image transformation. No API keys required
+Built-in methods for AI text generation and image transformation. No API keys required
 
 ### API Methods
 

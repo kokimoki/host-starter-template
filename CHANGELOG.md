@@ -10,3 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Initial `host-starter-template` setup
+
+### Changed
+
+- Updated `kokimoki-sdk.instructions` with API methods documentation
