@@ -9,7 +9,7 @@ The Kokimoki SDK is a comprehensive development toolkit for building real-time c
 
 ## General guidelines
 
-- **IMPROTANT** `kmClient` is the main entry point for Kokimoki SDK
+- **IMPORTANT** `kmClient` is the main entry point for Kokimoki SDK
 - The `clientId` is a unique identifier for each client (player)
 - Use `kmClient.store` for global stores and `kmClient.localStore` for local stores
 - Use `kmClient.transact` for atomic state updates across single store or multiple stores
@@ -279,7 +279,7 @@ await kmClient.transact([store], (state) => {
 
 - **CDN**: Media `upload.url` is public and can be used directly
 - **Tags**: Use tag system to organize uploads
-- **Pagination**: Use skip/limit ti paginate results
+- **Pagination**: Use skip/limit to paginate results
 - **Filtering**: Combine clientId, mimeTypes, and tags to query uploads
 
 ## AI Integration
