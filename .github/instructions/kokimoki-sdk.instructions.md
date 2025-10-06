@@ -10,7 +10,7 @@ The Kokimoki SDK is a comprehensive development toolkit for building real-time c
 ## General guidelines
 
 - **IMPORTANT** `kmClient` is the main entry point for Kokimoki SDK
-- The `clientId` is a unique identifier for each client (player)
+- `kmClient.id` is a unique identifier for each client (player)
 - Use `kmClient.store` for global stores and `kmClient.localStore` for local stores
 - Use `kmClient.transact` for atomic state updates across single store or multiple stores
 - Use `kokimoki.upload` and related API methods to handle media uploads in application
@@ -30,12 +30,12 @@ The Kokimoki SDK is a comprehensive development toolkit for building real-time c
 
 ## Client ID
 
-- Each client (player) has a unique `clientId` accessible as `kmClient.id`, stable identifier that represents a player across multiple connections
+- Each client (player) has a unique `kmClient.id` (aka `clientId`), stable identifier that represents a player across multiple connections
   (client sessions)
-- The `clientId` is persistent across client sessions
-- The `clientId` remains consistent after user reconnect or page reload
-- Use `clientId` to identify players in global stores
-- Each client (player) can have multiple connections, but all connections share the same `clientId`
+- The `kmClient.id` is persistent across client connections
+- The `kmClient.id` remains consistent after user reconnect or page reload
+- Use `kmClient.id` to identify players in global stores
+- Each client (player) can have multiple connections, but all connections share the same `kmClient.id`
 
 ## Kokimoki Store
 
@@ -142,7 +142,7 @@ Kokimoki SDK provides media storage service (Kokimoki server) to handle media fi
 
 #### upload(name, blob, tags?): Promise<Upload>
 
-Uploads media file
+Uploads media file.
 
 **Parameters:**
 

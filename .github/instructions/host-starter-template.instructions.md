@@ -84,9 +84,8 @@ const globalState = useSnapshot(globalStore.proxy);
 
 ### Client ID
 
-- Each player has a unique `clientId` accessible as `kmClient.id`
-- The `clientId` is persistent across sessions
-- Use `clientId` to identify players in the global store
+- Each player has a unique [`clientId`](/.github/instructions/kokimoki-sdk.instructions.md#client-id) accessible as `kmClient.id`
+- Use `kmClient.id` to identify players in the global store
 
 #### Example
 
@@ -117,7 +116,7 @@ await kmClient.transact([globalStore], ([globalState]) => {
 ### Global Awareness
 
 - Use [globalAwareness](../../src/state/stores/global-awareness.ts) to track players connected to the global state
-- ALWAYS when working with global connections, group by `clientId` because each player can open multiple tabs
+- **ALWAYS** when working with global connections, group by `kmClient.Id` because each player can open multiple tabs
 - Use `Object.entries(globalClients).length` for the number of unique players.
 
 #### Example
