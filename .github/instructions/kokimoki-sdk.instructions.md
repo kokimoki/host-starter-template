@@ -9,14 +9,14 @@ The Kokimoki SDK is a comprehensive development toolkit for building real-time c
 
 ## General guidelines
 
-- `kmClient` is the main entry point for Kokimoki SDK
+- **IMPROTANT** `kmClient` is the main entry point for Kokimoki SDK
 - The `clientId` is a unique identifier for each client (player)
 - Use `kmClient.store` for global stores and `kmClient.localStore` for local stores
 - Use `kmClient.transact` for atomic state updates across single store or multiple stores
-- Use `kokimoki.upload` and related API methods to handle file uploads in your application
+- Use `kokimoki.upload` and related API methods to handle media uploads in application
 - Use `kmClient.serverTimestamp()` for time-related matters as this will be synced among players
 - Use `useSnapshot` hook to get reactive state inside React components
-- Use `kmClient.chat` and `kmClient.transformImage` API methods for AI features
+- Use AI integration API methods: `kmClient.chat` and `kmClient.transformImage` to add AI capabilities to application
 
 ## Kokimoki Client
 
@@ -134,15 +134,15 @@ Kokimoki SDK implements a time synchronization system to ensure consistent times
 - The timestamp is a Epoch Unix Timestamp
 - Use server timestamps for time-related matters like event scheduling, timeouts, timers, etc.
 
-## File Uploads
+## Media Uploads
 
-Kokimoki SDK provides built-in file storage service to handle file uploads. No setup required
+Kokimoki SDK provides media storage service (Kokimoki server) to handle media file uploads. No setup required
 
 ### API Methods
 
 #### upload(name, blob, tags?): Promise<Upload>
 
-Uploads file
+Uploads media file
 
 **Parameters:**
 
@@ -157,12 +157,12 @@ const upload: Upload = await kmClient.upload('filename.jpg', fileBlob, [
  'tag1',
  'tag2'
 ]);
-// Use upload.url to access the file
+// Use upload.url to access the media file
 ```
 
 #### listUploads(filter?, skip?, limit?): Promise<Paginated<Upload>>
 
-Query uploads by filter and pagination
+Query uploaded media files by filter and pagination
 
 **Parameters:**
 
@@ -185,7 +185,7 @@ const { data, total }: Paginated<Upload> = await kmClient.listUploads(
 
 #### updateUpload(id, update): Promise<Upload>
 
-Replace upload tags with new tags
+Replace uploaded media file tags with new tags
 
 **Parameters:**
 
@@ -202,7 +202,7 @@ const updatedUpload: Upload = await kmClient.updateUpload(upload.id, {
 
 #### deleteUpload(id): Promise<void>
 
-Permanently delete upload file
+Permanently delete uploaded media
 
 **Parameters:**
 
@@ -241,7 +241,7 @@ interface Paginated<T> {
 #### Example: User-specific uploads
 
 ```typescript
-// Get uploads by clientId
+// Get uploaded media files by clientId
 const clientUploads = await kmClient.listUploads({ clientId: kmClient.id });
 ```
 
@@ -257,7 +257,7 @@ const images = await kmClient.listUploads({
 #### Example: Tag-based uploads
 
 ```typescript
-// Upload with tag
+// Upload media file with tag
 await kmClient.upload('avatar.jpg', blob, ['profile']);
 
 // Query uploads by tag
@@ -270,19 +270,19 @@ const profileUploads = await kmClient.listUploads({ tags: ['profile'] });
 await kmClient.transact([store], (state) => {
  // Upload image from Blob
  const upload = await kmClient.upload('file.jpg', blob);
- // Add image to store
+ // Add image to store images array
  state.playerImages.push({ url: upload.url, id: upload.id });
 });
 ```
 
 ### Key Points
 
-- **CDN**: `upload.url` is public and can be used directly
+- **CDN**: Media `upload.url` is public and can be used directly
 - **Tags**: Use tag system to organize uploads
 - **Pagination**: Use skip/limit ti paginate results
 - **Filtering**: Combine clientId, mimeTypes, and tags to query uploads
 
-## AI Features
+## AI Integration
 
 Built-in methods for AI text generation and image transformation. No API keys required
 
@@ -324,7 +324,7 @@ const questions = JSON.parse(content);
 
 #### transformImage(baseImageUrl, prompt, tags?): Promise<Upload>
 
-Used to transform image with AI. The result is stored as an`Upload` object
+Used to transform image with AI. The result is stored as [`Upload`](#media-uploads) object
 
 **Parameters:**
 
