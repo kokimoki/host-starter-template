@@ -10,7 +10,7 @@ The Kokimoki SDK is a comprehensive development toolkit for building real-time c
 ## General guidelines
 
 - **IMPORTANT** `kmClient` is the main entry point for Kokimoki SDK
-- `kmClient.id` is a unique identifier for each client (player)
+- Use `kmClient.id` as a unique identifier for each client (player)
 - Use `kmClient.store` for global stores and `kmClient.localStore` for local stores
 - Use `kmClient.transact` for atomic state updates across single store or multiple stores
 - Use `kokimoki.upload` and related API methods to handle media uploads in application

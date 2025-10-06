@@ -28,6 +28,7 @@ The project is developed in a spec-driven manner
 - Follow React and TypeScript [best practices](./reactjs.instructions.md)
 - **ALWAYS** use [@kokimoki/shared](./kokimoki-shared.instructions.md) components **FIRST** if they exist before creating new UI components
 - Prefer [DaisyUI class names](./daisyui.instructions.md) for common UI components over writing custom CSS or Tailwind utility classes
+- Use `src/components/` for reusable components
 - **IMPORTANT!** Do not modify `src/kit/` directory
 - Use utility functions from `src/utils/`
 - Keep configuration files (`src/config/`, `vite.config.ts`, `tsconfig*.json`) up to date and consistent
@@ -157,5 +158,3 @@ const globalClients = Object.values(globalConnections).reduce<
 
 - The [useGlobalController.ts](../../src/hooks/useGlobalController.ts) **ALWAYS** maintains a single connection that is the global state controller
 - This connection can run logic that would not make sense to run on multiple devices (e.g. affecting global state after a timeout is reached)
-
-## Media uploads
