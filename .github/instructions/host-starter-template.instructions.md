@@ -29,6 +29,7 @@ The project is developed in a spec-driven manner
 - **ALWAYS** use [@kokimoki/shared](./kokimoki-shared.instructions.md) components **FIRST** if they exist before creating new UI components
 - Prefer [DaisyUI class names](./daisyui.instructions.md) for common UI components over writing custom CSS or Tailwind utility classes
 - **IMPORTANT!** Do not modify `src/kit/` directory
+- Use `src/components/` for reusable UI components
 - Use utility functions from `src/utils/`
 - Keep configuration files (`src/config/`, `vite.config.ts`, `tsconfig*.json`) up to date and consistent
 - For time-sensitive game logic, always use `kmClient.serverTimestamp()` instead of local timestamps to maintain synchronization between all players
