@@ -10,7 +10,7 @@ The Kokimoki SDK is a comprehensive development toolkit for building real-time c
 ## General guidelines
 
 - **IMPORTANT** `kmClient` is the main entry point for Kokimoki SDK
-- `kmClient.id` is a unique identifier for each client (player)
+- Use `kmClient.id` as a unique identifier for each client (player)
 - Use `kmClient.store` for global stores and `kmClient.localStore` for local stores
 - Use `kmClient.transact` for atomic state updates across single store or multiple stores
 - Use `kokimoki.upload` and related API methods to handle media uploads in application
@@ -267,11 +267,12 @@ const profileUploads = await kmClient.listUploads({ tags: ['profile'] });
 #### Example: Usage in Kokimoki Store
 
 ```typescript
+// Upload image from Blob
+const upload = await kmClient.upload('file.jpg', blob);
+
 await kmClient.transact([store], (state) => {
- // Upload image from Blob
- const upload = await kmClient.upload('file.jpg', blob);
- // Add image to store images array
- state.playerImages.push({ url: upload.url, id: upload.id });
+ // Add image to images array in the store
+ state.playerImages[upload.id] = { url: upload.url };
 });
 ```
 
