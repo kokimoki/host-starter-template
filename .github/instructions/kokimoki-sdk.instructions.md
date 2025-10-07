@@ -267,11 +267,12 @@ const profileUploads = await kmClient.listUploads({ tags: ['profile'] });
 #### Example: Usage in Kokimoki Store
 
 ```typescript
+// Upload image from Blob
+const upload = await kmClient.upload('file.jpg', blob);
+
 await kmClient.transact([store], (state) => {
- // Upload image from Blob
- const upload = await kmClient.upload('file.jpg', blob);
  // Add image to store images array
- state.playerImages.push({ url: upload.url, id: upload.id });
+ state.playerImages[upload.id] = { url: upload.url };
 });
 ```
 
