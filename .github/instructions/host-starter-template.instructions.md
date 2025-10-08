@@ -246,7 +246,7 @@ return (
 
 ## Using timers
 
-- Store `kmClient.serverTimestamp()` in the global store to create a timestamp,accessible to all players
+- Store `kmClient.serverTimestamp()` in the global store to create a timestamp, accessible to all players
 - Use [useServerTimer.ts](../../src/hooks/useServerTime.ts) to create timers that are synced across all players
 
 ### Example
