@@ -32,10 +32,10 @@ The project is developed in a spec-driven manner
 - Use `src/components/` for reusable UI components
 - Use utility functions from `src/utils/`
 - Keep configuration files (`src/config/`, `vite.config.ts`, `tsconfig*.json`) up to date and consistent
-- For time-sensitive game logic, always use `kmClient.serverTimestamp()` instead of local timestamps to maintain synchronization between all players
+- For time-sensitive game logic, **ALWAYS** use `kmClient.serverTimestamp()` instead of local timestamps to maintain synchronization between all players
 - Prefer `lucide-react` icons instead of custom SVGs
 - Use [Media Uploads API methods](/.github/instructions/kokimoki-sdk.instructions.md#media-uploads) to leverage built-in media upload and management functionality
-- Use [AI API methods](/.github/instructions/kokimoki-sdk.instructions.md#ai-integration) to integrate AI-powered functionality in the app
+- Use [AI API methods](/.github/instructions/kokimoki-sdk.instructions.md#ai-integration) to integrate AI-powered functionality (chat with agent, AI image transform) in the app
 
 ## Modes
 
@@ -52,9 +52,7 @@ The app has three modes: `host`, `player`, and `presenter`. The mode is provided
 - The local [playerStore](../../src/state/stores/player-store.ts) contains data only stored on the player device
 - The player state actions should be defined in [player-actions.ts](../../src/state/actions/player-actions.ts)
 
-#### Example
-
-The `currentView` value is used for routing (switching between views)
+#### Example: Update and read Player State
 
 ```typescript
 // Update player state
@@ -66,21 +64,65 @@ await kmClient.transact([playerStore], ([playerState]) => {
 const playerState = useSnapshot(playerStore.proxy);
 ```
 
+#### Example: View Routing
+
+Use `currentView` in [playerStore](../../src/state/stores/player-store.ts) for client-side navigation (switching between views)
+
+```tsx
+// Define a store state in playerStore
+interface PlayerState {
+ currentView: 'lobby' | 'game' | 'results';
+}
+
+// Navigate between views
+await playerActions.setCurrentView('game');
+
+// Render based on current view
+const { currentView } = useSnapshot(playerStore.proxy);
+return (
+ <>
+  {currentView === 'lobby' && <LobbyView />}
+  {currentView === 'game' && <GameView />}
+  {currentView === 'results' && <ResultsView />}
+ </>
+);
+```
+
 ### Global Store
 
 - The [globalStore](../../src/state/stores/global-store.ts) contains data shared among all players in the game
 - The global state actions should be defined in [global-actions.ts](../../src/state/actions/global-actions.ts)
 
-#### Example
+#### Example: Update and read Global State
 
 ```typescript
 // Update global state
 await kmClient.transact([globalStore], ([globalState]) => {
- globalState.someValue = 'new-value';
+ globalState.value = 'new-value';
 });
 
 // Get reactive snapshot of global state in a React component
-const globalState = useSnapshot(globalStore.proxy);
+const { value } = useSnapshot(globalStore.proxy);
+```
+
+#### Example: Start/Stop Global Actions
+
+```typescript
+export const globalActions = {
+ async startGame() {
+  await kmClient.transact([globalStore], ([state]) => {
+   state.started = true;
+   state.startTimestamp = kmClient.serverTimestamp();
+  });
+ },
+
+ async stopGame() {
+  await kmClient.transact([globalStore], ([state]) => {
+   state.started = false;
+   state.startTimestamp = 0;
+  });
+ }
+};
 ```
 
 ### Client ID
@@ -111,36 +153,170 @@ await kmClient.transact([globalStore], ([globalState]) => {
 
 ### Combining Stores
 
-- Prefer to update stores (`playerStore`, `globalStore`) in a single transaction
-- Create such actions in [global-actions.ts](../../src/state/actions/global-actions.ts)
+- Update stores (`playerStore`, `globalStore`) in a single transaction
+- Create action in [global-actions.ts](../../src/state/actions/global-actions.ts)
 
 ### Global Awareness
 
 - Use [globalAwareness](../../src/state/stores/global-awareness.ts) to track players connected to the global state
-- **ALWAYS** when working with global connections, group by `kmClient.Id` because each player can open multiple tabs
-- Use `Object.entries(globalClients).length` for the number of unique players.
+- **ALWAYS** when working with global connections, group by `kmClient.id` because each player can open multiple tabs
 
-#### Example
+#### Example: Update Awareness Data
 
 ```typescript
+// Set awareness data to track connected players with names
+await globalAwareness.setData({ mode: kmClient.clientContext.mode, name });
+```
+
+#### Example: Read Awareness State
+
+A list of connected players with names
+
+```tsx
 const globalConnections = useSnapshot(globalAwareness.proxy);
+
 const globalClients = Object.values(globalConnections).reduce<
  Record<
   string,
   { lastPing: number; clientId: string; data: GlobalAwarenessData }
  >
 >((acc, connection) => {
+ // skip players without name as they have not joined yet
+ if (!connection.data.name) {
+  return acc;
+ }
+
+ // filter by mode to get only players
+ if (connection.data.mode !== 'player') {
+  return acc;
+ }
+
+ // group connections by client id to avoid duplicates
  if (!acc[connection.clientId]) {
   acc[connection.clientId] = connection;
  }
+
  return acc;
 }, {});
+
+const connectedPlayerCount = Object.entries(globalClients).length;
+
+// Render player count and list of players
+return (
+ <>
+  <span>Players: {connectedPlayerCount}</span>
+  <ul>
+   {Object.entries(globalClients).map(([clientId, connection]) => (
+    <li key={clientId}>{connection.data.name}</li>
+   ))}
+  </ul>
+ </>
+);
 ```
 
 ## Using timers
 
-- Store `kmClient.serverTimestamp()` in the global store to create a timestamp accessible to all players
+- Store `kmClient.serverTimestamp()` in the global store to create a timestamp,accessible to all players
 - Use [useServerTimer.ts](../../src/hooks/useServerTime.ts) to create timers that are synced across all players
+
+### Example
+
+```tsx
+import useServerTimer from '@/hooks/useServerTime';
+import { KmTimeCountdown } from '@kokimoki/shared';
+
+const serverTime = useServerTimer(); // Update server time every 250ms
+const { startTimestamp } = useSnapshot(globalStore.proxy);
+const elapsedMs = serverTime - startTimestamp;
+
+return <KmTimeCountdown ms={elapsedMs} />;
+```
+
+## Generate Links (Host/Presenter Mode)
+
+- Use [generateLink](../../src/kit/generate-link.ts) to create player and presenter join links
+- Only available in host/presenter mode
+
+### Example
+
+```tsx
+import { generateLink } from '@/kit/generate-link';
+
+const playerLink = generateLink(kmClient.clientContext.playerCode, {
+  mode: 'player'
+});
+
+const presenterLink = generateLink(kmClient.clientContext.presenterCode, {
+  mode: 'presenter',
+  playerCode: kmClient.clientContext.playerCode
+});
+
+// Display links
+<a href={playerLink}>Join as Player</a>
+<a href={presenterLink}>Join as Presenter</a>
+```
+
+## Layouts
+
+### Design Principles
+
+**Target devices and purpose for each mode:**
+
+- **Player**: Mobile-first responsive design (phones, tablets)
+  - Primary focus: Game content and player interaction
+  - UI patterns: Touch-friendly buttons, mobile-friendly vertical layouts and navigation
+
+- **Host**: Desktop-oriented design (laptops, desktops, tablets)
+  - Primary focus: Game state control and management
+  - UI patterns: Control panels, start/stop buttons, player lists, game links with QR codes
+
+- **Presenter**: Large screen optimized design (TV/projector displays)
+  - Primary focus: Read-only game state visualization, no user interaction
+  - UI patterns: Large text, timers, scores, QR codes for joining
+
+**Key differences:**
+
+- Player = interactive gameplay (mobile)
+- Host = game management (desktop)
+- Presenter = display game state (large screen)
+
+### Player Layout
+
+- Use [PlayerLayout](../../src/layouts/player.tsx) compound components for player UI
+- Mobile-first with sticky header/footer and responsive main content area
+- All layout components accept `className` prop for custom styling
+
+```tsx
+import PlayerLayout from '@/layouts/player';
+
+<PlayerLayout.Root>
+ <PlayerLayout.Header>{/* Menu button, title */}</PlayerLayout.Header>
+
+ <PlayerLayout.Main>{/* Main game content */}</PlayerLayout.Main>
+
+ <PlayerLayout.Footer>{/* Status bar, controls */}</PlayerLayout.Footer>
+</PlayerLayout.Root>;
+```
+
+### Host/Presenter Layout
+
+- Use [HostPresenterLayout](../../src/layouts/host-presenter.tsx) for desktop/large screens
+- Provides consistent structure with title header and grid-based main content
+- All layout components accept `className` prop for custom styling
+
+```tsx
+import HostPresenterLayout from '@/layouts/host-presenter';
+
+<HostPresenterLayout.Root>
+ <HostPresenterLayout.Header>
+  {/* Additional header content */}
+ </HostPresenterLayout.Header>
+
+ <HostPresenterLayout.Main>
+  {/* Game controls, links, views */}
+ </HostPresenterLayout.Main>
+</HostPresenterLayout.Root>;
+```
 
 ## Configuration
 
@@ -158,5 +334,86 @@ const globalClients = Object.values(globalConnections).reduce<
 
 - The [useGlobalController.ts](../../src/hooks/useGlobalController.ts) **ALWAYS** maintains a single connection that is the global state controller
 - This connection can run logic that would not make sense to run on multiple devices (e.g. affecting global state after a timeout is reached)
+- Add your time-based global controller logic inside the `useGlobalController` hook
+- The hook provides `serverTime` (updates every second) and `isGlobalController` flag
 
-## Media uploads
+### Example
+
+Add time-based logic inside `useGlobalController` hook:
+
+```tsx
+// Inside useGlobalController.ts hook (lines 36-44)
+useEffect(() => {
+ if (!isGlobalController) {
+  return;
+ }
+
+ // Example: Check if round time expired and start a new round
+ const handleNewRound = async () => {
+  await kmClient.transact([globalStore], ([state]) => {
+   if (serverTime - state.roundStartTime > 30000) {
+    state.currentRound += 1;
+    state.roundStartTime = kmClient.serverTimestamp();
+   }
+  });
+ };
+
+ handleNewRound();
+}, [isGlobalController, serverTime]);
+```
+
+## Common Template Patterns
+
+### Example: Waiting for Game Start
+
+If the game has not started yet, show a waiting view
+
+```tsx
+const { started } = useSnapshot(globalStore.proxy);
+
+if (!started) {
+ return <WaitingView />;
+}
+
+return <GameView />;
+```
+
+### Example: Force Player View
+
+When the game starts, force the player to a specific view
+
+```tsx
+const { started } = useSnapshot(globalStore.proxy);
+
+React.useEffect(() => {
+ if (started) {
+  playerActions.setCurrentView('shared-state');
+ }
+}, [started]);
+```
+
+### Example: Player Name Entry Flow
+
+If the player does not enter a name yet, show the create profile view
+
+```tsx
+const { name } = useSnapshot(playerStore.proxy);
+
+if (!name) {
+ return <CreateProfileView />;
+}
+
+return <GameView />;
+```
+
+### Example: Host-Specific UI
+
+If the current client mode is `host`, show host-specific UI elements
+
+```tsx
+const isHost = kmClient.clientContext.mode === 'host';
+
+return (
+ <>{isHost && <button onClick={globalActions.startGame}>Start Game</button>}</>
+);
+```
