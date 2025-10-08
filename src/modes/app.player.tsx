@@ -45,38 +45,38 @@ const App: React.FC = () => {
 
 	if (!started) {
 		return (
-			<PlayerLayout.Root>
-				<PlayerLayout.Header>
-					<PlayerMenu />
-				</PlayerLayout.Header>
+			<KmModalProvider>
+				<PlayerLayout.Root>
+					<PlayerLayout.Header>
+						<PlayerMenu />
+					</PlayerLayout.Header>
 
-				<PlayerLayout.Main>
-					{currentView === 'lobby' && <GameLobbyView />}
-					{currentView === 'connections' && <ConnectionsView />}
-				</PlayerLayout.Main>
+					<PlayerLayout.Main>
+						{currentView === 'lobby' && <GameLobbyView />}
+						{currentView === 'connections' && <ConnectionsView />}
+					</PlayerLayout.Main>
 
-				<PlayerLayout.Footer>
-					<NameLabel name={name} />
-				</PlayerLayout.Footer>
-			</PlayerLayout.Root>
+					<PlayerLayout.Footer>
+						<NameLabel name={name} />
+					</PlayerLayout.Footer>
+				</PlayerLayout.Root>
+			</KmModalProvider>
 		);
 	}
 
 	return (
-		<KmModalProvider>
-			<PlayerLayout.Root>
-				<PlayerLayout.Header />
+		<PlayerLayout.Root>
+			<PlayerLayout.Header />
 
-				<PlayerLayout.Main>
-					{currentView === 'shared-state' && <SharedStateView />}
-					{/* Add new views here */}
-				</PlayerLayout.Main>
+			<PlayerLayout.Main>
+				{currentView === 'shared-state' && <SharedStateView />}
+				{/* Add new views here */}
+			</PlayerLayout.Main>
 
-				<PlayerLayout.Footer>
-					<NameLabel name={name} />
-				</PlayerLayout.Footer>
-			</PlayerLayout.Root>
-		</KmModalProvider>
+			<PlayerLayout.Footer>
+				<NameLabel name={name} />
+			</PlayerLayout.Footer>
+		</PlayerLayout.Root>
 	);
 };
 

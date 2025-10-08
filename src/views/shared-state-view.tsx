@@ -15,6 +15,7 @@ interface Props {
 
 /**
  * View to display the global shared state of the game,  including controls for the 'host' mode
+ * This example is **optional** and can be removed if not needed
  */
 export const SharedStateView: React.FC<React.PropsWithChildren<Props>> = ({
 	className

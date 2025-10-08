@@ -7,7 +7,7 @@ interface NameLabelProps {
 
 /**
  * A label component to display the player's name
- * THis example is **optional** and can removed if not needed
+ * This example is **optional** and can removed if not needed
  */
 export const NameLabel: React.FC<NameLabelProps> = ({ name }) => {
 	return (

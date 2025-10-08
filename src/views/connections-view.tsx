@@ -11,6 +11,7 @@ interface Props {
 
 /**
  * View to display the number of online players. (connections in 'player' mode)
+ * This example is **optional** and can be removed if not needed
  */
 export const ConnectionsView: React.FC<React.PropsWithChildren<Props>> = ({
 	className
