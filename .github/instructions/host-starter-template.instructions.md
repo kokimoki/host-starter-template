@@ -372,7 +372,7 @@ import { HostPresenterLayout } from '@/layouts/host-presenter';
 Add time-based logic inside `useGlobalController` hook:
 
 ```tsx
-// Inside useGlobalController.ts hook (lines 36-44)
+// Inside useGlobalController.ts (lines 36-44)
 useEffect(() => {
  if (!isGlobalController) {
   return;
