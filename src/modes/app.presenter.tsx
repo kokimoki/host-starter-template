@@ -1,13 +1,13 @@
-import useGlobalController from '@/hooks/useGlobalController';
 import { generateLink } from '@/kit/generate-link';
+import HostPresenterLayout from '@/layouts/host-presenter';
 import { kmClient } from '@/services/km-client';
-import OnlinePlayersView from '@/views/online-players-view';
+import ConnectionsView from '@/views/connections-view';
+import { KmQrCode } from '@kokimoki/shared';
 import * as React from 'react';
 import { config } from '../config';
 import useDocumentTitle from '../hooks/useDocumentTitle';
 
 const App: React.FC = () => {
-	const isGlobalController = useGlobalController();
 	const { title } = config;
 	useDocumentTitle(title);
 
@@ -20,20 +20,31 @@ const App: React.FC = () => {
 	});
 
 	return (
-		<div>
-			<p>
-				PRESENTER MODE -{' '}
-				{isGlobalController ? 'Global Controller' : 'Not Global Controller'}
-			</p>
-			<p>
-				Player link:{' '}
-				<a href={playerLink} target="_blank">
-					{playerLink}
-				</a>
-			</p>
+		<HostPresenterLayout.Root>
+			<HostPresenterLayout.Header>
+				<div className="text-sm opacity-70">Presenter</div>
+			</HostPresenterLayout.Header>
 
-			<OnlinePlayersView />
-		</div>
+			<HostPresenterLayout.Main>
+				<div className="card bg-base-100 shadow-sm">
+					<div className="card-body">
+						<h2 className="card-title">Player Link</h2>
+						<KmQrCode data={playerLink} size={200} interactive={false} />
+
+						<a
+							href={playerLink}
+							target="_blank"
+							rel="noreferrer"
+							className="link link-primary break-all"
+						>
+							Player Link
+						</a>
+					</div>
+				</div>
+
+				<ConnectionsView />
+			</HostPresenterLayout.Main>
+		</HostPresenterLayout.Root>
 	);
 };
 

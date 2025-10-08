@@ -2,12 +2,12 @@ import { kmClient } from '@/services/km-client';
 
 export interface PlayerState {
 	name: string;
-	currentView: 'welcome-message' | 'connections' | 'shared-state';
+	currentView: 'lobby' | 'shared-state' | 'connections';
 }
 
 const initialState: PlayerState = {
 	name: '',
-	currentView: 'welcome-message'
+	currentView: 'lobby'
 };
 
 export const playerStore = kmClient.localStore<PlayerState>(
