@@ -32,10 +32,8 @@ const HostPresenterMain: React.FC<LayoutProps> = ({ children, className }) => (
 /**
  * Layout components for the 'host' and 'presenter' modes
  */
-const HostPresenterLayout = {
+export const HostPresenterLayout = {
 	Root: HostPresenterRoot,
 	Header: HostPresenterHeader,
 	Main: HostPresenterMain
 };
-
-export default HostPresenterLayout;

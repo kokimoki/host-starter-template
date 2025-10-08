@@ -7,7 +7,7 @@ interface Props {
 	context: ClientContext;
 }
 
-const DevFrame: FC<Props> = ({ clientKey, context }) => {
+export const DevFrame: FC<Props> = ({ clientKey, context }) => {
 	const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
 	const [link, setLink] = useState('');
@@ -71,5 +71,3 @@ const DevFrame: FC<Props> = ({ clientKey, context }) => {
 		</div>
 	);
 };
-
-export default DevFrame;

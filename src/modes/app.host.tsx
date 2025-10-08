@@ -1,15 +1,15 @@
-import useGlobalController from '@/hooks/useGlobalController';
+import { config } from '@/config';
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
+import { useGlobalController } from '@/hooks/useGlobalController';
 import { generateLink } from '@/kit/generate-link';
-import HostPresenterLayout from '@/layouts/host-presenter';
+import { HostPresenterLayout } from '@/layouts/host-presenter';
 import { kmClient } from '@/services/km-client';
-import SharedStateView from '@/views/shared-state-view';
+import { SharedStateView } from '@/views/shared-state-view';
 import { KmQrCode } from '@kokimoki/shared';
 import * as React from 'react';
-import { config } from '../config';
-import useDocumentTitle from '../hooks/useDocumentTitle';
 
 const App: React.FC = () => {
-	const isGlobalController = useGlobalController();
+	useGlobalController();
 	const { title } = config;
 	useDocumentTitle(title);
 

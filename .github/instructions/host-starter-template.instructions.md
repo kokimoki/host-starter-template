@@ -29,13 +29,21 @@ The project is developed in a spec-driven manner
 - **ALWAYS** use [@kokimoki/shared](./kokimoki-shared.instructions.md) components **FIRST** if they exist before creating new UI components
 - Prefer [DaisyUI class names](./daisyui.instructions.md) for common UI components over writing custom CSS or Tailwind utility classes
 - **IMPORTANT!** Do not modify `src/kit/` directory
-- Use `src/components/` for reusable UI components
+- Add reusable UI components in `src/components/`. Consider creating components when:
+  - Used in multiple places
+  - Contains complex logic
+  - Improves readability of parent component
 - Use utility functions from `src/utils/`
 - Keep configuration files (`src/config/`, `vite.config.ts`, `tsconfig*.json`) up to date and consistent
-- For time-sensitive game logic, **ALWAYS** use `kmClient.serverTimestamp()` instead of local timestamps to maintain synchronization between all players
+- **ALWAYS** use `kmClient.serverTimestamp()` for time-sensitive game logic to maintain synchronization between all players
 - Prefer `lucide-react` icons instead of custom SVGs
 - Use [Media Uploads API methods](/.github/instructions/kokimoki-sdk.instructions.md#media-uploads) to leverage built-in media upload and management functionality
 - Use [AI API methods](/.github/instructions/kokimoki-sdk.instructions.md#ai-integration) to integrate AI-powered functionality (chat with agent, AI image transform) in the app
+
+## Imports and Exports
+
+- **ALWAYS** use named exports: `export const Component` or `export function hook`
+- **ALWAYS** use `@/` path aliases: `import { ViewComponent } from '@/views/component'`
 
 ## Modes
 
@@ -153,8 +161,30 @@ await kmClient.transact([globalStore], ([globalState]) => {
 
 ### Combining Stores
 
-- Update stores (`playerStore`, `globalStore`) in a single transaction
-- Create action in [global-actions.ts](../../src/state/actions/global-actions.ts)
+- Update both `playerStore` and `globalStore` in a single transaction when needed
+- Create combined actions in [global-actions.ts](../../src/state/actions/global-actions.ts)
+
+#### Example
+
+Update both player and global state
+
+```typescript
+// In global-actions.ts
+await kmClient.transact(
+ [playerStore, globalStore],
+ ([playerState, globalState]) => {
+  // Update player state
+  playerState.hasAnswered = true;
+  // Update global state with player's answer and timestamp
+  if (!globalState.answers[kmClient.id]) {
+   globalState.answers[kmClient.id] = {
+    answer,
+    timestamp: kmClient.serverTimestamp()
+   };
+  }
+ }
+);
+```
 
 ### Global Awareness
 
@@ -222,7 +252,7 @@ return (
 ### Example
 
 ```tsx
-import useServerTimer from '@/hooks/useServerTime';
+import { useServerTimer } from '@/hooks/useServerTime';
 import { KmTimeCountdown } from '@kokimoki/shared';
 
 const serverTime = useServerTimer(); // Update server time every 250ms
@@ -264,7 +294,7 @@ const presenterLink = generateLink(kmClient.clientContext.presenterCode, {
 
 - **Player**: Mobile-first responsive design (phones, tablets)
   - Primary focus: Game content and player interaction
-  - UI patterns: Touch-friendly buttons, mobile-friendly vertical layouts and navigation
+  - UI patterns: Touch-friendly buttons, readable text size, mobile text mobile-friendly vertical layouts and navigation
 
 - **Host**: Desktop-oriented design (laptops, desktops, tablets)
   - Primary focus: Game state control and management
@@ -287,7 +317,7 @@ const presenterLink = generateLink(kmClient.clientContext.presenterCode, {
 - All layout components accept `className` prop for custom styling
 
 ```tsx
-import PlayerLayout from '@/layouts/player';
+import { PlayerLayout } from '@/layouts/player';
 
 <PlayerLayout.Root>
  <PlayerLayout.Header>{/* Menu button, title */}</PlayerLayout.Header>
@@ -305,7 +335,7 @@ import PlayerLayout from '@/layouts/player';
 - All layout components accept `className` prop for custom styling
 
 ```tsx
-import HostPresenterLayout from '@/layouts/host-presenter';
+import { HostPresenterLayout } from '@/layouts/host-presenter';
 
 <HostPresenterLayout.Root>
  <HostPresenterLayout.Header>
@@ -362,7 +392,7 @@ useEffect(() => {
 }, [isGlobalController, serverTime]);
 ```
 
-## Common Template Patterns
+## Other Template Patterns
 
 ### Example: Waiting for Game Start
 

@@ -26,10 +26,11 @@ export const schema = z.object({
 
 	menuTitle: z.string().default('Menu'),
 	menuConnections: z.string().default('Connections'),
-	menuSharedState: z.string().default('Shared State'),
+	menuGameLobby: z.string().default('Lobby'),
 
 	playerNameTitle: z.string().default('Enter Your Name'),
 	playerNamePlaceholder: z.string().default('Your name...'),
+	playerNameLabel: z.string().default('Name:'),
 	playerNameButton: z.string().default('Continue')
 });
 

@@ -53,8 +53,9 @@ loading: 'Loading...'
 
 menuTitle: 'Menu'
 menuConnections: 'Connections'
-menuSharedState: 'Shared State'
+menuGameLobby: 'Lobby'
 
 playerNameTitle: 'Enter Your Name'
 playerNamePlaceholder: 'Your name...'
+playerNameLabel: 'Name:'
 playerNameButton: 'Continue'

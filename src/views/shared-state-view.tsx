@@ -1,5 +1,5 @@
 import { config } from '@/config';
-import useServerTimer from '@/hooks/useServerTime';
+import { useServerTimer } from '@/hooks/useServerTime';
 import { kmClient } from '@/services/km-client';
 import { globalActions } from '@/state/actions/global-actions';
 import { globalStore } from '@/state/stores/global-store';
@@ -16,7 +16,7 @@ interface Props {
 /**
  * View to display the global shared state of the game,  including controls for the 'host' mode
  */
-const SharedStateView: React.FC<React.PropsWithChildren<Props>> = ({
+export const SharedStateView: React.FC<React.PropsWithChildren<Props>> = ({
 	className
 }) => {
 	const { started, startTimestamp } = useSnapshot(globalStore.proxy);
@@ -61,5 +61,3 @@ const SharedStateView: React.FC<React.PropsWithChildren<Props>> = ({
 		</div>
 	);
 };
-
-export default SharedStateView;

@@ -3,9 +3,9 @@ import { globalAwareness } from '@/state/stores/global-awareness';
 import { globalStore } from '@/state/stores/global-store';
 import { useEffect } from 'react';
 import { useSnapshot } from 'valtio';
-import useServerTimer from './useServerTime';
+import { useServerTimer } from './useServerTime';
 
-export default function useGlobalController() {
+export function useGlobalController() {
 	const { controllerConnectionId } = useSnapshot(globalStore.proxy);
 	const connections = useSnapshot(globalAwareness.proxy);
 	const isGlobalController = controllerConnectionId === kmClient.connectionId;

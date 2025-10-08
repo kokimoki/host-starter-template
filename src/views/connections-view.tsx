@@ -12,7 +12,7 @@ interface Props {
 /**
  * View to display the number of online players. (connections in 'player' mode)
  */
-const ConnectionsView: React.FC<React.PropsWithChildren<Props>> = ({
+export const ConnectionsView: React.FC<React.PropsWithChildren<Props>> = ({
 	className
 }) => {
 	const globalConnections = useSnapshot(globalAwareness.proxy);
@@ -46,5 +46,3 @@ const ConnectionsView: React.FC<React.PropsWithChildren<Props>> = ({
 		</div>
 	);
 };
-
-export default ConnectionsView;

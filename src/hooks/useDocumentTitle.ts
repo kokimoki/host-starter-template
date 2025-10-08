@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-function useDocumentTitle(title: string): void {
+export function useDocumentTitle(title: string): void {
 	const originalTitleRef = React.useRef(document.title);
 
 	React.useEffect(() => {
@@ -14,5 +14,3 @@ function useDocumentTitle(title: string): void {
 		};
 	}, []);
 }
-
-export default useDocumentTitle;

@@ -1,0 +1,19 @@
+import { config } from '@/config';
+import * as React from 'react';
+
+interface NameLabelProps {
+	name: string;
+}
+
+/**
+ * A label component to display the player's name
+ * THis example is **optional** and can removed if not needed
+ */
+export const NameLabel: React.FC<NameLabelProps> = ({ name }) => {
+	return (
+		<div className="flex items-center justify-center gap-2">
+			<span>{config.playerNameLabel}</span>
+			<span className="font-semibold">{name}</span>
+		</div>
+	);
+};

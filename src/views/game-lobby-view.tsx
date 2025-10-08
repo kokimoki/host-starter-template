@@ -7,7 +7,7 @@ interface Props {
 	className?: string;
 }
 
-const GameLobbyView: React.FC<React.PropsWithChildren<Props>> = ({
+export const GameLobbyView: React.FC<React.PropsWithChildren<Props>> = ({
 	className
 }) => {
 	return (
@@ -23,5 +23,3 @@ const GameLobbyView: React.FC<React.PropsWithChildren<Props>> = ({
 		</div>
 	);
 };
-
-export default GameLobbyView;

@@ -1,7 +1,7 @@
 import { kmClient } from '@/services/km-client';
 import { useEffect, useRef, useState } from 'react';
 
-export default function useServerTimer(ms = 250) {
+export function useServerTimer(ms = 250) {
 	const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 	const [serverTime, setServerTime] = useState(() =>
 		kmClient.serverTimestamp()

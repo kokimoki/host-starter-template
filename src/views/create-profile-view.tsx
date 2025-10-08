@@ -10,7 +10,7 @@ interface Props {
 /**
  * View to create a player profile by entering a name
  */
-const CreateProfileView: React.FC<Props> = ({ className }) => {
+export const CreateProfileView: React.FC<Props> = ({ className }) => {
 	const [name, setName] = React.useState('');
 	const [isLoading, setIsLoading] = React.useState(false);
 
@@ -65,5 +65,3 @@ const CreateProfileView: React.FC<Props> = ({ className }) => {
 		</div>
 	);
 };
-
-export default CreateProfileView;

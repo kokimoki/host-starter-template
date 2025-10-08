@@ -55,11 +55,9 @@ const PlayerFooter: React.FC<LayoutProps> = ({ children, className }) => (
 /**
  * Layout components for the 'player' mode
  */
-const PlayerLayout = {
+export const PlayerLayout = {
 	Root: PlayerRoot,
 	Header: PlayerHeader,
 	Main: PlayerMain,
 	Footer: PlayerFooter
 };
-
-export default PlayerLayout;
