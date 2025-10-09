@@ -59,3 +59,12 @@ playerNameTitle: 'Enter Your Name'
 playerNamePlaceholder: 'Your name...'
 playerNameLabel: 'Name:'
 playerNameButton: 'Continue'
+
+hostLabel: 'Host'
+presenterLabel: 'Presenter'
+
+gameLinksTitle: 'Game Links'
+playerLinkLabel: 'Player Link'
+presenterLinkLabel: 'Presenter Link'
+
+menuAriaLabel: 'Open menu drawer'

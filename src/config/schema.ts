@@ -31,7 +31,16 @@ export const schema = z.object({
 	playerNameTitle: z.string().default('Enter Your Name'),
 	playerNamePlaceholder: z.string().default('Your name...'),
 	playerNameLabel: z.string().default('Name:'),
-	playerNameButton: z.string().default('Continue')
+	playerNameButton: z.string().default('Continue'),
+
+	hostLabel: z.string().default('Host'),
+	presenterLabel: z.string().default('Presenter'),
+
+	gameLinksTitle: z.string().default('Game Links'),
+	playerLinkLabel: z.string().default('Player Link'),
+	presenterLinkLabel: z.string().default('Presenter Link'),
+
+	menuAriaLabel: z.string().default('Open menu drawer')
 });
 
 export type Config = z.infer<typeof schema>;

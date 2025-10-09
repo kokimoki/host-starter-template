@@ -306,9 +306,9 @@ const presenterLink = generateLink(kmClient.clientContext.presenterCode, {
 
 **Key differences:**
 
-- Player = interactive gameplay (mobile)
-- Host = game management (desktop)
-- Presenter = display game state (large screen)
+- Player = interactive gameplay display (mobile)
+- Host = game management display (desktop)
+- Presenter = spectator display (large screen)
 
 ### Player Layout
 
@@ -350,15 +350,35 @@ import { HostPresenterLayout } from '@/layouts/host-presenter';
 
 ## Configuration
 
-- For parameters that should be configurable, use the [schema.ts](../../src/config/schema.ts) and `zod/v4` to manage a configuration
-- Run `npm run build` after modifying the schema to generate the yaml schema specification
-- ALWAYS provide default values for all parameters
-- Actual default configuration should be in [default.config.yaml](../../default.config.yaml) following the schema
-- Check existing configuration before adding new values to `schema.ts`
-- Keep `schema.ts` minimal - only short, valid defaults
-- ALWAYS use quotes for strings in `YAML` files
+### Structure
+
+- [schema.ts](../../src/config/schema.ts) defines the configuration schema structure with default values using `zod/v4` and `.default()`
+- [default.config.yaml](../../default.config.yaml) contains the actual configuration values
+
+### Guidelines
+
+- **MUST ALWAYS** add all user-facing text (buttons, labels, titles, messages) and configurable game parameters to [schema.ts](../../src/config/schema.ts) and [default.config.yaml](../../default.config.yaml)
+- **NEVER** hardcode any text strings directly in components
+- **ALWAYS** update both files when making changes in configuration
+- **ALWAYS** run `npm run build` after modifying the `schema.ts` to generate the `YAML` schema specification
+- Check existing configuration **BEFORE** adding new values to avoid duplication
+- Keep `schema.ts` defaults minimal - only short, valid fallback values
+- **ALWAYS** use quotes for strings in `YAML` files
 - Use `Md` suffix (e.g. `welcomeMessageMd`) for fields containing Markdown
+- Values naming should be descriptive and consistent (e.g. `startButton`, `stopButton`, `waitingMessageMd`)
 - Render Markdown using `react-markdown` with `prose` class from Tailwind CSS
+
+### Example: Using Config in Components
+
+```tsx
+import { config } from '@/config';
+
+// ✅ CORRECT - text from config
+export const Button = () => <button>{config.startButton}</button>;
+
+// ❌ WRONG - hardcoded text
+export const Button = () => <button>Start Game</button>;
+```
 
 ## Global controller
 

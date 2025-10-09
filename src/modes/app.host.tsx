@@ -29,13 +29,13 @@ const App: React.FC = () => {
 	return (
 		<HostPresenterLayout.Root>
 			<HostPresenterLayout.Header>
-				<div className="text-sm opacity-70">Host</div>
+				<div className="text-sm opacity-70">{config.hostLabel}</div>
 			</HostPresenterLayout.Header>
 
 			<HostPresenterLayout.Main>
 				<div className="card bg-base-100 shadow-sm">
 					<div className="card-body">
-						<h2 className="card-title">Game Links</h2>
+						<h2 className="card-title">{config.gameLinksTitle}</h2>
 						<KmQrCode data={playerLink} size={200} interactive={false} />
 						<div className="flex gap-2">
 							<a
@@ -44,7 +44,7 @@ const App: React.FC = () => {
 								rel="noreferrer"
 								className="link link-primary break-all"
 							>
-								Player Link
+								{config.playerLinkLabel}
 							</a>
 							|
 							<a
@@ -53,7 +53,7 @@ const App: React.FC = () => {
 								rel="noreferrer"
 								className="link link-primary break-all"
 							>
-								Presenter Link
+								{config.presenterLinkLabel}
 							</a>
 						</div>
 					</div>

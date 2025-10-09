@@ -25,13 +25,13 @@ const App: React.FC = () => {
 	return (
 		<HostPresenterLayout.Root>
 			<HostPresenterLayout.Header>
-				<div className="text-sm opacity-70">Presenter</div>
+				<div className="text-sm opacity-70">{config.presenterLabel}</div>
 			</HostPresenterLayout.Header>
 
 			<HostPresenterLayout.Main>
 				<div className="card bg-base-100 shadow-sm">
 					<div className="card-body">
-						<h2 className="card-title">Player Link</h2>
+						<h2 className="card-title">{config.playerLinkLabel}</h2>
 						<KmQrCode data={playerLink} size={200} interactive={false} />
 
 						<a
@@ -40,7 +40,7 @@ const App: React.FC = () => {
 							rel="noreferrer"
 							className="link link-primary break-all"
 						>
-							Player Link
+							{config.playerLinkLabel}
 						</a>
 					</div>
 				</div>

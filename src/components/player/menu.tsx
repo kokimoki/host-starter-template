@@ -43,7 +43,7 @@ export const PlayerMenu: React.FC = () => {
 	return (
 		<button className="btn btn-circle" onClick={handleOpen}>
 			<MenuIcon className="h-6 w-6" />
-			<span className="sr-only">Open menu drawer</span>
+			<span className="sr-only">{config.menuAriaLabel}</span>
 		</button>
 	);
 };
