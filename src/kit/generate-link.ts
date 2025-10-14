@@ -2,7 +2,6 @@ import { kmEnv } from '@/services/km-client';
 import type { ClientContext } from '@/types';
 
 /**
- *
  * @param code Kokimoki code for fetching context
  * @param fallbackContext Context used in dev mode
  * @returns

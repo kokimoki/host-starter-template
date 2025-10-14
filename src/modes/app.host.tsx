@@ -1,13 +1,15 @@
-import useGlobalController from '@/hooks/useGlobalController';
+import { config } from '@/config';
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
+import { useGlobalController } from '@/hooks/useGlobalController';
 import { generateLink } from '@/kit/generate-link';
+import { HostPresenterLayout } from '@/layouts/host-presenter';
 import { kmClient } from '@/services/km-client';
-import GlobalSharedStateView from '@/views/global-shared-state-view';
+import { SharedStateView } from '@/views/shared-state-view';
+import { KmQrCode } from '@kokimoki/shared';
 import * as React from 'react';
-import { config } from '../config';
-import useDocumentTitle from '../hooks/useDocumentTitle';
 
 const App: React.FC = () => {
-	const isGlobalController = useGlobalController();
+	useGlobalController();
 	const { title } = config;
 	useDocumentTitle(title);
 
@@ -25,26 +27,41 @@ const App: React.FC = () => {
 	});
 
 	return (
-		<div>
-			<p>
-				HOST MODE -{' '}
-				{isGlobalController ? 'Global Controller' : 'Not Global Controller'}
-			</p>
-			<p>
-				Player link:{' '}
-				<a href={playerLink} target="_blank">
-					{playerLink}
-				</a>
-			</p>
-			<p>
-				Presenter link:{' '}
-				<a href={presenterLink} target="_blank">
-					{presenterLink}
-				</a>
-			</p>
+		<HostPresenterLayout.Root>
+			<HostPresenterLayout.Header>
+				<div className="text-sm opacity-70">{config.hostLabel}</div>
+			</HostPresenterLayout.Header>
 
-			<GlobalSharedStateView />
-		</div>
+			<HostPresenterLayout.Main>
+				<div className="card bg-base-100 shadow-sm">
+					<div className="card-body">
+						<h2 className="card-title">{config.gameLinksTitle}</h2>
+						<KmQrCode data={playerLink} size={200} interactive={false} />
+						<div className="flex gap-2">
+							<a
+								href={playerLink}
+								target="_blank"
+								rel="noreferrer"
+								className="link link-primary break-all"
+							>
+								{config.playerLinkLabel}
+							</a>
+							|
+							<a
+								href={presenterLink}
+								target="_blank"
+								rel="noreferrer"
+								className="link link-primary break-all"
+							>
+								{config.presenterLinkLabel}
+							</a>
+						</div>
+					</div>
+				</div>
+
+				<SharedStateView />
+			</HostPresenterLayout.Main>
+		</HostPresenterLayout.Root>
 	);
 };
 

@@ -271,7 +271,7 @@ const profileUploads = await kmClient.listUploads({ tags: ['profile'] });
 const upload = await kmClient.upload('file.jpg', blob);
 
 await kmClient.transact([store], (state) => {
- // Add image to store images array
+ // Add image to images array in the store
  state.playerImages[upload.id] = { url: upload.url };
 });
 ```
@@ -348,21 +348,9 @@ const upload: Upload = await kmClient.transformImage(
 
 - The `kmClient.awareness` store is used to provide a real-time presence information of all connections in a game session
 - Each connection has a unique `connectionId` identifier that represents a single connection
+- Use `setData()` method to update the current connection's awareness data
 
-### Example
-
-Create awareness store for tracking user presence
-
-```typescript
-import { kmClient } from '@services/km-client';
-
-// Initialize awareness store
-const awareness = kmClient.awareness('store-name', {
- // Custom presence data for this connection
-});
-```
-
-### Example
+### Types
 
 The structure of `kmClient.awareness` store state
 
@@ -371,8 +359,42 @@ interface AwarenessState {
  [connectionId: string]: {
   clientId: string;
   lastPing: number;
-  // Custom presence data for this connection
-  data: {};
+  data: {
+   // Custom presence data for this connection
+  };
  };
 }
+```
+
+### Examples
+
+#### Initialize Awareness
+
+```typescript
+import { kmClient } from '@services/km-client';
+
+// Initialize awareness store with initial data
+const awareness = kmClient.awareness('store-name', {
+ name: ''
+});
+```
+
+#### Update Awareness Data
+
+```typescript
+// Update current connection's awareness data
+await awareness.setData({ name: 'Player 1' });
+```
+
+#### Read Awareness State
+
+```typescript
+// Get all connections
+const connections = useSnapshot(awareness.proxy);
+
+// Get all connected player's names
+const connectionNames = Object.values(connections).forEach((connection) => {
+ // Access custom data
+ return connection.data.name;
+});
 ```

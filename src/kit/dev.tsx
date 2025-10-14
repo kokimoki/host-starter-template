@@ -1,6 +1,6 @@
 import { config } from '@/config';
 import { useEffect } from 'react';
-import DevFrame from './dev-frame';
+import { DevFrame } from './dev-frame';
 
 interface Props {
 	nPlayerWindows?: number;

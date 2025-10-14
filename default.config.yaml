@@ -33,35 +33,38 @@ theme:
 
 # Translations
 title: 'Host Starter'
-welcomeMessageMd: |
-  # Welcome!
-  This is my awesome game.
 
-globalConnectionsMd: |
-  # Connections
-  Global connections example.
-players: 'Players'
+gameLobbyMd: |
+  # Waiting for game to start...
+  The game will start once the host presses the start button.
+
+connectionsMd: |
+  # Connections example
+
 sharedStateMd: |
-  # Shared State
-  Global shared state example.
+  # Shared State example
+
+players: 'Players'
 timeElapsed: 'Time elapsed'
-buttonPresses: 'Button presses'
 startButton: 'Start Game'
 stopButton: 'Stop Game'
-incrementButton: 'Increment'
-decrementButton: 'Decrement'
 
 loading: 'Loading...'
-or: 'OR'
-share: 'Share:'
-copy: 'Copy'
-copied: 'Copied!'
 
 menuTitle: 'Menu'
-menuWelcomeMessage: 'Welcome Message'
 menuConnections: 'Connections'
-menuSharedState: 'Shared State'
+menuGameLobby: 'Lobby'
 
 playerNameTitle: 'Enter Your Name'
 playerNamePlaceholder: 'Your name...'
+playerNameLabel: 'Name:'
 playerNameButton: 'Continue'
+
+hostLabel: 'Host'
+presenterLabel: 'Presenter'
+
+gameLinksTitle: 'Game Links'
+playerLinkLabel: 'Player Link'
+presenterLinkLabel: 'Presenter Link'
+
+menuAriaLabel: 'Open menu drawer'

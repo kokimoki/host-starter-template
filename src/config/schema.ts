@@ -10,39 +10,37 @@ export const schema = z.object({
 	// translations
 	title: z.string().default('My Game'),
 
-	welcomeMessageMd: z.string().default('# Welcome!\nThis is my awesome game.'),
-	waitingForGameStartMd: z
+	gameLobbyMd: z
 		.string()
 		.default(
 			'# Waiting for game to start...\nThe game will start once the host presses the start button.'
 		),
-	globalConnectionsMd: z
-		.string()
-		.default('# Connections\nGlobal connections example.'),
-	players: z.string().default('Players'),
+	connectionsMd: z.string().default('# Connections example'),
+	sharedStateMd: z.string().default('# Shared State example'),
 
-	sharedStateMd: z.string().default('# Shared State\nShared state example.'),
+	players: z.string().default('Players'),
 	timeElapsed: z.string().default('Time elapsed'),
-	buttonPresses: z.string().default('Button presses'),
 	startButton: z.string().default('Start Game'),
 	stopButton: z.string().default('Stop Game'),
-	incrementButton: z.string().default('Increment'),
-	decrementButton: z.string().default('Decrement'),
-
 	loading: z.string().default('Loading...'),
-	or: z.string().default('OR'),
-	share: z.string().default('Share:'),
-	copy: z.string().default('Copy'),
-	copied: z.string().default('Copied!'),
 
 	menuTitle: z.string().default('Menu'),
-	menuWelcomeMessage: z.string().default('Welcome Message'),
 	menuConnections: z.string().default('Connections'),
-	menuSharedState: z.string().default('Shared State'),
+	menuGameLobby: z.string().default('Lobby'),
 
 	playerNameTitle: z.string().default('Enter Your Name'),
 	playerNamePlaceholder: z.string().default('Your name...'),
-	playerNameButton: z.string().default('Continue')
+	playerNameLabel: z.string().default('Name:'),
+	playerNameButton: z.string().default('Continue'),
+
+	hostLabel: z.string().default('Host'),
+	presenterLabel: z.string().default('Presenter'),
+
+	gameLinksTitle: z.string().default('Game Links'),
+	playerLinkLabel: z.string().default('Player Link'),
+	presenterLinkLabel: z.string().default('Presenter Link'),
+
+	menuAriaLabel: z.string().default('Open menu drawer')
 });
 
 export type Config = z.infer<typeof schema>;
