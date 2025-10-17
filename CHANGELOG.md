@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] - 2025-10-17
+
+### Changed
+
+- Updated `host-starter-template.instructions` to remove references to `daisyui` package
+- Simplified `host-starter-template.instructions` by removing tuplicates from `kokimoki-sdk.instructions`
+- Simplified `reactjs.instructions`, and renamed to `react.instructions`
+- Simplified `kokimoki-shared.instructions` by removing full `llms.txt` and added link to external docs
+- Updated `host-starter-template` by removing `daisyui` classes from components and styles
+
+### Removed
+
+- Removed `daisyui` package
+- Removed `themes` system (temporary)
+
 ## [1.0.1] - 2025-10-09
 
 ### Changed

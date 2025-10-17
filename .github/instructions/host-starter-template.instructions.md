@@ -191,6 +191,43 @@ import { HostPresenterLayout } from '@/layouts/host-presenter';
 </HostPresenterLayout.Root>;
 ```
 
+## Styling
+
+### Tailwind Theme Customization
+
+- Modify `@theme` directive in [global.css](../../src/global.css) to customize Tailwind theme
+- `@theme` variables automatically generate corresponding utility classes
+- Use namespace prefixes to determine which utilities are created:
+  - `--color-*` for colors (generates `bg-*`, `text-*`, `border-*`, etc.)
+  - `--font-*` for font families
+  - `--text-*` for font sizes
+  - `--spacing-*` for padding, margin, and sizing
+  - `--radius-*` for border radius
+  - `--shadow-*` for box shadows
+
+**Example: Adding Custom Colors**
+
+```css
+/* Inside global.css */
+@theme {
+  --color-mint-500: oklch(0.72 0.11 178);
+  --color-brand-primary: #3b82f6;
+}
+```
+
+```tsx
+// Automatically available in components
+<div className="bg-mint-500 text-brand-primary">{/* Content */}</div>
+```
+
+**Example: Overriding Default Values**
+
+```css
+@theme {
+  --breakpoint-sm: 30rem; /* Override default sm breakpoint */
+}
+```
+
 ## Configuration
 
 ### Structure
