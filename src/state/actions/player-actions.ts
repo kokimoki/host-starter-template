@@ -1,5 +1,5 @@
 import { kmClient } from '@/services/km-client';
-import { globalAwareness } from '../stores/global-awareness';
+import { globalStore } from '../stores/global-store';
 import { playerStore, type PlayerState } from '../stores/player-store';
 
 export const playerActions = {
@@ -10,14 +10,12 @@ export const playerActions = {
 	},
 
 	async setPlayerName(name: string) {
-		await kmClient.transact([playerStore], ([playerState]) => {
-			playerState.name = name;
-		});
-
-		// Publish name to global awareness state
-		await globalAwareness.setData({
-			mode: kmClient.clientContext.mode,
-			name
-		});
+		await kmClient.transact(
+			[playerStore, globalStore],
+			([playerState, globalState]) => {
+				playerState.name = name;
+				globalState.players[kmClient.id] = { name };
+			}
+		);
 	}
 };

@@ -26,7 +26,6 @@ The Kokimoki SDK is a comprehensive development toolkit for building real-time c
   - `kmClient.transact` for atomic state updates
   - `kmClient.serverTimestamp()` for synchronized timestamps
   - `kmClient.id` for unique player identification
-  - `kmClient.awareness` for user presence and awareness tracking
 
 ## Client ID
 
@@ -54,13 +53,13 @@ Kokimoki Store powered by `valtio` and `valtio-yjs` for real-time state manageme
 import { kmClient } from '@services/km-client';
 
 interface State {
- title: string;
- count: number;
+	title: string;
+	count: number;
 }
 
 const initialState: State = {
- title: 'Store',
- count: 0
+	title: 'Store',
+	count: 0
 };
 
 // Initialize global store with initial state
@@ -82,8 +81,8 @@ import { store } from '../store';
 
 // Update state
 await kmClient.transact([store], ([state]) => {
- state.title = 'New store';
- state.count += 1;
+	state.title = 'New store';
+	state.count += 1;
 });
 ```
 
@@ -97,8 +96,8 @@ await kmClient.transact([store], ([state]) => {
 ```typescript
 // Update multiple stores in a single transaction
 await kmClient.transact([store1, store2], ([state1, state2]) => {
- state1.name = 'My Store1';
- state2.name = 'My Store2';
+	state1.name = 'My Store1';
+	state2.name = 'My Store2';
 });
 ```
 
@@ -114,15 +113,15 @@ import { useSnapshot } from 'valtio';
 import { store } from '../store';
 
 const Component = () => {
- // Get reactive snapshot of the store state
- const { title, count } = useSnapshot(store.proxy);
+	// Get reactive snapshot of the store state
+	const { title, count } = useSnapshot(store.proxy);
 
- return (
-  <div>
-   <h1>Title: {title}</h1>
-   <p>Count: {count}</p>
-  </div>
- );
+	return (
+		<div>
+			<h1>Title: {title}</h1>
+			<p>Count: {count}</p>
+		</div>
+	);
 };
 ```
 
@@ -154,8 +153,8 @@ Uploads media file.
 
 ```typescript
 const upload: Upload = await kmClient.upload('filename.jpg', fileBlob, [
- 'tag1',
- 'tag2'
+	'tag1',
+	'tag2'
 ]);
 // Use upload.url to access the media file
 ```
@@ -177,9 +176,9 @@ Query uploaded media files by filter and pagination
 ```typescript
 // Query uploads by tag and uploaded by this client
 const { data, total }: Paginated<Upload> = await kmClient.listUploads(
- { clientId: kmClient.id, tags: ['tag1'] },
- skip,
- limit
+	{ clientId: kmClient.id, tags: ['tag1'] },
+	skip,
+	limit
 );
 ```
 
@@ -196,7 +195,7 @@ Replace uploaded media file tags with new tags
 
 ```typescript
 const updatedUpload: Upload = await kmClient.updateUpload(upload.id, {
- tags: ['new']
+	tags: ['new']
 });
 ```
 
@@ -218,21 +217,21 @@ await kmClient.deleteUpload(upload.id);
 
 ```typescript
 interface Upload {
- id: string; // unique id
- url: string; // file url (CDN)
- name: string; // original filename
- size: number; // in bytes
- mimeType: string;
- clientId: string; // who uploaded
- tags: string[]; // metadata for filtering and organization
- completed: boolean; // upload status
- createdAt: Date;
- appId: string;
+	id: string; // unique id
+	url: string; // file url (CDN)
+	name: string; // original filename
+	size: number; // in bytes
+	mimeType: string;
+	clientId: string; // who uploaded
+	tags: string[]; // metadata for filtering and organization
+	completed: boolean; // upload status
+	createdAt: Date;
+	appId: string;
 }
 
 interface Paginated<T> {
- items: T[];
- total: number;
+	items: T[];
+	total: number;
 }
 ```
 
@@ -250,7 +249,7 @@ const clientUploads = await kmClient.listUploads({ clientId: kmClient.id });
 ```typescript
 // Get only uploaded images
 const images = await kmClient.listUploads({
- mimeTypes: ['image/jpeg', 'image/png']
+	mimeTypes: ['image/jpeg', 'image/png']
 });
 ```
 
@@ -271,8 +270,8 @@ const profileUploads = await kmClient.listUploads({ tags: ['profile'] });
 const upload = await kmClient.upload('file.jpg', blob);
 
 await kmClient.transact([store], (state) => {
- // Add image to images array in the store
- state.playerImages[upload.id] = { url: upload.url };
+	// Add image to images array in the store
+	state.playerImages[upload.id] = { url: upload.url };
 });
 ```
 
@@ -305,19 +304,19 @@ Used to generate text response with AI
 ```typescript
 // Generate text response
 const { content } = await kmClient.chat(
- 'You are a sarcastic assistant',
- 'Write a story about dragons',
- 0.7, // moderate creativity
- 500 // limit to 500 tokens
+	'You are a sarcastic assistant',
+	'Write a story about dragons',
+	0.7, // moderate creativity
+	500 // limit to 500 tokens
 );
 ```
 
 ```typescript
 // Generate quiz questions in JSON format
 const { content } = await kmClient.chat(
- 'Return valid JSON array in the format [{"question": "string"}]',
- 'Generate 5 quiz questions about history',
- 0.5 // balanced creativity
+	'Return valid JSON array in the format [{"question": "string"}]',
+	'Generate 5 quiz questions about history',
+	0.5 // balanced creativity
 );
 
 const questions = JSON.parse(content);
@@ -338,63 +337,74 @@ Used to transform image with AI. The result is stored as [`Upload`](#media-uploa
 ```typescript
 // Transform image from url
 const upload: Upload = await kmClient.transformImage(
- 'https://static.kokimoki.com/game/image.jpg',
- 'Make it look like a painting',
- ['art', 'ai-generated']
+	'https://static.kokimoki.com/game/image.jpg',
+	'Make it look like a painting',
+	['art', 'ai-generated']
 );
 ```
 
-## Kokimoki Awareness
+## Store Connections
 
-- The `kmClient.awareness` store is used to provide a real-time presence information of all connections in a game session
-- Each connection has a unique `connectionId` identifier that represents a single connection
-- Use `setData()` method to update the current connection's awareness data
+Each Kokimoki store has a `connections` property that provides real-time presence information of all clients connected to that store.
 
-### Types
+### Accessing Connections
 
-The structure of `kmClient.awareness` store state
+- Use `store.connections` to access the connections proxy for any store
+- The `connections.clientIds` is a `Set` containing all currently connected client IDs
+- Use `useSnapshot` to get reactive updates when connections change
 
-```typescript
-interface AwarenessState {
- [connectionId: string]: {
-  clientId: string;
-  lastPing: number;
-  data: {
-   // Custom presence data for this connection
-  };
- };
-}
+### Example: Track Online Players
+
+```tsx
+import { useSnapshot } from 'valtio';
+import { globalStore } from '@/state/stores/global-store';
+
+const Component = () => {
+	// Get online client IDs from store connections
+	const onlineClientIds = useSnapshot(globalStore.connections).clientIds;
+
+	// Check if specific player is online
+	const isPlayerOnline = onlineClientIds.has(playerId);
+
+	// Get count of online players
+	const onlineCount = onlineClientIds.size;
+
+	return <div>Online players: {onlineCount}</div>;
+};
 ```
 
-### Examples
+### Example: Display Player List with Online Status
 
-#### Initialize Awareness
+```tsx
+import { useSnapshot } from 'valtio';
+import { globalStore } from '@/state/stores/global-store';
 
-```typescript
-import { kmClient } from '@services/km-client';
+const PlayerList = () => {
+	const players = useSnapshot(globalStore.proxy).players;
+	const onlineClientIds = useSnapshot(globalStore.connections).clientIds;
 
-// Initialize awareness store with initial data
-const awareness = kmClient.awareness('store-name', {
- name: ''
-});
+	const playersList = Object.entries(players).map(([clientId, player]) => ({
+		clientId,
+		name: player.name,
+		isOnline: onlineClientIds.has(clientId)
+	}));
+
+	return (
+		<ul>
+			{playersList.map((player) => (
+				<li key={player.clientId}>
+					{player.name} - {player.isOnline ? 'Online' : 'Offline'}
+				</li>
+			))}
+		</ul>
+	);
+};
 ```
 
-#### Update Awareness Data
+### Key Points
 
-```typescript
-// Update current connection's awareness data
-await awareness.setData({ name: 'Player 1' });
-```
-
-#### Read Awareness State
-
-```typescript
-// Get all connections
-const connections = useSnapshot(awareness.proxy);
-
-// Get all connected player's names
-const connectionNames = Object.values(connections).forEach((connection) => {
- // Access custom data
- return connection.data.name;
-});
-```
+- Each store has its own `connections` property
+- `connections.clientIds` is a `Set<string>` containing connected client IDs
+- Use `useSnapshot(store.connections)` to get reactive updates
+- Players can have multiple browser tabs open, but all share the same `clientId`
+- A player is considered online if their `clientId` is in the `clientIds` set
