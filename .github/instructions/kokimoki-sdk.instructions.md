@@ -13,9 +13,9 @@ The Kokimoki SDK is a comprehensive development toolkit for building real-time c
 - Use `kmClient.id` as a unique identifier for each client (player)
 - Use `kmClient.store` for global stores and `kmClient.localStore` for local stores
 - Use `kmClient.transact` for atomic state updates across single store or multiple stores
-- Use `kokimoki.upload` and related API methods to handle media uploads in application
+- Use `kmClient.upload` and related API methods to handle media uploads in application
 - Use `kmClient.serverTimestamp()` for time-related matters as this will be synced among players
-- Use `useSnapshot` hook to get reactive state inside React components
+- Use `useSnapshot` hook from `valtio` to get reactive state inside React components
 - Use AI integration API methods: `kmClient.chat` and `kmClient.transformImage` to add AI capabilities to application
 
 ## Kokimoki Client
@@ -47,7 +47,7 @@ Kokimoki Store powered by `valtio` and `valtio-yjs` for real-time state manageme
   - `kmClient.localStore` is used for data stored on the player device (local)
   - `kmClient.store` is used for data shared among all players in a game (global)
 
-#### Example
+**Example: Creating a Store**
 
 ```typescript
 import { kmClient } from '@services/km-client';
@@ -74,7 +74,7 @@ export const store = kmClient.store<PlayerState>('store-name', initialState);
 - Transactions are atomic and ensure state consistency
 - ALWAYS update store state inside `kmClient.transact()` within action function
 
-#### Example
+**Example: Updating State**
 
 ```typescript
 import { store } from '../store';
@@ -91,7 +91,7 @@ await kmClient.transact([store], ([state]) => {
 - Multiple stores can be updated in a single transaction
 - Prefer to update stores in a single transaction to ensure state consistency
 
-#### Example
+**Example: Multiple Stores**
 
 ```typescript
 // Update multiple stores in a single transaction
@@ -106,7 +106,7 @@ await kmClient.transact([store1, store2], ([state1, state2]) => {
 - Use `useSnapshot` hook from `valtio` to get reactive state inside React components
 - The component will re-render when the store state changes
 
-#### Example
+**Example: Using State in Components**
 
 ```tsx
 import { useSnapshot } from 'valtio';
