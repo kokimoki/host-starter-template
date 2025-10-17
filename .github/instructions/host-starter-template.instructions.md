@@ -11,7 +11,7 @@ This project is based on a host starter template using [Kokimoki SDK](./kokimoki
 The template provides the following functionality:
 
 - Players can communicate in real time by using [globalStore](../../src/state/stores/global-store.ts)
-- Players can be aware of each others' presence using [globalAwareness](../../src/state/stores/global-awareness.ts)
+- Players can be aware of each others' presence using globalStore.connections
 - Each player has a local state that is not synced to the server [playerStore](../../src/state/stores/player-store.ts)
 
 ## Spec-driven development
@@ -65,7 +65,7 @@ The app has three modes: `host`, `player`, and `presenter`. The mode is provided
 ```typescript
 // Update player state
 await kmClient.transact([playerStore], ([playerState]) => {
- playerState.currentView = 'view-name';
+	playerState.currentView = 'view-name';
 });
 
 // Get reactive snapshot of player state in a React component
@@ -79,7 +79,7 @@ Use `currentView` in [playerStore](../../src/state/stores/player-store.ts) for c
 ```tsx
 // Define a store state in playerStore
 interface PlayerState {
- currentView: 'lobby' | 'game' | 'results';
+	currentView: 'lobby' | 'game' | 'results';
 }
 
 // Navigate between views
@@ -88,11 +88,11 @@ await playerActions.setCurrentView('game');
 // Render based on current view
 const { currentView } = useSnapshot(playerStore.proxy);
 return (
- <>
-  {currentView === 'lobby' && <LobbyView />}
-  {currentView === 'game' && <GameView />}
-  {currentView === 'results' && <ResultsView />}
- </>
+	<>
+		{currentView === 'lobby' && <LobbyView />}
+		{currentView === 'game' && <GameView />}
+		{currentView === 'results' && <ResultsView />}
+	</>
 );
 ```
 
@@ -106,7 +106,7 @@ return (
 ```typescript
 // Update global state
 await kmClient.transact([globalStore], ([globalState]) => {
- globalState.value = 'new-value';
+	globalState.value = 'new-value';
 });
 
 // Get reactive snapshot of global state in a React component
@@ -117,19 +117,19 @@ const { value } = useSnapshot(globalStore.proxy);
 
 ```typescript
 export const globalActions = {
- async startGame() {
-  await kmClient.transact([globalStore], ([state]) => {
-   state.started = true;
-   state.startTimestamp = kmClient.serverTimestamp();
-  });
- },
+	async startGame() {
+		await kmClient.transact([globalStore], ([state]) => {
+			state.started = true;
+			state.startTimestamp = kmClient.serverTimestamp();
+		});
+	},
 
- async stopGame() {
-  await kmClient.transact([globalStore], ([state]) => {
-   state.started = false;
-   state.startTimestamp = 0;
-  });
- }
+	async stopGame() {
+		await kmClient.transact([globalStore], ([state]) => {
+			state.started = false;
+			state.startTimestamp = 0;
+		});
+	}
 };
 ```
 
@@ -144,18 +144,18 @@ Modify data by player in the global store
 
 ```typescript
 interface GlobalStore {
- players: Record<
-  string, // clientId
-  { score: number }
- >;
+	players: Record<
+		string, // clientId
+		{ score: number }
+	>;
 }
 
 // Update player score in the global store
 await kmClient.transact([globalStore], ([globalState]) => {
- if (!globalState.players[kmClient.id]) {
-  globalState.players[kmClient.id] = { score: 0 };
- }
- globalState.players[kmClient.id].score += 1;
+	if (!globalState.players[kmClient.id]) {
+		globalState.players[kmClient.id] = { score: 0 };
+	}
+	globalState.players[kmClient.id].score += 1;
 });
 ```
 
@@ -171,77 +171,61 @@ Update both player and global state
 ```typescript
 // In global-actions.ts
 await kmClient.transact(
- [playerStore, globalStore],
- ([playerState, globalState]) => {
-  // Update player state
-  playerState.hasAnswered = true;
-  // Update global state with player's answer and timestamp
-  if (!globalState.answers[kmClient.id]) {
-   globalState.answers[kmClient.id] = {
-    answer,
-    timestamp: kmClient.serverTimestamp()
-   };
-  }
- }
+	[playerStore, globalStore],
+	([playerState, globalState]) => {
+		// Update player state
+		playerState.hasAnswered = true;
+		// Update global state with player's answer and timestamp
+		if (!globalState.answers[kmClient.id]) {
+			globalState.answers[kmClient.id] = {
+				answer,
+				timestamp: kmClient.serverTimestamp()
+			};
+		}
+	}
 );
 ```
 
-### Global Awareness
+### Store Connections
 
-- Use [globalAwareness](../../src/state/stores/global-awareness.ts) to track players connected to the global state
-- **ALWAYS** when working with global connections, group by `kmClient.id` because each player can open multiple tabs
+- Each Kokimoki store has a `connections` property that tracks which clients are currently connected
+- Use `store.connections.clientIds` to get a `Set` of online client IDs
+- **ALWAYS** use `useSnapshot(store.connections)` to get reactive updates when connections change
+- Each player can open multiple tabs, but all share the same `kmClient.id`
 
-#### Example: Update Awareness Data
-
-```typescript
-// Set awareness data to track connected players with names
-await globalAwareness.setData({ mode: kmClient.clientContext.mode, name });
-```
-
-#### Example: Read Awareness State
-
-A list of connected players with names
+#### Example: Display Online Players
 
 ```tsx
-const globalConnections = useSnapshot(globalAwareness.proxy);
+import { useSnapshot } from 'valtio';
+import { globalStore } from '@/state/stores/global-store';
 
-const globalClients = Object.values(globalConnections).reduce<
- Record<
-  string,
-  { lastPing: number; clientId: string; data: GlobalAwarenessData }
- >
->((acc, connection) => {
- // skip players without name as they have not joined yet
- if (!connection.data.name) {
-  return acc;
- }
+const Component = () => {
+	const players = useSnapshot(globalStore.proxy).players;
+	const onlineClientIds = useSnapshot(globalStore.connections).clientIds;
 
- // filter by mode to get only players
- if (connection.data.mode !== 'player') {
-  return acc;
- }
+	// Create list with online status
+	const playersList = Object.entries(players).map(([clientId, player]) => ({
+		clientId,
+		name: player.name,
+		isOnline: onlineClientIds.has(clientId)
+	}));
 
- // group connections by client id to avoid duplicates
- if (!acc[connection.clientId]) {
-  acc[connection.clientId] = connection;
- }
+	// Count only online players
+	const onlineCount = playersList.filter((p) => p.isOnline).length;
 
- return acc;
-}, {});
-
-const connectedPlayerCount = Object.entries(globalClients).length;
-
-// Render player count and list of players
-return (
- <>
-  <span>Players: {connectedPlayerCount}</span>
-  <ul>
-   {Object.entries(globalClients).map(([clientId, connection]) => (
-    <li key={clientId}>{connection.data.name}</li>
-   ))}
-  </ul>
- </>
-);
+	return (
+		<>
+			<span>Online Players: {onlineCount}</span>
+			<ul>
+				{playersList.map((player) => (
+					<li key={player.clientId}>
+						{player.name} - {player.isOnline ? 'Online' : 'Offline'}
+					</li>
+				))}
+			</ul>
+		</>
+	);
+};
 ```
 
 ## Using timers
@@ -320,11 +304,11 @@ const presenterLink = generateLink(kmClient.clientContext.presenterCode, {
 import { PlayerLayout } from '@/layouts/player';
 
 <PlayerLayout.Root>
- <PlayerLayout.Header>{/* Menu button, title */}</PlayerLayout.Header>
+	<PlayerLayout.Header>{/* Menu button, title */}</PlayerLayout.Header>
 
- <PlayerLayout.Main>{/* Main game content */}</PlayerLayout.Main>
+	<PlayerLayout.Main>{/* Main game content */}</PlayerLayout.Main>
 
- <PlayerLayout.Footer>{/* Status bar, controls */}</PlayerLayout.Footer>
+	<PlayerLayout.Footer>{/* Status bar, controls */}</PlayerLayout.Footer>
 </PlayerLayout.Root>;
 ```
 
@@ -338,13 +322,13 @@ import { PlayerLayout } from '@/layouts/player';
 import { HostPresenterLayout } from '@/layouts/host-presenter';
 
 <HostPresenterLayout.Root>
- <HostPresenterLayout.Header>
-  {/* Additional header content */}
- </HostPresenterLayout.Header>
+	<HostPresenterLayout.Header>
+		{/* Additional header content */}
+	</HostPresenterLayout.Header>
 
- <HostPresenterLayout.Main>
-  {/* Game controls, links, views */}
- </HostPresenterLayout.Main>
+	<HostPresenterLayout.Main>
+		{/* Game controls, links, views */}
+	</HostPresenterLayout.Main>
 </HostPresenterLayout.Root>;
 ```
 
@@ -394,21 +378,21 @@ Add time-based logic inside `useGlobalController` hook:
 ```tsx
 // Inside useGlobalController.ts (lines 36-44)
 useEffect(() => {
- if (!isGlobalController) {
-  return;
- }
+	if (!isGlobalController) {
+		return;
+	}
 
- // Example: Check if round time expired and start a new round
- const handleNewRound = async () => {
-  await kmClient.transact([globalStore], ([state]) => {
-   if (serverTime - state.roundStartTime > 30000) {
-    state.currentRound += 1;
-    state.roundStartTime = kmClient.serverTimestamp();
-   }
-  });
- };
+	// Example: Check if round time expired and start a new round
+	const handleNewRound = async () => {
+		await kmClient.transact([globalStore], ([state]) => {
+			if (serverTime - state.roundStartTime > 30000) {
+				state.currentRound += 1;
+				state.roundStartTime = kmClient.serverTimestamp();
+			}
+		});
+	};
 
- handleNewRound();
+	handleNewRound();
 }, [isGlobalController, serverTime]);
 ```
 
@@ -422,7 +406,7 @@ If the game has not started yet, show a waiting view
 const { started } = useSnapshot(globalStore.proxy);
 
 if (!started) {
- return <WaitingView />;
+	return <WaitingView />;
 }
 
 return <GameView />;
@@ -436,9 +420,9 @@ When the game starts, force the player to a specific view
 const { started } = useSnapshot(globalStore.proxy);
 
 React.useEffect(() => {
- if (started) {
-  playerActions.setCurrentView('shared-state');
- }
+	if (started) {
+		playerActions.setCurrentView('shared-state');
+	}
 }, [started]);
 ```
 
@@ -450,7 +434,7 @@ If the player does not enter a name yet, show the create profile view
 const { name } = useSnapshot(playerStore.proxy);
 
 if (!name) {
- return <CreateProfileView />;
+	return <CreateProfileView />;
 }
 
 return <GameView />;
@@ -464,6 +448,6 @@ If the current client mode is `host`, show host-specific UI elements
 const isHost = kmClient.clientContext.mode === 'host';
 
 return (
- <>{isHost && <button onClick={globalActions.startGame}>Start Game</button>}</>
+	<>{isHost && <button onClick={globalActions.startGame}>Start Game</button>}</>
 );
 ```
