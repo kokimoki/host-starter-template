@@ -3,17 +3,17 @@
 
 /* Imports */
 @import 'tailwindcss';
+@import '@kokimoki/shared/styles.css';
+
 @plugin "@tailwindcss/typography";
 
-@import '@kokimoki/shared/styles.css';
-@import './daisyui.css';
-
-/* NOTE: Setup shared styles here */
-html,
-body {
-	@apply bg-base-200;
+@theme {
+	--font-family: 'Noto Sans', sans-serif;
+	/* Add theme styling here */
 }
 
+html,
 body {
-	font-family: 'Noto Sans', sans-serif;
+	background-color: var(--color-slate-100);
+	font-family: var(--font-family);
 }

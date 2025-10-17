@@ -30,12 +30,15 @@ export const CreateProfileView: React.FC<Props> = ({ className }) => {
 
 	return (
 		<div
-			className={cn('card bg-base-100 w-full max-w-96 shadow-sm', className)}
+			className={cn(
+				'bg-white border border-gray-200 rounded-lg shadow-md w-full max-w-96',
+				className
+			)}
 		>
-			<div className="card-body">
-				<h2 className="card-title">{config.playerNameTitle}</h2>
+			<div className="p-6">
+				<h2 className="text-xl font-bold mb-2">{config.playerNameTitle}</h2>
 				<form onSubmit={handleSubmit} className="space-y-4">
-					<label className="input">
+					<label className="block">
 						<input
 							type="text"
 							placeholder={config.playerNamePlaceholder}
@@ -44,16 +47,17 @@ export const CreateProfileView: React.FC<Props> = ({ className }) => {
 							disabled={isLoading}
 							autoFocus
 							maxLength={50}
+							className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
 						/>
 					</label>
 					<button
 						type="submit"
-						className="btn btn-primary btn-block"
+						className="w-full px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
 						disabled={!name.trim() || isLoading}
 					>
 						{isLoading ? (
 							<>
-								<span className="loading loading-spinner loading-sm"></span>
+								<span className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
 								{config.loading}
 							</>
 						) : (

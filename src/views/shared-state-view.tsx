@@ -25,27 +25,30 @@ export const SharedStateView: React.FC<React.PropsWithChildren<Props>> = ({
 	const isHost = kmClient.clientContext.mode === 'host';
 
 	return (
-		<div className={cn('card bg-base-100 w-full shadow-sm', className)}>
-			<div className="card-body">
+		<div
+			className={cn(
+				'bg-white border border-gray-200 rounded-lg shadow-md w-full',
+				className
+			)}
+		>
+			<div className="p-6">
 				<div className="prose">
 					<Markdown>{config.sharedStateMd}</Markdown>
 				</div>
 
 				<div className="mt-4 grid gap-4">
 					{started && (
-						<div className="stats shadow">
-							<div className="stat">
-								<div className="stat-title">{config.timeElapsed}</div>
-								<div className="stat-value">
-									<KmTimeCountdown ms={serverTime - startTimestamp} />
-								</div>
+						<div className="bg-white border border-gray-200 rounded-lg shadow p-6">
+							<div className="text-sm text-gray-500">{config.timeElapsed}</div>
+							<div className="text-3xl font-bold mt-1">
+								<KmTimeCountdown ms={serverTime - startTimestamp} />
 							</div>
 						</div>
 					)}
 
 					{!started && isHost && (
 						<button
-							className="btn btn-primary"
+							className="px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 font-medium"
 							onClick={globalActions.startGame}
 						>
 							{config.startButton}
@@ -53,7 +56,10 @@ export const SharedStateView: React.FC<React.PropsWithChildren<Props>> = ({
 					)}
 
 					{started && isHost && (
-						<button className="btn btn-error" onClick={globalActions.stopGame}>
+						<button
+							className="px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 font-medium"
+							onClick={globalActions.stopGame}
+						>
 							{config.stopButton}
 						</button>
 					)}

@@ -33,16 +33,16 @@ const App: React.FC = () => {
 			</HostPresenterLayout.Header>
 
 			<HostPresenterLayout.Main>
-				<div className="card bg-base-100 shadow-sm">
-					<div className="card-body">
-						<h2 className="card-title">{config.gameLinksTitle}</h2>
+				<div className="rounded-lg border border-gray-200 bg-white shadow-md">
+					<div className="flex flex-col gap-2 p-6">
+						<h2 className="text-xl font-bold">{config.gameLinksTitle}</h2>
 						<KmQrCode data={playerLink} size={200} interactive={false} />
 						<div className="flex gap-2">
 							<a
 								href={playerLink}
 								target="_blank"
 								rel="noreferrer"
-								className="link link-primary break-all"
+								className="break-all text-blue-600 underline hover:text-blue-700"
 							>
 								{config.playerLinkLabel}
 							</a>
@@ -51,7 +51,7 @@ const App: React.FC = () => {
 								href={presenterLink}
 								target="_blank"
 								rel="noreferrer"
-								className="link link-primary break-all"
+								className="break-all text-blue-600 underline hover:text-blue-700"
 							>
 								{config.presenterLinkLabel}
 							</a>
