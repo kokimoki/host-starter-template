@@ -349,9 +349,10 @@ Each Kokimoki store has a `connections` property that provides real-time presenc
 
 ### Accessing Connections
 
-- Use `store.connections` to access the connections proxy for any store
-- The `connections.clientIds` is a `Set` containing all currently connected client IDs
+- Use `store.connections` to access the connections proxy for any Kokimoki store
+- Use `store.connections.clientIds` to get a `Set` of online client IDs
 - Use `useSnapshot` to get reactive updates when connections change
+- **ALWAYS** use `useSnapshot(store.connections)` to get reactive updates when connections change
 
 ### Example: Track Online Players
 
