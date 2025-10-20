@@ -1,7 +1,7 @@
 {
 	"name": "@kokimoki/host-starter",
 	"private": true,
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"type": "module",
 	"description": "A starter template for building a host-based games using Kokimoki SDK",
 	"scripts": {
@@ -30,7 +30,6 @@
 		"@types/react": "^19.1.8",
 		"@types/react-dom": "^19.1.6",
 		"@vitejs/plugin-react": "^4.7.0",
-		"daisyui": "^5.1.13",
 		"eslint": "^9.29.0",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-only-warn": "^1.1.0",

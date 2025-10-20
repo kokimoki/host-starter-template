@@ -10,7 +10,7 @@ interface LayoutProps {
 const PlayerRoot: React.FC<LayoutProps> = ({ children, className }) => (
 	<main
 		className={cn(
-			'bg-base-200 grid min-h-dvh grid-rows-[auto_1fr_auto]',
+			'bg-slate-100 grid min-h-dvh grid-rows-[auto_1fr_auto]',
 			className
 		)}
 	>
@@ -20,7 +20,10 @@ const PlayerRoot: React.FC<LayoutProps> = ({ children, className }) => (
 
 const PlayerHeader: React.FC<LayoutProps> = ({ children, className }) => (
 	<header
-		className={cn('navbar bg-base-100 sticky top-0 z-10 shadow-sm', className)}
+		className={cn(
+			'bg-white sticky top-0 z-10 shadow-sm py-4',
+			className
+		)}
 	>
 		<div className="container mx-auto flex flex-wrap items-center justify-between px-4">
 			<div className="font-bold">{config.title}</div>
@@ -44,7 +47,7 @@ const PlayerMain: React.FC<LayoutProps> = ({ children, className }) => (
 const PlayerFooter: React.FC<LayoutProps> = ({ children, className }) => (
 	<footer
 		className={cn(
-			'footer bg-base-100 text-base-content sticky bottom-0 z-10 p-4',
+			'bg-white text-gray-900 sticky bottom-0 z-10 p-4',
 			className
 		)}
 	>

@@ -1,6 +1,6 @@
 import { kmClient, kmEnv } from '@/services/km-client';
 import React, { type ReactNode } from 'react';
-import { themeVarMappings, type Config } from '../config';
+import { type Config } from '../config';
 
 interface AppImports {
 	host: () => Promise<{ default: React.ComponentType }>;
@@ -46,19 +46,8 @@ async function waitForSubscriptions(): Promise<void> {
 	}
 }
 
-function setupTheme(config: Config): void {
-	if (config.theme) {
-		themeVarMappings.forEach(([cssVar, configKey]) => {
-			const value = config.theme?.[configKey];
-			if (value) {
-				document.documentElement.style.setProperty(cssVar, value);
-			}
-		});
-	}
-}
-
 async function prepareComponent(
-	config: Config,
+	_config: Config,
 	appImports: AppImports,
 	renderComponent: (component: ReactNode) => void
 ): Promise<void> {
@@ -80,7 +69,6 @@ async function prepareComponent(
 
 	await waitForSubscriptions();
 	document.getElementById('connecting')?.remove();
-	setupTheme(config);
 	renderComponent(<App />);
 }
 

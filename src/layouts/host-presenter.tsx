@@ -8,7 +8,7 @@ interface LayoutProps {
 }
 
 const HostPresenterRoot: React.FC<LayoutProps> = ({ children, className }) => (
-	<div className={cn('bg-base-200 min-h-screen p-8', className)}>
+	<div className={cn('bg-slate-100 min-h-screen p-8', className)}>
 		{children}
 	</div>
 );
