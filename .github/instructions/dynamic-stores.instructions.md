@@ -28,12 +28,12 @@ Use dynamic stores when you need:
 import { useDynamicStore } from '@/hooks/useDynamicStore';
 
 interface RoomState {
-  messages: string[];
+  messages: Record<string, string>; // key: timestamp, value: message
   count: number;
 }
 
 const initialState: RoomState = {
-  messages: [],
+  messages: {},
   count: 0
 };
 
@@ -48,7 +48,8 @@ const MyComponent = ({ roomCode }: { roomCode: string }) => {
   // Update state
   const addMessage = async (message: string) => {
     await kmClient.transact([store], ([state]) => {
-      state.messages.push(message);
+      const timestamp = kmClient.serverTimestamp().toString();
+      state.messages[timestamp] = message;
     });
   };
 
@@ -56,7 +57,7 @@ const MyComponent = ({ roomCode }: { roomCode: string }) => {
     return <div>Connecting...</div>;
   }
 
-  return <div>Messages: {roomState.messages.length}</div>;
+  return <div>Messages: {Object.keys(roomState.messages).length}</div>;
 };
 ```
 
@@ -132,35 +133,43 @@ const TeamView = ({ teamId }: { teamId: string }) => {
 Multiple independent chat rooms:
 
 ```tsx
+interface ChatMessage {
+  clientId: string;
+  playerName: string;
+  text: string;
+  timestamp: number;
+}
+
 interface ChatState {
-  messages: Array<{
-    id: string;
-    clientId: string;
-    text: string;
-    timestamp: number;
-  }>;
+  messages: Record<string, ChatMessage>; // key: timestamp as string
 }
 
 const ChatRoom = ({ roomCode }: { roomCode: string }) => {
   const { store, isConnected } = useDynamicStore<ChatState>(
     `chat-${roomCode}`,
-    { messages: [] }
+    { messages: {} }
   );
 
   const { messages } = useSnapshot(store.proxy);
 
-  const sendMessage = async (text: string) => {
+  const sendMessage = async (playerName: string, text: string) => {
     await kmClient.transact([store], ([state]) => {
-      state.messages.push({
-        id: `${kmClient.id}-${Date.now()}`,
+      const timestamp = kmClient.serverTimestamp();
+      state.messages[timestamp.toString()] = {
         clientId: kmClient.id,
+        playerName,
         text,
-        timestamp: kmClient.serverTimestamp()
-      });
+        timestamp
+      };
     });
   };
 
-  return <div>{messages.length} messages</div>;
+  // Get sorted messages
+  const sortedMessages = Object.entries(messages)
+    .sort(([a], [b]) => Number(a) - Number(b))
+    .map(([, msg]) => msg);
+
+  return <div>{sortedMessages.length} messages</div>;
 };
 ```
 
@@ -171,8 +180,8 @@ Small group discussions or activities:
 ```tsx
 interface BreakoutRoomState {
   topic: string;
-  participants: string[];
-  responses: Record<string, string>;
+  participants: Record<string, { joinedAt: number }>; // key: clientId
+  responses: Record<string, string>; // key: clientId
   completed: boolean;
 }
 
@@ -181,7 +190,7 @@ const BreakoutRoom = ({ roomId }: { roomId: string }) => {
     `breakout-${roomId}`,
     {
       topic: '',
-      participants: [],
+      participants: {},
       responses: {},
       completed: false
     }
@@ -193,8 +202,10 @@ const BreakoutRoom = ({ roomId }: { roomId: string }) => {
   React.useEffect(() => {
     if (isConnected) {
       kmClient.transact([store], ([state]) => {
-        if (!state.participants.includes(kmClient.id)) {
-          state.participants.push(kmClient.id);
+        if (!state.participants[kmClient.id]) {
+          state.participants[kmClient.id] = {
+            joinedAt: kmClient.serverTimestamp()
+          };
         }
       });
     }
@@ -244,21 +255,23 @@ const BreakoutRoom = ({ roomId }: { roomId: string }) => {
 **State definition** (`src/state/chat-store.ts`):
 
 ```typescript
+// Export message interface
+export interface ChatMessage {
+  clientId: string;
+  playerName: string;
+  message: string;
+  timestamp: number;
+}
+
 // Export state interface
 export interface ChatState {
-  messages: Array<{
-    id: string;
-    clientId: string;
-    playerName: string;
-    message: string;
-    timestamp: number;
-  }>;
+  messages: Record<string, ChatMessage>; // key: timestamp as string
 }
 
 // Export function to generate initial state
 export function createChatState(): ChatState {
   return {
-    messages: []
+    messages: {}
   };
 }
 ```
@@ -268,7 +281,7 @@ export function createChatState(): ChatState {
 ```typescript
 import type { KokimokiStore } from '@kokimoki/app';
 import { kmClient } from '@/services/km-client';
-import type { ChatState } from '../chat-store';
+import type { ChatState, ChatMessage } from '../chat-store';
 
 export const chatActions = {
   async sendMessage(
@@ -277,13 +290,14 @@ export const chatActions = {
     message: string
   ) {
     await kmClient.transact([store], ([state]) => {
-      state.messages.push({
-        id: `${kmClient.id}-${Date.now()}`,
+      const timestamp = kmClient.serverTimestamp();
+      const newMessage: ChatMessage = {
         clientId: kmClient.id,
         playerName,
         message,
-        timestamp: kmClient.serverTimestamp()
-      });
+        timestamp
+      };
+      state.messages[timestamp.toString()] = newMessage;
     });
   }
 };
@@ -304,11 +318,16 @@ const ChatRoom = ({ roomCode }: { roomCode: string }) => {
 
   const { messages } = useSnapshot(store.proxy);
 
+  // Get sorted messages
+  const sortedMessages = Object.entries(messages)
+    .sort(([a], [b]) => Number(a) - Number(b))
+    .map(([, msg]) => msg);
+
   const handleSend = async (message: string) => {
     await chatActions.sendMessage(store, playerName, message);
   };
 
-  return <div>{messages.length} messages</div>;
+  return <div>{sortedMessages.length} messages</div>;
 };
 ```
 
@@ -319,6 +338,7 @@ const ChatRoom = ({ roomCode }: { roomCode: string }) => {
 3. **Check isConnected**: Wait for connection before showing/updating content
 4. **Cleanup on leave**: Remove player-specific data when leaving a room
 5. **Use actions**: Never inline `kmClient.transact` calls in components
+6. **Use Records, not Arrays**: Store collections as `Record<string, T>` with timestamp keys for automatic sorting and better sync performance
 
 ## Guidelines
 
@@ -328,5 +348,7 @@ const ChatRoom = ({ roomCode }: { roomCode: string }) => {
 - **ALWAYS** pass store instance to action functions
 - **ALWAYS** use `useSnapshot` to get reactive state updates
 - **ALWAYS** use `kmClient.transact` for state updates (within actions)
+- **NEVER** use arrays for collections - use `Record<string, T>` with timestamp keys instead
 - Use `isConnected` before displaying or modifying state
+- Use `kmClient.serverTimestamp().toString()` as keys for ordered collections
 - Consider using `kmClient.id` as keys for player-specific data in rooms
