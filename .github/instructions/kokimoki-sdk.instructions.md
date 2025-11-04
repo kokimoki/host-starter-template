@@ -73,6 +73,7 @@ export const store = kmClient.store<PlayerState>('store-name', initialState);
 - Use async/await for all state transactions by `kmClient.transact` function for global stores
 - Transactions are atomic and ensure state consistency
 - ALWAYS update store state inside `kmClient.transact()` within action function
+- Prefer using records, not arrays: store collections as `Record<string, T>` with timestamp keys for automatic sorting and better sync performance
 
 **Example: Updating State**
 

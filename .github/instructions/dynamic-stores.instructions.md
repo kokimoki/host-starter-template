@@ -348,7 +348,6 @@ const ChatRoom = ({ roomCode }: { roomCode: string }) => {
 - **ALWAYS** pass store instance to action functions
 - **ALWAYS** use `useSnapshot` to get reactive state updates
 - **ALWAYS** use `kmClient.transact` for state updates (within actions)
-- **NEVER** use arrays for collections - use `Record<string, T>` with timestamp keys instead
 - Use `isConnected` before displaying or modifying state
 - Use `kmClient.serverTimestamp().toString()` as keys for ordered collections
 - Consider using `kmClient.id` as keys for player-specific data in rooms
