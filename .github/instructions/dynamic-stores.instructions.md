@@ -238,6 +238,8 @@ const BreakoutRoom = ({ roomId }: { roomId: string }) => {
 
 - State syncs in real-time across all clients joined to the same room
 - Use transactions to update state atomically
+- **CRITICAL**: Always check if state properties exist before accessing them (e.g., `if (state.players)` before `state.players.length`)
+- Initial state may be `undefined` during connection/sync - add defensive checks in useEffect dependencies
 
 ### Connection Management
 
@@ -245,6 +247,7 @@ const BreakoutRoom = ({ roomId }: { roomId: string }) => {
 - Component automatically leaves the store on unmount
 - `isConnected` indicates successful join
 - `isConnecting` indicates join in progress
+- **Store state may not be fully initialized immediately after `isConnected` becomes true**
 
 ## Best Practices
 
@@ -336,9 +339,13 @@ const ChatRoom = ({ roomCode }: { roomCode: string }) => {
 1. **Unique room names**: Use descriptive prefixes (e.g., `"chat-room-"`, `"team-"`)
 2. **Key remounting**: Use `key={roomCode}` to force remount when switching rooms
 3. **Check isConnected**: Wait for connection before showing/updating content
-4. **Cleanup on leave**: Remove player-specific data when leaving a room
-5. **Use actions**: Never inline `kmClient.transact` calls in components
-6. **Use Records, not Arrays**: Store collections as `Record<string, T>` with timestamp keys for automatic sorting and better sync performance
+4. **Defensive state checks**: Always verify properties exist before accessing (e.g., `!myRoomState.players` before using)
+5. **UseEffect guards**: Check for undefined/null in useEffect conditions that depend on dynamic store state
+6. **Cleanup on leave**: Remove player-specific data when leaving a room
+7. **Use actions**: Never inline `kmClient.transact` calls in components
+8. **Use Records, not Arrays**: Store collections as `Record<string, T>` with timestamp keys for automatic sorting and better sync performance
+9. **Atomic transactions**: Combine related state updates in single transaction when possible
+10. **View state management**: When using dynamic stores for navigation/pairing, ensure parent components don't force view changes that conflict with store-driven navigation
 
 ## Guidelines
 
