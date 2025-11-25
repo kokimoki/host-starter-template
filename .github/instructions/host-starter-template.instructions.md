@@ -24,7 +24,7 @@ This project is based on a host starter template using [Kokimoki SDK](./kokimoki
 ## General guidelines
 
 - Follow React and TypeScript [best practices](./react.instructions.md)
-- **ALWAYS** check [@kokimoki/shared](./kokimoki-shared.instructions.md) components before implementing new UI features
+- **ALWAYS** check [@kokimoki/shared](./kokimoki-shared.instructions.md) components before building new UI
 - **CRITICAL** Do not modify `src/kit/` directory
 - Keep config files (`src/config/`, `vite.config.ts`, `tsconfig*.json`) up to date
 - Prefer `lucide-react` icons over custom SVGs
@@ -241,7 +241,7 @@ import { HostPresenterLayout } from '@/layouts/host-presenter';
 - **CRITICAL:** Add all user-facing text (buttons, labels, titles, messages) and configurable game parameters to [schema.ts](../../src/config/schema.ts) and [default.config.yaml](../../default.config.yaml)
 - **NEVER** hardcode text strings in components
 - **ALWAYS** update both files when making changes in config
-- Run `npm run build` after modifying the `schema.ts` to generate the `YAML` schema specification
+- **ALWAYS** Run `npm run build` after modifying the `schema.ts` to generate the `YAML` schema specification
 - Check existing configuration before adding new values
 - Keep `schema.ts` defaults minimal - only short, valid fallback values
 - **ALWAYS** use quotes for strings in `YAML` files
