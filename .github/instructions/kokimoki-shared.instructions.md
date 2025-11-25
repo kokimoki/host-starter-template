@@ -22,4 +22,4 @@ A React components library that provides reusable UI components and hooks for Ko
 - **KmTimeProgress** - Progress indicator component for tracking time-based progress with live updates
 - **useKmAnimatedValue** - React hook for animating numeric values with smooth transitions and automatic DOM updates
 
-Refer to [`@kokimoki/shared/dist/docs/llms.txt`](../../node_modules/@kokimoki/shared/dist/docs/llms.txt) for detailed documentation about each component and hook
+Refer to [`@kokimoki/shared/dist/docs/llms.txt`](https://unpkg.com/@kokimoki/shared@1.0.8/dist/docs/llms.txt) for detailed documentation about each component and hook
