@@ -1,8 +1,9 @@
-# AGENTS instructions
+# AGENTS.md
 
 ## Project Overview
 
-Real-time collaborative game application template using Kokimoki SDK. Three display modes: `host` (desktop control), `player` (mobile gameplay), `presenter` (spectator screen).
+Real-time collaborative game application template using Kokimoki SDK.
+Has three display modes: `host` (desktop control), `player` (mobile gameplay), `presenter` (spectator screen).
 
 ## Build and test commands
 
@@ -17,7 +18,7 @@ Real-time collaborative game application template using Kokimoki SDK. Three disp
 **IMPORTANT** Before implementing features, read instruction files in `.github/instructions/`:
 
 - [host-starter-template](.github/instructions/host-starter-template.instructions.md) - Project starter template structure, display modes, state management, layouts, configuration
-- [kokimoki-sdk](.github/instructions/kokimoki-sdk.instructions.md) - Kokimoki SDK reference for state management, media uploads, server time, leaderboards, AI integration
+- [kokimoki-sdk](.github/instructions/kokimoki-sdk.instructions.md) - Kokimoki SDK providing state management, media uploads, server time, leaderboards, AI integration
 - [dynamic-stores](.github/instructions/dynamic-stores.instructions.md) - Room-based state management with dynamic stores
 - [kokimoki-shared](.github/instructions/kokimoki-shared.instructions.md) - Reusable UI components
 - [react](.github/instructions/react.instructions.md) - React and TypeScript best practices
@@ -26,7 +27,7 @@ Real-time collaborative game application template using Kokimoki SDK. Three disp
 
 - Named exports only (no default exports)
 - Use `@/` path alias for all imports
-- Use `kebab-case` for filenames and `camelCase` for functions, variables and hooks
+- Use `kebab-case` for filenames except `src/utils/` and `src/hooks/` (use `camelCase` there)
 
 ## Common Tasks
 
