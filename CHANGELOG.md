@@ -17,7 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated `kokimoki-shared.instructions.md` with more detailed component usage guidelines and decision framework
 - Updated `kokimoki-sdk.instructions.md` to remove redundant documentation and improve clarity
 - Updated `host-starter-template.instructions.md` with additional patterns and examples
-- Updated `@kokimoki/app` package to `2.0.0`
+- Updated `@kokimoki/app` to `2.0.0`
+- Updated `@kokimoki/shared` to `1.0.8`
 - Refactored `useDynamicStore` hook to use single `ConnectionState` object instead of separate state variables for better state management consistency
 
 ## [1.0.2] - 2025-10-17
