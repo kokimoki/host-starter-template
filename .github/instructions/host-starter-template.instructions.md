@@ -29,7 +29,7 @@ This project is based on a host starter template using [Kokimoki SDK](./kokimoki
 - Keep config files (`src/config/`, `vite.config.ts`, `tsconfig*.json`) up to date
 - Prefer `lucide-react` icons over custom SVGs
 - Use `Media Uploads` and `AI Integration` methods from Kokimoki SDK
-- Use [`useDynamicStore`](../../src/hooks/useDynamicStore.tsx) hook for isolated room-based state management following [instructions](./dynamic-store.instructions.md)
+- Use [`useDynamicStore`](../../src/hooks/useDynamicStore.tsx) hook for isolated room-based state management following [instructions](./dynamic-stores.instructions.md)
 
 ## Imports and Exports
 
