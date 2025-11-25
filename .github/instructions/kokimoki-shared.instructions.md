@@ -12,7 +12,7 @@ A React components library that provides reusable UI components and hooks for Ko
 ## Components and Hooks
 
 - **KmAudioButton** - Audio control button with play/pause functionality and animated icons
-- **KmAudooProvider** - Context provider for managing audio playback with global controls
+- **KmAudioProvider** - Context provider for managing audio playback with global controls
 - **KmConfettiProvider** - Context provider for managing confetti effects with customizable presets
 - **KmCopyButton** - Copy-to-clipboard button with customizable text and visual feedback
 - **KmModalProvider** - Context provider managing Dialog, Drawer, and AlertDialog modals
