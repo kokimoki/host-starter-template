@@ -24,12 +24,12 @@ This project is based on a host starter template using [Kokimoki SDK](./kokimoki
 ## General guidelines
 
 - Follow React and TypeScript [best practices](./react.instructions.md)
-- **ALWAYS** check [@kokimoki/shared](./kokimoki-shared.instructions.md) components before creating new UI components
-- Use [`useDynamicStore`](../../src/hooks/useDynamicStore.tsx) hook for isolated room-based state management following [instructions](./dynamic-store.instructions.md)
+- **ALWAYS** check [@kokimoki/shared](./kokimoki-shared.instructions.md) components before implementing new UI features
 - **CRITICAL** Do not modify `src/kit/` directory
 - Keep config files (`src/config/`, `vite.config.ts`, `tsconfig*.json`) up to date
 - Prefer `lucide-react` icons over custom SVGs
-- Use [Media Uploads](./kokimoki-sdk.instructions.md#media-uploads) and [AI Integration](./kokimoki-sdk.instructions.md#ai-integration) methods from SDK
+- Use `Media Uploads` and `AI Integration` methods from Kokimoki SDK
+- Use [`useDynamicStore`](../../src/hooks/useDynamicStore.tsx) hook for isolated room-based state management following [instructions](./dynamic-store.instructions.md)
 
 ## Imports and Exports
 
