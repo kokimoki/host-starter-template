@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [Unreleased]
+
+### Added
+
+- Added `AGENTS.md` file with project overview, build commands, instruction references, and common tasks
+- Added `dynamic-stores.instructions.md` comprehensive documentation for room-based state management with `useDynamicStore` hook
+
+### Changed
+
+- Updated `kokimoki-shared.instructions.md` with more detailed component usage guidelines and decision framework
+- Updated `kokimoki-sdk.instructions.md` to remove redundant documentation and improve clarity
+- Updated `host-starter-template.instructions.md` with additional patterns and examples
+- Updated `@kokimoki/app` package to `2.0.0`
+- Refactored `useDynamicStore` hook to use single `ConnectionState` object instead of separate state variables for better state management consistency
+
 ## [1.0.2] - 2025-10-17
 
 ### Changed
