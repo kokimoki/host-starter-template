@@ -9,7 +9,7 @@ The `useDynamicStore` hook enables creation of isolated, room-based state manage
 
 ## When to Use Dynamic Stores
 
-Use dynamic stores when you need:
+**Use for:**
 
 - **Room-based isolation**: Chat rooms, team spaces, breakout rooms
 - **Player grouping**: Teams, squads, parties that share private state
@@ -84,6 +84,9 @@ const MyComponent = ({ roomCode }: { roomCode: string }) => {
 
   return <div>Messages: {Object.keys(roomState.messages).length}</div>;
 };
+
+// Use key to remount component on `roomCode` change
+<MyComponent key={roomCode} roomCode={roomCode} />;
 ```
 
 ## Hook API
@@ -245,7 +248,7 @@ const BreakoutRoom = ({ roomId }: { roomId: string }) => {
   return (
     <div>
       <h3>{roomState.topic}</h3>
-      <p>Participants: {roomState.participants.length}</p>
+      <p>Participants: {Object.keys(roomState.participants).length}</p>
     </div>
   );
 };
