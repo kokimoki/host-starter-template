@@ -15,8 +15,8 @@ This project is based on a host starter template using [Kokimoki SDK](./kokimoki
 
 ## Spec-driven development
 
-- The specification is defined in `spec.md` file
-- Create spec if missing
+- The specification should be defined in `spec.md` file in the root directory
+- Create `spec.md` if missing before starting development
 - **ALWAYS** check spec before implementation, make sure that the implementation follows the spec
 - Update spec when implementation deviates or new features added
 - Ask for clarifications if spec unclear
@@ -24,11 +24,12 @@ This project is based on a host starter template using [Kokimoki SDK](./kokimoki
 ## General guidelines
 
 - Follow React and TypeScript [best practices](./react.instructions.md)
-- **ALWAYS** check [@kokimoki/shared](./kokimoki-shared.instructions.md) components before creating new UI components
-- **CRITICAL:** Do not modify `src/kit/` directory
+- **ALWAYS** check [@kokimoki/shared](./kokimoki-shared.instructions.md) components before building new UI
+- **CRITICAL** Do not modify `src/kit/` directory
 - Keep config files (`src/config/`, `vite.config.ts`, `tsconfig*.json`) up to date
 - Prefer `lucide-react` icons over custom SVGs
-- Use [Media Uploads](./kokimoki-sdk.instructions.md#media-uploads) and [AI Integration](./kokimoki-sdk.instructions.md#ai-integration) methods from SDK
+- Use `Media Uploads` and `AI Integration` methods from Kokimoki SDK
+- Use [`useDynamicStore`](../../src/hooks/useDynamicStore.tsx) hook for isolated room-based state management following [instructions](./dynamic-stores.instructions.md)
 
 ## Imports and Exports
 
@@ -240,7 +241,7 @@ import { HostPresenterLayout } from '@/layouts/host-presenter';
 - **CRITICAL:** Add all user-facing text (buttons, labels, titles, messages) and configurable game parameters to [schema.ts](../../src/config/schema.ts) and [default.config.yaml](../../default.config.yaml)
 - **NEVER** hardcode text strings in components
 - **ALWAYS** update both files when making changes in config
-- Run `npm run build` after modifying the `schema.ts` to generate the `YAML` schema specification
+- **ALWAYS** Run `npm run build` after modifying the `schema.ts` to generate the `YAML` schema specification
 - Check existing configuration before adding new values
 - Keep `schema.ts` defaults minimal - only short, valid fallback values
 - **ALWAYS** use quotes for strings in `YAML` files

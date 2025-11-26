@@ -9,7 +9,7 @@ The `useDynamicStore` hook enables creation of isolated, room-based state manage
 
 ## When to Use Dynamic Stores
 
-Use dynamic stores when you need:
+**Use for:**
 
 - **Room-based isolation**: Chat rooms, team spaces, breakout rooms
 - **Player grouping**: Teams, squads, parties that share private state
@@ -21,6 +21,31 @@ Use dynamic stores when you need:
 - Global game state (use `globalStore` instead)
 - Player-specific data (use `playerStore` instead)
 - Single shared space for all players
+
+### General Best Practices
+
+- **Unique room names**: Use descriptive prefixes (e.g., `"chat-room-"`, `"team-"`)
+- **Key remounting**: Use `key={roomCode}` to force remount when switching rooms
+- **Check isConnected**: Wait for connection before showing/updating content
+- **Defensive state checks**: Always verify properties exist before accessing (e.g., `!myRoomState.players` before using)
+- **UseEffect guards**: Check for undefined/null in useEffect conditions that depend on dynamic store state
+- **Cleanup on leave**: Remove player-specific data when leaving a room
+- **Use actions**: Never inline `kmClient.transact` calls in components
+- **Use Records, not Arrays**: Store collections as `Record<string, T>` with timestamp keys for automatic sorting and better sync performance
+- **Atomic transactions**: Combine related state updates in single transaction when possible
+- **View state management**: When using dynamic stores for navigation/pairing, ensure parent components don't force view changes that conflict with store-driven navigation
+
+## General guidelines
+
+- **ALWAYS** organize dynamic stores in `src/state/*-store.ts` files
+- **ALWAYS** export state interface and initial state creator function
+- **ALWAYS** define actions in `src/state/actions/*-actions.ts` files
+- **ALWAYS** pass store instance to action functions
+- **ALWAYS** use `useSnapshot` to get reactive state updates
+- **ALWAYS** use `kmClient.transact` for state updates (within actions)
+- Use `isConnected` before displaying or modifying state
+- Use `kmClient.serverTimestamp().toString()` as keys for ordered collections
+- Consider using `kmClient.id` as keys for player-specific data in rooms
 
 ## Basic Usage
 
@@ -59,6 +84,9 @@ const MyComponent = ({ roomCode }: { roomCode: string }) => {
 
   return <div>Messages: {Object.keys(roomState.messages).length}</div>;
 };
+
+// Use key to remount component on `roomCode` change
+<MyComponent key={roomCode} roomCode={roomCode} />;
 ```
 
 ## Hook API
@@ -220,7 +248,7 @@ const BreakoutRoom = ({ roomId }: { roomId: string }) => {
   return (
     <div>
       <h3>{roomState.topic}</h3>
-      <p>Participants: {roomState.participants.length}</p>
+      <p>Participants: {Object.keys(roomState.participants).length}</p>
     </div>
   );
 };
@@ -333,28 +361,3 @@ const ChatRoom = ({ roomCode }: { roomCode: string }) => {
   return <div>{sortedMessages.length} messages</div>;
 };
 ```
-
-### General Best Practices
-
-1. **Unique room names**: Use descriptive prefixes (e.g., `"chat-room-"`, `"team-"`)
-2. **Key remounting**: Use `key={roomCode}` to force remount when switching rooms
-3. **Check isConnected**: Wait for connection before showing/updating content
-4. **Defensive state checks**: Always verify properties exist before accessing (e.g., `!myRoomState.players` before using)
-5. **UseEffect guards**: Check for undefined/null in useEffect conditions that depend on dynamic store state
-6. **Cleanup on leave**: Remove player-specific data when leaving a room
-7. **Use actions**: Never inline `kmClient.transact` calls in components
-8. **Use Records, not Arrays**: Store collections as `Record<string, T>` with timestamp keys for automatic sorting and better sync performance
-9. **Atomic transactions**: Combine related state updates in single transaction when possible
-10. **View state management**: When using dynamic stores for navigation/pairing, ensure parent components don't force view changes that conflict with store-driven navigation
-
-## Guidelines
-
-- **ALWAYS** organize dynamic stores in `src/state/*-store.ts` files
-- **ALWAYS** export state interface and initial state creator function
-- **ALWAYS** define actions in `src/state/actions/*-actions.ts` files
-- **ALWAYS** pass store instance to action functions
-- **ALWAYS** use `useSnapshot` to get reactive state updates
-- **ALWAYS** use `kmClient.transact` for state updates (within actions)
-- Use `isConnected` before displaying or modifying state
-- Use `kmClient.serverTimestamp().toString()` as keys for ordered collections
-- Consider using `kmClient.id` as keys for player-specific data in rooms

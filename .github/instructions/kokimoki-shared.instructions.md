@@ -3,15 +3,16 @@ description: Documentation for the @kokimoki/shared library components and hooks
 applyTo: '**/*.tsx'
 ---
 
-# Shared Components Library: @kokimoki/shared v1.0.7
+# Shared Components Library: @kokimoki/shared
 
 ## Overview
 
 A React components library that provides reusable UI components and hooks for Kokimoki applications
 
-## Available Components and Hooks
+## Components and Hooks
 
 - **KmAudioButton** - Audio control button with play/pause functionality and animated icons
+- **KmAudioProvider** - Context provider for managing audio playback with global controls
 - **KmConfettiProvider** - Context provider for managing confetti effects with customizable presets
 - **KmCopyButton** - Copy-to-clipboard button with customizable text and visual feedback
 - **KmModalProvider** - Context provider managing Dialog, Drawer, and AlertDialog modals
@@ -21,4 +22,4 @@ A React components library that provides reusable UI components and hooks for Ko
 - **KmTimeProgress** - Progress indicator component for tracking time-based progress with live updates
 - **useKmAnimatedValue** - React hook for animating numeric values with smooth transitions and automatic DOM updates
 
-For detailed individual components description with examples, refer to the documentation: [docs](https://unpkg.com/@kokimoki/shared@1.0.7/dist/docs/llms.txt)
+Refer to [`@kokimoki/shared/dist/docs/llms.txt`](https://unpkg.com/@kokimoki/shared@1.0.8/dist/docs/llms.txt) for detailed documentation about each component and hook

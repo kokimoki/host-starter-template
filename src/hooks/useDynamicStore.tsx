@@ -17,12 +17,19 @@ export interface UseDynamicStoreResult<T extends object> {
 	isConnecting: boolean;
 }
 
+interface ConnectionState {
+	connected: boolean;
+	connecting: boolean;
+}
+
 export function useDynamicStore<T extends object>(
 	roomName: string,
 	initialState: T
 ): UseDynamicStoreResult<T> {
-	const [isConnected, setIsConnected] = useState(false);
-	const [isConnecting, setIsConnecting] = useState(false);
+	const [connection, setConnection] = useState<ConnectionState>({
+		connected: false,
+		connecting: false
+	});
 
 	// Initialize or get cached store
 	if (!kokimokiStores.has(roomName)) {
@@ -46,28 +53,36 @@ export function useDynamicStore<T extends object>(
 		// Join store if not already joined
 		if (!entry.joined) {
 			entry.joined = true;
-			setIsConnecting(true);
-			setIsConnected(false);
+			setConnection({
+				connecting: true,
+				connected: false
+			});
 
 			kmClient
 				.join(entry.store)
 				.then(() => {
 					// Only update state if component is still mounted
 					if (entry.refCount > 0) {
-						setIsConnected(true);
-						setIsConnecting(false);
+						setConnection({
+							connecting: false,
+							connected: true
+						});
 					}
 				})
 				.catch((error) => {
 					console.error(`Failed to join store ${roomName}:`, error);
-					setIsConnected(false);
-					setIsConnecting(false);
+					setConnection({
+						connecting: false,
+						connected: false
+					});
 					entry.joined = false;
 				});
 		} else {
 			// Already joined by another instance
-			setIsConnected(true);
-			setIsConnecting(false);
+			setConnection({
+				connecting: false,
+				connected: true
+			});
 		}
 
 		// Cleanup on unmount
@@ -105,15 +120,17 @@ export function useDynamicStore<T extends object>(
 				}, 250);
 			}
 
-			setIsConnected(false);
-			setIsConnecting(false);
+			setConnection({
+				connecting: false,
+				connected: false
+			});
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [roomName]);
 
 	return {
 		store,
-		isConnected,
-		isConnecting
+		isConnected: connection.connected,
+		isConnecting: connection.connecting
 	};
 }
