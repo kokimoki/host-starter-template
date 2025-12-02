@@ -18,10 +18,12 @@ export default defineConfig({
 			schema,
 			deployCodes: [
 				{
-					name: 'player',
-					description: 'Link for players',
+					name: 'host',
+					description: 'Link for hosts',
 					clientContext: {
-						mode: 'player'
+						mode: 'host',
+						playerCode: '$player',
+						presenterCode: '$presenter'
 					}
 				},
 				{
@@ -33,12 +35,10 @@ export default defineConfig({
 					}
 				},
 				{
-					name: 'host',
-					description: 'Link for hosts',
+					name: 'player',
+					description: 'Link for players',
 					clientContext: {
-						mode: 'host',
-						playerCode: '$player',
-						presenterCode: '$presenter'
+						mode: 'player'
 					}
 				}
 			],
