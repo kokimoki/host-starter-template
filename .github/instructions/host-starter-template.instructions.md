@@ -263,11 +263,9 @@ export const Button = () => <button>Start Game</button>;
 
 ## Global controller
 
-[useGlobalController.ts](../../src/hooks/useGlobalController.ts) maintains a single controller connection for time-based logic.
+[useGlobalController.ts](../../src/hooks/useGlobalController.ts) maintains a single controller connection for logic that should only run on one device at a time (e.g. handling global timers, assigning player roles, running physics simulations).
 
-- Add time-based global controller logic inside the `useGlobalController` hook
-
-**Example: Time-based logic**
+### Example: Time-based logic\*\*
 
 ```tsx
 // Inside useGlobalController.ts (lines 36-44)
@@ -288,6 +286,45 @@ useEffect(() => {
 
   handleNewRound();
 }, [isGlobalController, serverTime]);
+```
+
+### Example: Distributing player roles
+
+```tsx
+// Inside useGlobalController.ts (lines 46-60)
+// role: "wizard", "warrior", "archer", "healer", etc.
+const { assignedRoles } = useSnapshot(globalStore.proxy); // { [role]: clientId | null }
+const onlinePlayerIds = useSnapshot(globalStore.connections).clientIds; // Set<string>
+
+useEffect(() => {
+  if (!isGlobalController) {
+    return;
+  }
+
+  // Check current connections to ensure each role has one assigned player
+  const handleRoleAssignment = async () => {
+    await kmClient.transact([globalStore], ([globalState]) => {
+      const unassignedPlayers = Array.from(onlinePlayerIds).filter(
+        (id) => !Object.values(assignedRoles).includes(id)
+      );
+
+      const roles = Object.keys(assignedRoles);
+      roles.forEach((role) => {
+        const assignedPlayerId = assignedRoles[role];
+
+        if (
+          (assignedPlayerId && !onlinePlayerIds.has(assignedPlayerId)) ||
+          !assignedPlayerId
+        ) {
+          const newPlayerId = unassignedPlayers.shift() || null;
+          globalState.assignedRoles[role] = newPlayerId;
+        }
+      });
+    });
+  };
+
+  handleRoleAssignment();
+}, [isGlobalController, onlinePlayerIds]);
 ```
 
 ## Common Patterns
