@@ -268,7 +268,7 @@ export const Button = () => <button>Start Game</button>;
 ### Example: Time-based logic\*\*
 
 ```tsx
-// Inside useGlobalController.ts (lines 36-44)
+// Inside useGlobalController.ts
 useEffect(() => {
   if (!isGlobalController) {
     return;
@@ -291,7 +291,7 @@ useEffect(() => {
 ### Example: Distributing player roles
 
 ```tsx
-// Inside useGlobalController.ts (lines 46-60)
+// Inside useGlobalController.ts
 // role: "wizard", "warrior", "archer", "healer", etc.
 const { assignedRoles } = useSnapshot(globalStore.proxy); // { [role]: clientId | null }
 const onlinePlayerIds = useSnapshot(globalStore.connections).clientIds; // Set<string>
