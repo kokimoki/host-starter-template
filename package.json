@@ -6,7 +6,8 @@
 	"description": "A starter template for building a host-based games using Kokimoki SDK",
 	"scripts": {
 		"dev": "vite --clearScreen false",
-		"build": "tsc && vite build",
+		"typecheck": "tsc -b",
+		"build": "npm run typecheck && vite build",
 		"preview": "vite preview",
 		"lint": "eslint \"src/**/*.ts\"",
 		"format": "prettier --write ."
