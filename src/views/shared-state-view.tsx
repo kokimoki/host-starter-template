@@ -4,10 +4,10 @@ import { kmClient } from '@/services/km-client';
 import { globalActions } from '@/state/actions/global-actions';
 import { globalStore } from '@/state/stores/global-store';
 import { cn } from '@/utils/cn';
+import { useSnapshot } from '@kokimoki/app';
 import { KmTimeCountdown } from '@kokimoki/shared';
 import React from 'react';
 import Markdown from 'react-markdown';
-import { useSnapshot } from 'valtio';
 
 interface Props {
 	className?: string;
@@ -27,7 +27,7 @@ export const SharedStateView: React.FC<React.PropsWithChildren<Props>> = ({
 	return (
 		<div
 			className={cn(
-				'bg-white border border-gray-200 rounded-lg shadow-md w-full',
+				'w-full rounded-lg border border-gray-200 bg-white shadow-md',
 				className
 			)}
 		>
@@ -38,9 +38,9 @@ export const SharedStateView: React.FC<React.PropsWithChildren<Props>> = ({
 
 				<div className="mt-4 grid gap-4">
 					{started && (
-						<div className="bg-white border border-gray-200 rounded-lg shadow p-6">
+						<div className="rounded-lg border border-gray-200 bg-white p-6 shadow">
 							<div className="text-sm text-gray-500">{config.timeElapsed}</div>
-							<div className="text-3xl font-bold mt-1">
+							<div className="mt-1 text-3xl font-bold">
 								<KmTimeCountdown ms={serverTime - startTimestamp} />
 							</div>
 						</div>
@@ -48,7 +48,7 @@ export const SharedStateView: React.FC<React.PropsWithChildren<Props>> = ({
 
 					{!started && isHost && (
 						<button
-							className="px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 font-medium"
+							className="rounded-lg bg-blue-500 px-4 py-2 font-medium text-white hover:bg-blue-600"
 							onClick={globalActions.startGame}
 						>
 							{config.startButton}
@@ -57,7 +57,7 @@ export const SharedStateView: React.FC<React.PropsWithChildren<Props>> = ({
 
 					{started && isHost && (
 						<button
-							className="px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 font-medium"
+							className="rounded-lg bg-red-500 px-4 py-2 font-medium text-white hover:bg-red-600"
 							onClick={globalActions.stopGame}
 						>
 							{config.stopButton}

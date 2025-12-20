@@ -1,10 +1,19 @@
 import { config } from '@/config';
+import { kmClient } from '@/services/km-client';
 import { cn } from '@/utils/cn';
 import React from 'react';
 import Markdown from 'react-markdown';
 
 interface Props {
 	className?: string;
+}
+
+async function chat() {
+	const res = await kmClient.ai.chat({
+		userPrompt: 'Hello, how are you?'
+	});
+
+	console.log('Chat response:', res);
 }
 
 /**
@@ -17,11 +26,14 @@ export const GameLobbyView: React.FC<React.PropsWithChildren<Props>> = ({
 	return (
 		<div
 			className={cn(
-				'bg-white border border-gray-200 rounded-lg shadow-md w-full max-w-screen-sm',
+				'w-full max-w-screen-sm rounded-lg border border-gray-200 bg-white shadow-md',
 				className
 			)}
 		>
-			<div className="p-6 prose">
+			<button className="bg-amber-300" onClick={chat}>
+				Test Chat
+			</button>
+			<div className="prose p-6">
 				<Markdown>{config.gameLobbyMd}</Markdown>
 			</div>
 		</div>

@@ -11,9 +11,9 @@ import { ConnectionsView } from '@/views/connections-view';
 import { CreateProfileView } from '@/views/create-profile-view';
 import { GameLobbyView } from '@/views/game-lobby-view';
 import { SharedStateView } from '@/views/shared-state-view';
+import { useSnapshot } from '@kokimoki/app';
 import { KmModalProvider } from '@kokimoki/shared';
 import * as React from 'react';
-import { useSnapshot } from 'valtio';
 
 const App: React.FC = () => {
 	const { title } = config;

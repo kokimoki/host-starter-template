@@ -1,9 +1,9 @@
 import { config } from '@/config';
 import { globalStore } from '@/state/stores/global-store';
 import { cn } from '@/utils/cn';
+import { useSnapshot } from '@kokimoki/app';
 import React from 'react';
 import Markdown from 'react-markdown';
-import { useSnapshot } from 'valtio';
 
 interface Props {
 	className?: string;
@@ -28,7 +28,7 @@ export const ConnectionsView: React.FC<React.PropsWithChildren<Props>> = ({
 	return (
 		<div
 			className={cn(
-				'bg-white border border-gray-200 rounded-lg shadow-md w-full',
+				'w-full rounded-lg border border-gray-200 bg-white shadow-md',
 				className
 			)}
 		>
@@ -37,22 +37,22 @@ export const ConnectionsView: React.FC<React.PropsWithChildren<Props>> = ({
 					<Markdown>{config.connectionsMd}</Markdown>
 				</div>
 
-				<div className="mt-4 bg-white border border-gray-200 rounded-lg shadow p-6">
+				<div className="mt-4 rounded-lg border border-gray-200 bg-white p-6 shadow">
 					<div className="text-sm text-gray-500">{config.players}</div>
-					<div className="text-3xl font-bold mt-1">{onlinePlayersCount}</div>
+					<div className="mt-1 text-3xl font-bold">{onlinePlayersCount}</div>
 				</div>
 
 				{playersList.length > 0 && (
 					<div className="mt-4">
 						<h3 className="mb-2 text-lg font-semibold">Player List</h3>
-						<ul className="bg-slate-50 rounded-lg divide-y divide-gray-200">
+						<ul className="divide-y divide-gray-200 rounded-lg bg-slate-50">
 							{playersList.map((player) => (
 								<li key={player.id} className="px-4 py-3">
 									<div className="flex items-center justify-between">
 										<span>{player.name}</span>
 										<span
 											className={cn(
-												'inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium',
+												'inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium',
 												player.isOnline
 													? 'bg-green-100 text-green-800'
 													: 'border border-gray-300 text-gray-700'

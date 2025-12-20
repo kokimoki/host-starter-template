@@ -1,7 +1,7 @@
 import { kmClient } from '@/services/km-client';
 import { globalStore } from '@/state/stores/global-store';
+import { useSnapshot } from '@kokimoki/app';
 import { useEffect } from 'react';
-import { useSnapshot } from 'valtio';
 import { useServerTimer } from './useServerTime';
 
 export function useGlobalController() {
