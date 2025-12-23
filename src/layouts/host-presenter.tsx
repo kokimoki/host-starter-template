@@ -8,7 +8,7 @@ interface LayoutProps {
 }
 
 const HostPresenterRoot: React.FC<LayoutProps> = ({ children, className }) => (
-	<div className={cn('bg-slate-100 min-h-screen p-8', className)}>
+	<div className={cn('min-h-screen bg-slate-100 p-8', className)}>
 		{children}
 	</div>
 );
@@ -24,13 +24,13 @@ const HostPresenterHeader: React.FC<LayoutProps> = ({
 );
 
 const HostPresenterMain: React.FC<LayoutProps> = ({ children, className }) => (
-	<main className={cn('mx-auto grid max-w-screen-xl gap-6', className)}>
+	<main className={cn('mx-auto grid max-w-7xl gap-6', className)}>
 		{children}
 	</main>
 );
 
 /**
- * Layout components for the 'host' and 'presenter' modes
+ * Layout components for the `host` and `presenter` modes
  */
 export const HostPresenterLayout = {
 	Root: HostPresenterRoot,

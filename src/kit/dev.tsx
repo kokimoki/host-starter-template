@@ -1,3 +1,4 @@
+// IMPORTANT: Do NOT modify or remove this file
 import { config } from '@/config';
 import { useEffect } from 'react';
 import { DevFrame } from './dev-frame';

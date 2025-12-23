@@ -1,10 +1,12 @@
+// IMPORTANT: Do NOT modify or remove this file
 import { kmEnv } from '@/services/km-client';
 import type { ClientContext } from '@/types';
 
 /**
- * @param code Kokimoki code for fetching context
- * @param fallbackContext Context used in dev mode
- * @returns
+ * Generate a link for Kokimoki app to access via link or QR code
+ * @param code Kokimoki app code
+ * @param fallbackContext Context ONLY used in dev mode
+ * @returns Generated link URL
  */
 export function generateLink(code: string, fallbackContext: ClientContext) {
 	if (kmEnv.dev) {

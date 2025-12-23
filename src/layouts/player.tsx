@@ -10,7 +10,7 @@ interface LayoutProps {
 const PlayerRoot: React.FC<LayoutProps> = ({ children, className }) => (
 	<main
 		className={cn(
-			'bg-slate-100 grid min-h-dvh grid-rows-[auto_1fr_auto]',
+			'grid min-h-dvh grid-rows-[auto_1fr_auto] bg-slate-100',
 			className
 		)}
 	>
@@ -20,10 +20,7 @@ const PlayerRoot: React.FC<LayoutProps> = ({ children, className }) => (
 
 const PlayerHeader: React.FC<LayoutProps> = ({ children, className }) => (
 	<header
-		className={cn(
-			'bg-white sticky top-0 z-10 shadow-sm py-4',
-			className
-		)}
+		className={cn('sticky top-0 z-10 bg-white py-4 shadow-sm', className)}
 	>
 		<div className="container mx-auto flex flex-wrap items-center justify-between px-4">
 			<div className="font-bold">{config.title}</div>
@@ -46,17 +43,14 @@ const PlayerMain: React.FC<LayoutProps> = ({ children, className }) => (
 
 const PlayerFooter: React.FC<LayoutProps> = ({ children, className }) => (
 	<footer
-		className={cn(
-			'bg-white text-gray-900 sticky bottom-0 z-10 p-4',
-			className
-		)}
+		className={cn('sticky bottom-0 z-10 bg-white p-4 text-gray-900', className)}
 	>
 		{children}
 	</footer>
 );
 
 /**
- * Layout components for the 'player' mode
+ * Layout components for the `player` mode
  */
 export const PlayerLayout = {
 	Root: PlayerRoot,
