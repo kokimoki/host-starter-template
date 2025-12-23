@@ -1,4 +1,4 @@
-import { config } from '@/config';
+import { Logo } from '@/components/logo';
 import { cn } from '@/utils/cn';
 import * as React from 'react';
 
@@ -8,23 +8,25 @@ interface LayoutProps {
 }
 
 const PlayerRoot: React.FC<LayoutProps> = ({ children, className }) => (
-	<main
+	<div
 		className={cn(
 			'grid min-h-dvh grid-rows-[auto_1fr_auto] bg-slate-100',
 			className
 		)}
 	>
 		{children}
-	</main>
+	</div>
 );
 
 const PlayerHeader: React.FC<LayoutProps> = ({ children, className }) => (
 	<header
-		className={cn('sticky top-0 z-10 bg-white py-4 shadow-sm', className)}
+		className={cn(
+			'sticky top-0 z-10 bg-slate-50/95 shadow-xs backdrop-blur-xs',
+			className
+		)}
 	>
-		<div className="container mx-auto flex flex-wrap items-center justify-between px-4">
-			<div className="font-bold">{config.title}</div>
-
+		<div className="container mx-auto flex items-center justify-between p-4">
+			<Logo />
 			{children}
 		</div>
 	</header>
@@ -32,10 +34,7 @@ const PlayerHeader: React.FC<LayoutProps> = ({ children, className }) => (
 
 const PlayerMain: React.FC<LayoutProps> = ({ children, className }) => (
 	<main
-		className={cn(
-			'container mx-auto flex items-center justify-center p-4 lg:p-6',
-			className
-		)}
+		className={cn('container mx-auto flex items-center px-4 py-16', className)}
 	>
 		{children}
 	</main>
@@ -43,9 +42,12 @@ const PlayerMain: React.FC<LayoutProps> = ({ children, className }) => (
 
 const PlayerFooter: React.FC<LayoutProps> = ({ children, className }) => (
 	<footer
-		className={cn('sticky bottom-0 z-10 bg-white p-4 text-gray-900', className)}
+		className={cn(
+			'sticky bottom-0 z-10 border-t border-slate-200 bg-slate-50/95 backdrop-blur-xs',
+			className
+		)}
 	>
-		{children}
+		<div className="container mx-auto flex justify-center p-4">{children}</div>
 	</footer>
 );
 

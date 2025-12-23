@@ -14,5 +14,23 @@ export const globalActions = {
 			globalState.started = false;
 			globalState.startTimestamp = 0;
 		});
+	},
+
+	async togglePresenterQr() {
+		await kmClient.transact([globalStore], ([globalState]) => {
+			globalState.showPresenterQr = !globalState.showPresenterQr;
+		});
+	},
+
+	async showHelpForAll() {
+		await kmClient.transact([globalStore], ([globalState]) => {
+			globalState.showHelpForAll = true;
+		});
+	},
+
+	async hideHelpForAll() {
+		await kmClient.transact([globalStore], ([globalState]) => {
+			globalState.showHelpForAll = false;
+		});
 	}
 };

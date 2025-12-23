@@ -4,6 +4,7 @@ import { config } from '@/config';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { useGlobalController } from '@/hooks/useGlobalController';
 import { PlayerLayout } from '@/layouts/player';
+import { globalActions } from '@/state/actions/global-actions';
 import { playerActions } from '@/state/actions/player-actions';
 import { globalStore } from '@/state/stores/global-store';
 import { playerStore } from '@/state/stores/player-store';
@@ -12,13 +13,15 @@ import { CreateProfileView } from '@/views/create-profile-view';
 import { GameLobbyView } from '@/views/game-lobby-view';
 import { SharedStateView } from '@/views/shared-state-view';
 import { useSnapshot } from '@kokimoki/app';
-import { KmModalProvider } from '@kokimoki/shared';
+import { KmModalProvider, useKmModal } from '@kokimoki/shared';
 import * as React from 'react';
+import Markdown from 'react-markdown';
 
 const App: React.FC = () => {
 	const { title } = config;
 	const { name, currentView } = useSnapshot(playerStore.proxy);
-	const { started } = useSnapshot(globalStore.proxy);
+	const { started, showHelpForAll } = useSnapshot(globalStore.proxy);
+	const { openDrawer } = useKmModal();
 
 	useGlobalController();
 	useDocumentTitle(title);
@@ -31,6 +34,27 @@ const App: React.FC = () => {
 			playerActions.setCurrentView('lobby');
 		}
 	}, [started]);
+
+	React.useEffect(() => {
+		// Open help drawer when host enables it for all players
+		if (showHelpForAll) {
+			openDrawer({
+				content: (
+					<div className="max-h-full w-full overflow-y-auto">
+						<div className="container mx-auto px-4 py-16">
+							<article className="prose">
+								<Markdown>{config.menuHelpMd}</Markdown>
+							</article>
+						</div>
+					</div>
+				),
+				onClose: () => {
+					// Reset flag when player closes the drawer
+					globalActions.hideHelpForAll();
+				}
+			});
+		}
+	}, [showHelpForAll, openDrawer]);
 
 	if (!name) {
 		return (
@@ -45,22 +69,20 @@ const App: React.FC = () => {
 
 	if (!started) {
 		return (
-			<KmModalProvider>
-				<PlayerLayout.Root>
-					<PlayerLayout.Header>
-						<PlayerMenu />
-					</PlayerLayout.Header>
+			<PlayerLayout.Root>
+				<PlayerLayout.Header>
+					<PlayerMenu />
+				</PlayerLayout.Header>
 
-					<PlayerLayout.Main>
-						{currentView === 'lobby' && <GameLobbyView />}
-						{currentView === 'connections' && <ConnectionsView />}
-					</PlayerLayout.Main>
+				<PlayerLayout.Main>
+					{currentView === 'lobby' && <GameLobbyView />}
+					{currentView === 'connections' && <ConnectionsView />}
+				</PlayerLayout.Main>
 
-					<PlayerLayout.Footer>
-						<NameLabel name={name} />
-					</PlayerLayout.Footer>
-				</PlayerLayout.Root>
-			</KmModalProvider>
+				<PlayerLayout.Footer>
+					<NameLabel name={name} />
+				</PlayerLayout.Footer>
+			</PlayerLayout.Root>
 		);
 	}
 
@@ -80,4 +102,10 @@ const App: React.FC = () => {
 	);
 };
 
-export default App;
+const AppWithProvider: React.FC = () => (
+	<KmModalProvider>
+		<App />
+	</KmModalProvider>
+);
+
+export default AppWithProvider;

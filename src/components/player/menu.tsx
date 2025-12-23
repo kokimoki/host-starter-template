@@ -1,58 +1,41 @@
 import { config } from '@/config';
-import { playerActions } from '@/state/actions/player-actions';
-import type { PlayerState } from '@/state/stores/player-store';
 import { useKmModal } from '@kokimoki/shared';
-import { MenuIcon } from 'lucide-react';
+import { HelpCircle } from 'lucide-react';
 import * as React from 'react';
+import Markdown from 'react-markdown';
 
 /**
  * Menu component to navigate between different views in the player layout
  * This example is **optional** and can be removed if not needed
  */
 export const PlayerMenu: React.FC = () => {
-	const { openDrawer, closeModal } = useKmModal();
+	const { openDrawer } = useKmModal();
 
-	const handleNavigate = (view: PlayerState['currentView']) => {
-		playerActions.setCurrentView(view);
-		closeModal();
-	};
-
-	const handleOpen = () => {
+	const handleOpenHelp = () => {
 		openDrawer({
-			title: config.menuTitle,
+			title: config.menuHelpTitle,
 			content: (
-				<div className="h-full w-full p-4">
-					<ul className="flex w-full flex-col gap-2">
-						<li>
-							<button
-								onClick={() => handleNavigate('lobby')}
-								className="w-full rounded-lg px-4 py-2 text-left transition-colors hover:bg-slate-100"
-							>
-								{config.menuGameLobby}
-							</button>
-						</li>
-						<li>
-							<button
-								onClick={() => handleNavigate('connections')}
-								className="w-full rounded-lg px-4 py-2 text-left transition-colors hover:bg-slate-100"
-							>
-								{config.menuConnections}
-							</button>
-						</li>
-						{/* Add more menu items here */}
-					</ul>
+				<div className="max-h-full w-full overflow-y-auto">
+					<div className="container mx-auto px-4 py-16">
+						<article className="prose">
+							<Markdown>{config.menuHelpMd}</Markdown>
+						</article>
+					</div>
 				</div>
 			)
 		});
 	};
 
 	return (
-		<button
-			className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300"
-			onClick={handleOpen}
-		>
-			<MenuIcon className="h-6 w-6" />
-			<span className="sr-only">{config.menuAriaLabel}</span>
-		</button>
+		<div className="flex items-center gap-2">
+			<button
+				type="button"
+				onClick={handleOpenHelp}
+				className="flex size-9 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-slate-900 hover:text-slate-50"
+			>
+				<HelpCircle className="size-5" />
+				<span className="sr-only">{config.menuHelpAriaLabel}</span>
+			</button>
+		</div>
 	);
 };

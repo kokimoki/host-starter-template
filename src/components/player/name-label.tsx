@@ -12,7 +12,7 @@ interface NameLabelProps {
 export const NameLabel: React.FC<NameLabelProps> = ({ name }) => {
 	return (
 		<div className="flex items-center gap-2">
-			<span>{config.playerNameLabel}</span>
+			<span className="text-slate-500">{config.playerNameLabel}</span>
 			<span className="font-semibold">{name}</span>
 		</div>
 	);
