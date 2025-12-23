@@ -43,11 +43,11 @@ const PlayerMain: React.FC<LayoutProps> = ({ children, className }) => (
 const PlayerFooter: React.FC<LayoutProps> = ({ children, className }) => (
 	<footer
 		className={cn(
-			'sticky bottom-0 z-10 border-t border-slate-200 bg-slate-50/95 p-4 backdrop-blur-xs',
+			'sticky bottom-0 z-10 border-t border-slate-200 bg-slate-50/95 backdrop-blur-xs',
 			className
 		)}
 	>
-		<div className="container mx-auto flex justify-center">{children}</div>
+		<div className="container mx-auto flex justify-center p-4">{children}</div>
 	</footer>
 );
 

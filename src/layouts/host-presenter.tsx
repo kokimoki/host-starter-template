@@ -49,11 +49,11 @@ const HostPresenterFooter: React.FC<LayoutProps> = ({
 }) => (
 	<footer
 		className={cn(
-			'sticky bottom-0 z-10 border-t border-slate-200 bg-slate-50/95 p-4 backdrop-blur-xs',
+			'sticky bottom-0 z-10 border-t border-slate-200 bg-slate-50/95 backdrop-blur-xs',
 			className
 		)}
 	>
-		<div className="container mx-auto flex items-center justify-between">
+		<div className="container mx-auto flex items-center justify-between p-4">
 			{children}
 		</div>
 	</footer>
