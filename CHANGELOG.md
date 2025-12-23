@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [Unreleased]
+
+### Added
+
+- Added new `kokimopki/sdk` usage examples in template
+
+### Changed
+
+- Updated `kokimoki-sdk.instructions.md` and `kokimoki-shared.instructions.md` with extra context
+- Improved template layout and styles
+- Updated `@kokimoki/app` to `2.0.2`
+- Updated `@kokimoki/kit` to `1.6.7`
+- Updated `@kokimoki/shared` to `1.10.0`
+
+### Removed
+
+- Removed `vatio` and `zod` packages, now provided by `@kokimoki/app` and `@kokimoki/kit` respectively
+
 ## [1.0.3] - 2025-11-25
 
 ### Added
