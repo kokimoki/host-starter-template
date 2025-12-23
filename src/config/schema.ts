@@ -11,30 +11,40 @@ export const schema = z.object({
 		),
 	connectionsMd: z.string().default('# Connections example'),
 	sharedStateMd: z.string().default('# Shared State example'),
+	sharedStatePlayerMd: z.string().default('# Shared State example for players'),
 
 	players: z.string().default('Players'),
-	timeElapsed: z.string().default('Time elapsed'),
+	online: z.string().default('Online'),
+	offline: z.string().default('Offline'),
 	startButton: z.string().default('Start Game'),
 	stopButton: z.string().default('Stop Game'),
 	loading: z.string().default('Loading...'),
 
-	menuTitle: z.string().default('Menu'),
 	menuConnections: z.string().default('Connections'),
 	menuGameLobby: z.string().default('Lobby'),
+	menuHelp: z.string().default('Help'),
 
-	playerNameTitle: z.string().default('Enter Your Name'),
+	menuHelpMd: z
+		.string()
+		.default('# Help\nInstructions on how to play the game.'),
+
+	createProfileMd: z.string().default('# Create your player profile'),
 	playerNamePlaceholder: z.string().default('Your name...'),
 	playerNameLabel: z.string().default('Name:'),
 	playerNameButton: z.string().default('Continue'),
 
-	hostLabel: z.string().default('Host'),
-	presenterLabel: z.string().default('Presenter'),
-
-	gameLinksTitle: z.string().default('Game Links'),
 	playerLinkLabel: z.string().default('Player Link'),
 	presenterLinkLabel: z.string().default('Presenter Link'),
 
-	menuAriaLabel: z.string().default('Open menu drawer')
+	togglePresenterQrButton: z.string().default('Toggle Presenter QR'),
+
+	openPlayerHelpButton: z.string().default('Open Player Help'),
+
+	menuTitle: z.string().default('Menu'),
+	menuHelpTitle: z.string().default('Help'),
+
+	menuAriaLabel: z.string().default('Open menu drawer'),
+	menuHelpAriaLabel: z.string().default('Open help drawer')
 });
 
 export type Config = z.infer<typeof schema>;

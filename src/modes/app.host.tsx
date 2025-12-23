@@ -4,14 +4,30 @@ import { useGlobalController } from '@/hooks/useGlobalController';
 import { generateLink } from '@/kit/generate-link';
 import { HostPresenterLayout } from '@/layouts/host-presenter';
 import { kmClient } from '@/services/km-client';
+import { globalActions } from '@/state/actions/global-actions';
+import { globalStore } from '@/state/stores/global-store';
 import { SharedStateView } from '@/views/shared-state-view';
-import { KmQrCode } from '@kokimoki/shared';
+import { CirclePlay, CircleStop, SquareArrowOutUpRight } from 'lucide-react';
 import * as React from 'react';
+import { useSnapshot } from 'valtio';
 
 const App: React.FC = () => {
 	useGlobalController();
 	const { title } = config;
+	const isHost = kmClient.clientContext.mode === 'host';
+	const { started, showPresenterQr } = useSnapshot(globalStore.proxy);
+	const [buttonCooldown, setButtonCooldown] = React.useState(true);
 	useDocumentTitle(title);
+
+	// Button cooldown to prevent accidentally spamming start/stop
+	React.useEffect(() => {
+		setButtonCooldown(true);
+		const timeout = setTimeout(() => {
+			setButtonCooldown(false);
+		}, 1000);
+
+		return () => clearTimeout(timeout);
+	}, [started]);
 
 	if (kmClient.clientContext.mode !== 'host') {
 		throw new Error('App host rendered in non-host mode');
@@ -28,39 +44,80 @@ const App: React.FC = () => {
 
 	return (
 		<HostPresenterLayout.Root>
-			<HostPresenterLayout.Header>
-				<div className="text-sm opacity-70">{config.hostLabel}</div>
-			</HostPresenterLayout.Header>
-
+			<HostPresenterLayout.Header />
 			<HostPresenterLayout.Main>
-				<div className="rounded-lg border border-gray-200 bg-white shadow-md">
-					<div className="flex flex-col gap-2 p-6">
-						<h2 className="text-xl font-bold">{config.gameLinksTitle}</h2>
-						<KmQrCode data={playerLink} size={200} interactive={false} />
-						<div className="flex gap-2">
-							<a
-								href={playerLink}
-								target="_blank"
-								rel="noreferrer"
-								className="break-all text-blue-600 underline hover:text-blue-700"
-							>
-								{config.playerLinkLabel}
-							</a>
-							|
-							<a
-								href={presenterLink}
-								target="_blank"
-								rel="noreferrer"
-								className="break-all text-blue-600 underline hover:text-blue-700"
-							>
-								{config.presenterLinkLabel}
-							</a>
-						</div>
+				<div className="space-y-4">
+					<SharedStateView />
+
+					<div className="inline-flex gap-4">
+						<button
+							type="button"
+							className={
+								showPresenterQr ? 'km-btn-neutral' : 'km-btn-secondary'
+							}
+							onClick={globalActions.togglePresenterQr}
+						>
+							{config.togglePresenterQrButton}
+						</button>
+
+						<button
+							type="button"
+							className="km-btn-secondary"
+							onClick={globalActions.showHelpForAll}
+						>
+							{config.openPlayerHelpButton}
+						</button>
 					</div>
 				</div>
-
-				<SharedStateView />
 			</HostPresenterLayout.Main>
+
+			<HostPresenterLayout.Footer>
+				<div className="inline-flex gap-4">
+					{!started && isHost && (
+						<button
+							type="button"
+							className="km-btn-primary"
+							onClick={globalActions.startGame}
+							disabled={buttonCooldown}
+						>
+							<CirclePlay className="size-5" />
+							{config.startButton}
+						</button>
+					)}
+					{started && isHost && (
+						<button
+							type="button"
+							className="km-btn-error"
+							onClick={globalActions.stopGame}
+							disabled={buttonCooldown}
+						>
+							<CircleStop className="size-5" />
+							{config.stopButton}
+						</button>
+					)}
+				</div>
+				<div className="inline-flex gap-4">
+					<a
+						href={playerLink}
+						target="_blank"
+						rel="noreferrer"
+						className="km-btn-secondary"
+					>
+						{config.playerLinkLabel}
+						<SquareArrowOutUpRight className="size-5" />
+					</a>
+
+					<a
+						href={presenterLink}
+						target="_blank"
+						rel="noreferrer"
+						className="km-btn-secondary"
+					>
+						{config.presenterLinkLabel}
+						<SquareArrowOutUpRight className="size-5" />
+					</a>
+				</div>
+			</HostPresenterLayout.Footer>
 		</HostPresenterLayout.Root>
 	);
 };
