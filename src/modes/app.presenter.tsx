@@ -4,12 +4,16 @@ import { useGlobalController } from '@/hooks/useGlobalController';
 import { generateLink } from '@/kit/generate-link';
 import { HostPresenterLayout } from '@/layouts/host-presenter';
 import { kmClient } from '@/services/km-client';
+import { globalStore } from '@/state/stores/global-store';
+import { cn } from '@/utils/cn';
 import { ConnectionsView } from '@/views/connections-view';
 import { KmQrCode } from '@kokimoki/shared';
 import * as React from 'react';
+import { useSnapshot } from 'valtio';
 
 const App: React.FC = () => {
 	const { title } = config;
+	const { showPresenterQr } = useSnapshot(globalStore.proxy);
 
 	useGlobalController();
 	useDocumentTitle(title);
@@ -23,31 +27,21 @@ const App: React.FC = () => {
 	});
 
 	return (
-		<HostPresenterLayout.Root>
-			<HostPresenterLayout.Header>
-				<div className="text-sm opacity-70">{config.presenterLabel}</div>
-			</HostPresenterLayout.Header>
+		<>
+			<HostPresenterLayout.Root>
+				<HostPresenterLayout.Header />
 
-			<HostPresenterLayout.Main>
-				<div className="rounded-lg border border-gray-200 bg-white shadow-md">
-					<div className="flex flex-col gap-2 p-6">
-						<h2 className="text-xl font-bold">{config.playerLinkLabel}</h2>
-						<KmQrCode data={playerLink} size={200} interactive={false} />
-
-						<a
-							href={playerLink}
-							target="_blank"
-							rel="noreferrer"
-							className="break-all text-blue-600 underline hover:text-blue-700"
-						>
-							{config.playerLinkLabel}
-						</a>
-					</div>
-				</div>
-
-				<ConnectionsView />
-			</HostPresenterLayout.Main>
-		</HostPresenterLayout.Root>
+				<HostPresenterLayout.Main>
+					<ConnectionsView>
+						<KmQrCode
+							data={playerLink}
+							size={200}
+							className={cn(!showPresenterQr && 'invisible')}
+						/>
+					</ConnectionsView>
+				</HostPresenterLayout.Main>
+			</HostPresenterLayout.Root>
+		</>
 	);
 };
 
