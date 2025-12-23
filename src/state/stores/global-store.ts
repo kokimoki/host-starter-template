@@ -6,7 +6,6 @@ export interface GlobalState {
 	startTimestamp: number;
 	players: Record<string, { name: string }>;
 	showPresenterQr: boolean;
-	showHelpForAll: boolean;
 }
 
 const initialState: GlobalState = {
@@ -14,8 +13,7 @@ const initialState: GlobalState = {
 	started: false,
 	startTimestamp: 0,
 	players: {},
-	showPresenterQr: true,
-	showHelpForAll: false
+	showPresenterQr: true
 };
 
 export const globalStore = kmClient.store<GlobalState>('global', initialState);

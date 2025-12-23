@@ -28,7 +28,7 @@ This project is based on a host starter template using [Kokimoki SDK](./kokimoki
 - **CRITICAL** Do not modify `src/kit/` directory
 - Keep config files (`src/config/`, `vite.config.ts`, `tsconfig*.json`) up to date
 - Prefer `lucide-react` icons over custom SVGs
-- Use `Media Uploads` and `AI Integration` methods from Kokimoki SDK
+- Use [Storage](./kokimoki-sdk.instructions.md#storage) for media uploads and [AI Integration](./kokimoki-sdk.instructions.md#ai-integration) from Kokimoki SDK
 - Use [`useDynamicStore`](../../src/hooks/useDynamicStore.tsx) hook for isolated room-based state management following [instructions](./dynamic-stores.instructions.md)
 
 ## Imports and Exports
@@ -46,6 +46,8 @@ Based on the mode, one of the following files is used as the root component:
 - Presenter mode: [app.presenter.tsx](../../src/modes/app.presenter.tsx)
 
 ## State management
+
+See [Kokimoki SDK Stores](./kokimoki-sdk.instructions.md#stores) for store fundamentals.
 
 ### Player store (Local)
 
@@ -111,9 +113,15 @@ await kmClient.transact([globalStore], ([globalState]) => {
 - Update both `playerStore` and `globalStore` in a single transaction when needed
 - Create combined actions in [global-actions.ts](../../src/state/actions/global-actions.ts)
 
+### Dynamic Stores
+
+For room-based or team-based isolated state, see [Dynamic Stores](./dynamic-stores.instructions.md).
+
 ## Timers
 
 - Use [useServerTimer.ts](../../src/hooks/useServerTime.ts) for synced across all players timers
+- Use [KmTimeCountdown](./kokimoki-shared.instructions.md#kmtimecountdown) to display time
+- Use [KmTimeProgress](./kokimoki-shared.instructions.md#kmtimeprogress) for progress visualization
 
 **Example: Elapsed Time Display**
 
@@ -131,6 +139,8 @@ return <KmTimeCountdown ms={elapsedMs} />;
 ## Generate Links (Host/Presenter)
 
 - Use [generateLink](../../src/kit/generate-link.ts) to create join links
+- Use [KmQrCode](./kokimoki-shared.instructions.md#kmqrcode) to display QR codes for join links
+- Use [KmCopyButton](./kokimoki-shared.instructions.md#kmcopybutton) to copy links to clipboard
 
 **Example: Generating Links**
 

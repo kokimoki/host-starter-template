@@ -11,21 +11,15 @@ Development toolkit for building real-time collaborative game applications
 
 - `kmClient` - main entry point in Kokimoki SDK (defined in `src/services/km-client.ts`)
 - `kmClient.id` - unique player identifier (persistent across connections)
-- `kmClient.store(name, initialState)` - create global store (shared for players)
-- `kmClient.localStore(name, initialState)` - create local store (device-only)
-- `kmClient.transact([stores], callback)` - atomic state updates
-- `kmClient.serverTimestamp()` - synchronized server time (Unix epoch)
-- `useSnapshot(store.proxy)` - reactive state in React components (from `valtio`)
-- **ALWAYS** use `kmClient.transact()` for global store updates
-- **ALWAYS** use `useSnapshot(store.proxy)` hook in components to get reactive store changes
-- Use `useSnapshot(store.connections)` for tracking active connections
-- Use `kmClient.storage` methods to handle files
-- Use `kmClient.ai` methods to use AI capabilities
-- Use `kmClient.leaderboard` methods to manage leaderboards
+- `kmClient.serverTimestamp` - synchronized server time (Unix epoch)
 
 ## Stores
 
-- Defined stores in `src/state/stores/`
+### Features
+
+- Define stores in `src/state/stores/`
+- Use `kmClient.store` for global shared state
+- Use `kmClient.localStore` for local device-specific state
 
 ### When to Use
 
@@ -34,68 +28,30 @@ Development toolkit for building real-time collaborative game applications
 
 ### State Updates
 
-- Defined actions in `src/state/actions/`
-- Transactions are atomic and ensure consistency
-- Prefer `Record<string, T>` over arrays for collections
+- Define actions in `src/state/actions/`
+- **ALWAYS** use `useSnapshot(store.proxy)` hook for reactive state in React components
+- Transactions via `kmClient.transact` are atomic state updates
+- **ALWAYS** use `kmClient.transact` for global store updates
 
 ## Connections
 
 - Track online players via `store.connections`
-- `store.connections.clientIds` - `Set<string>` of online client IDs
 - Use `useSnapshot(store.connections)` for reactive connections updates
 
 ## Storage
+
+### Features
 
 - Use for media files (images, audio, video), large JSON data, files not suitable for real-time stores
 - File upload/management via `kmClient.storage`
 - No setup required
 
-### API Methods
+### When to Use
 
-#### upload
-
-Upload a file to storage
-
-```
-kmClient.storage.upload(
-  name: string,
-  blob: Blob,
-  tags?: string[]
-): Promise<Upload>
-```
-
-#### listUploads
-
-Query uploaded files with filtering and pagination
-
-```
-kmClient.storage.listUploads(
-  filter?: { clientId?: string; mimeTypes?: string[]; tags?: string[] },
-  skip?: number,
-  limit?: number
-): Promise<Paginated<Upload>>
-```
-
-#### updateUpload
-
-Update file tags
-
-```
-kmClient.storage.updateUpload(
-  id: string,
-  update: { tags?: string[] }
-): Promise<Upload>
-```
-
-#### deleteUpload
-
-Permanently delete a file
-
-```
-kmClient.storage.deleteUpload(
-  id: string
-): Promise<{ acknowledged: boolean; deletedCount: number }>
-```
+- Upload a file to storage via `kmClient.storage.upload`
+- Query uploaded files with filtering and pagination via `kmClient.storage.listUploads`
+- Update file tags via `kmClient.storage.updateUpload`
+- Permanently delete files via `kmClient.storage.deleteUpload`
 
 ## AI Integration
 
@@ -104,117 +60,29 @@ kmClient.storage.deleteUpload(
 
 ### When to Use
 
-- **ai.chat** - free-form text responses (stories, explanations, conversations)
-- **ai.generateJson** - structured data (quiz questions, game content, configs)
-- **ai.modifyImage** - image transformations (style transfer, edits)
-
-### API Methods
-
-#### chat
-
-Generate text response
-
-```
-kmClient.ai.chat(req: {
-  model?: string,
-  systemPrompt?: string,
-  userPrompt?: string,
-  temperature?: number,
-  maxTokens?: number
-}): Promise<{ content: string }>
-```
-
-#### generateJson
-
-Generate structured JSON (auto-parsed)
-
-```
-kmClient.ai.generateJson<T>(req: {
-  model?: string,
-  systemPrompt?: string,
-  userPrompt?: string,
-  temperature?: number,
-  maxTokens?: number
-}): Promise<T>
-```
-
-#### modifyImage
-
-Transform image with AI
-
-```
-kmClient.ai.modifyImage(
-  baseImageUrl: string,
-  prompt: string,
-  tags?: string[]
-): Promise<Upload>
-```
+- Generate text response (stories, explanations, summaries) via `kmClient.ai.chat`
+- Generate structured JSON (quiz questions, game content) via `kmClient.ai.generateJson`
+- Transform images via `kmClient.ai.modifyImage`
 
 ## Leaderboard
 
+### Features
+
 - Leaderboard system via `kmClient.leaderboard`
 - No setup required
-- Long-term persistent storage for large number of players
+- Storage for large number of players
 
 ### When to Use
 
-- **Leaderboard API**: Large player counts (100+), persistent scores, efficient pagination
-- **Global Store**: Small player counts (<100), real-time updates, session-based
+- Large player counts (100+), persistent scores, efficient pagination
+- Add new entry (creates new record each time) via `kmClient.leaderboard.insertEntry`
+- Add or update latest entry per client (replaces previous) via `kmClient.leaderboard.upsertEntry`
+- List entries with pagination via `kmClient.leaderboard.listEntries`
+- Get best entry for a client via `kmClient.leaderboard.getBestEntry`
 
-### API Methods
+### When NOT to Use
 
-#### insertEntry
-
-Add new entry (creates new each time, keeps history)
-
-```
-kmClient.leaderboard.insertEntry<M, PM>(
-  name: string,
-  sortDir: "asc" | "desc",
-  score: number,
-  metadata: M,
-  privateMetadata: PM
-): Promise<{ rank: number }>
-```
-
-#### upsertEntry
-
-Add or update latest entry per client (replaces previous)
-
-```
-kmClient.leaderboard.upsertEntry<M, PM>(
-  name: string,
-  sortDir: "asc" | "desc",
-  score: number,
-  metadata: M,
-  privateMetadata: PM
-): Promise<{ rank: number }>
-```
-
-#### listEntries
-
-List entries with pagination
-
-```
-kmClient.leaderboard.listEntries<M>(
-  name: string,
-  sortDir: "asc" | "desc",
-  skip?: number,
-  limit?: number
-): Promise<Paginated<{ rank: number; score: number; metadata: M }>>
-```
-
-#### getBestEntry
-
-Get best entry for a client
-
-```
-kmClient.leaderboard.getBestEntry<M>(
-  name: string,
-  sortDir: "asc" | "desc",
-  clientId?: string
-): Promise<{ rank: number; score: number; metadata: M }>
-```
+- Small player counts (<100), real-time updates, session-based (use global stores instead)
 
 ## Full Documentation
 

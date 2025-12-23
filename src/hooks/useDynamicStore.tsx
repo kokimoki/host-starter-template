@@ -16,9 +16,6 @@ interface ConnectionState {
 	connecting: boolean;
 }
 
-/**
- * Result type for useDynamicStore hook
- */
 export interface UseDynamicStoreResult<T extends object> {
 	store: KokimokiStore<T>;
 	isConnected: boolean;

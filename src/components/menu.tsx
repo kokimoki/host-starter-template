@@ -6,6 +6,7 @@ import Markdown from 'react-markdown';
 
 /**
  * Menu component to navigate between different views in the player layout
+ *
  * This example is **optional** and can be removed if not needed
  */
 export const PlayerMenu: React.FC = () => {
@@ -13,7 +14,6 @@ export const PlayerMenu: React.FC = () => {
 
 	const handleOpenHelp = () => {
 		openDrawer({
-			title: config.menuHelpTitle,
 			content: (
 				<div className="max-h-full w-full overflow-y-auto">
 					<div className="container mx-auto px-4 py-16">
