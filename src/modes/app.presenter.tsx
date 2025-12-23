@@ -5,6 +5,7 @@ import { generateLink } from '@/kit/generate-link';
 import { HostPresenterLayout } from '@/layouts/host-presenter';
 import { kmClient } from '@/services/km-client';
 import { globalStore } from '@/state/stores/global-store';
+import { cn } from '@/utils/cn';
 import { ConnectionsView } from '@/views/connections-view';
 import { KmQrCode } from '@kokimoki/shared';
 import * as React from 'react';
@@ -27,20 +28,17 @@ const App: React.FC = () => {
 
 	return (
 		<>
-			{showPresenterQr && (
-				<KmQrCode
-					className="absolute top-22 right-4 z-10"
-					data={playerLink}
-					size={250}
-					interactive={false}
-				/>
-			)}
-
 			<HostPresenterLayout.Root>
 				<HostPresenterLayout.Header />
 
 				<HostPresenterLayout.Main>
-					<ConnectionsView />
+					<ConnectionsView>
+						<KmQrCode
+							data={playerLink}
+							size={200}
+							className={cn(!showPresenterQr && 'invisible')}
+						/>
+					</ConnectionsView>
 				</HostPresenterLayout.Main>
 			</HostPresenterLayout.Root>
 		</>

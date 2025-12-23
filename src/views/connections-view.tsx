@@ -14,7 +14,9 @@ interface Props {
  * View to display players who have joined the game and their online status.
  * This example is **optional** and can be removed if not needed
  */
-export const ConnectionsView: React.FC<React.PropsWithChildren<Props>> = () => {
+export const ConnectionsView: React.FC<React.PropsWithChildren<Props>> = ({
+	children
+}) => {
 	const players = useSnapshot(globalStore.proxy).players;
 	const onlinePlayerIds = useSnapshot(globalStore.connections).clientIds;
 	const playersList = Object.entries(players).map(([id, player]) => ({
@@ -27,18 +29,22 @@ export const ConnectionsView: React.FC<React.PropsWithChildren<Props>> = () => {
 
 	return (
 		<div className="w-full space-y-8">
-			<article
-				className={cn(
-					'prose',
-					isPresenter && 'lg:prose-lg xl:prose-xl 2xl:prose-2xl'
-				)}
-			>
-				<h1>
-					{onlinePlayersCount} {config.players}
-				</h1>
+			<div className="flex items-center justify-between gap-8">
+				<article
+					className={cn(
+						'prose',
+						isPresenter && 'lg:prose-lg xl:prose-xl 2xl:prose-2xl'
+					)}
+				>
+					<h1>
+						{onlinePlayersCount} {config.players}
+					</h1>
 
-				<Markdown>{config.connectionsMd}</Markdown>
-			</article>
+					<Markdown>{config.connectionsMd}</Markdown>
+				</article>
+
+				{children}
+			</div>
 
 			{playersList.length > 0 && (
 				<ul className="w-full divide-y divide-slate-300 lg:text-lg xl:text-xl 2xl:text-2xl">
