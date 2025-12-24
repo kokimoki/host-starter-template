@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added new `kokimopki/sdk` usage examples in template
+- Added new `kokimoki/sdk` usage examples in template
 
 ### Changed
 
