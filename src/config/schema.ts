@@ -1,4 +1,4 @@
-import { z } from 'zod/v4';
+import { z } from '@kokimoki/kit';
 
 export const schema = z.object({
 	// translations
@@ -20,10 +20,6 @@ export const schema = z.object({
 	stopButton: z.string().default('Stop Game'),
 	loading: z.string().default('Loading...'),
 
-	menuConnections: z.string().default('Connections'),
-	menuGameLobby: z.string().default('Lobby'),
-	menuHelp: z.string().default('Help'),
-
 	menuHelpMd: z
 		.string()
 		.default('# Help\nInstructions on how to play the game.'),
@@ -37,11 +33,6 @@ export const schema = z.object({
 	presenterLinkLabel: z.string().default('Presenter Link'),
 
 	togglePresenterQrButton: z.string().default('Toggle Presenter QR'),
-
-	openPlayerHelpButton: z.string().default('Open Player Help'),
-
-	menuTitle: z.string().default('Menu'),
-	menuHelpTitle: z.string().default('Help'),
 
 	menuAriaLabel: z.string().default('Open menu drawer'),
 	menuHelpAriaLabel: z.string().default('Open help drawer')

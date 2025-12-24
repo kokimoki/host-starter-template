@@ -1,9 +1,13 @@
 import { kmClient } from '@/services/km-client';
 import { globalStore } from '@/state/stores/global-store';
+import { useSnapshot } from '@kokimoki/app';
 import { useEffect } from 'react';
-import { useSnapshot } from 'valtio';
 import { useServerTimer } from './useServerTime';
 
+/**
+ * Hook to control and modify the global state
+ * @returns A boolean indicating if the current client is the global controller
+ */
 export function useGlobalController() {
 	const { controllerConnectionId } = useSnapshot(globalStore.proxy);
 	const connections = useSnapshot(globalStore.connections);
@@ -35,7 +39,7 @@ export function useGlobalController() {
 			return;
 		}
 
-		// Global controller-specific logic goes here
+		// IMPORTANT: Global controller-specific logic goes here
 		// For example, a time-based event that modifies the global state
 		// All global controller logic does not need to be time-based
 	}, [isGlobalController, serverTime]);

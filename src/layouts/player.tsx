@@ -52,7 +52,7 @@ const PlayerFooter: React.FC<LayoutProps> = ({ children, className }) => (
 );
 
 /**
- * Layout components for the 'player' mode
+ * Layout components for the `player` mode
  */
 export const PlayerLayout = {
 	Root: PlayerRoot,

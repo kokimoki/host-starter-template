@@ -34,7 +34,8 @@ Instructions for building high-quality ReactJS applications with modern patterns
 
 ## State Management
 
-- **ALWAYS** use [Kokimoki SDK](./kokimoki-sdk.instructions.md) for global (shared) and player (local) states
+- **ALWAYS** use [Kokimoki SDK Stores](./kokimoki-sdk.instructions.md#stores) for global (shared) and player (local) states
+- Use [Dynamic Stores](./dynamic-stores.instructions.md) for room-based isolated state
 - Use `useState` for local component state
 - Use `useContext` for sharing state across component trees
 
@@ -65,3 +66,4 @@ Instructions for building high-quality ReactJS applications with modern patterns
 - Compound components for related functionality
 - Provider pattern for context-based state sharing
 - Use utility functions from `src/utils/`
+- Check [@kokimoki/shared](./kokimoki-shared.instructions.md) components before building custom UI

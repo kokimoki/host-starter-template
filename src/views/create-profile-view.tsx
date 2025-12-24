@@ -9,12 +9,14 @@ interface Props {
 
 /**
  * View to create a player profile by entering a name
+ *
+ * This example is **optional** and can be removed if not needed
  */
 export const CreateProfileView: React.FC<Props> = () => {
 	const [name, setName] = React.useState('');
 	const [isLoading, setIsLoading] = React.useState(false);
 
-	const handleSubmit = async (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
 		const trimmedName = name.trim();

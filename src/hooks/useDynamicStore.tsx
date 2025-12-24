@@ -11,17 +11,23 @@ interface StoreEntry {
 
 const kokimokiStores = new Map<string, StoreEntry>();
 
+interface ConnectionState {
+	connected: boolean;
+	connecting: boolean;
+}
+
 export interface UseDynamicStoreResult<T extends object> {
 	store: KokimokiStore<T>;
 	isConnected: boolean;
 	isConnecting: boolean;
 }
 
-interface ConnectionState {
-	connected: boolean;
-	connecting: boolean;
-}
-
+/**
+ * Hook to manage dynamic Kokimoki stores with connection state
+ * @param roomName - The unique name of the Kokimoki store (room)
+ * @param initialState - The initial state for the Kokimoki store
+ * @returns An object containing the Kokimoki store and connection states
+ */
 export function useDynamicStore<T extends object>(
 	roomName: string,
 	initialState: T

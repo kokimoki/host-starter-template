@@ -60,7 +60,7 @@ const HostPresenterFooter: React.FC<LayoutProps> = ({
 );
 
 /**
- * Layout components for the 'host' and 'presenter' modes
+ * Layout components for the `host` and `presenter` modes
  */
 export const HostPresenterLayout = {
 	Root: HostPresenterRoot,

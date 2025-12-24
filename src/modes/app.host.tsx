@@ -7,9 +7,9 @@ import { kmClient } from '@/services/km-client';
 import { globalActions } from '@/state/actions/global-actions';
 import { globalStore } from '@/state/stores/global-store';
 import { SharedStateView } from '@/views/shared-state-view';
+import { useSnapshot } from '@kokimoki/app';
 import { CirclePlay, CircleStop, SquareArrowOutUpRight } from 'lucide-react';
 import * as React from 'react';
-import { useSnapshot } from 'valtio';
 
 const App: React.FC = () => {
 	useGlobalController();
@@ -49,25 +49,13 @@ const App: React.FC = () => {
 				<div className="space-y-4">
 					<SharedStateView />
 
-					<div className="inline-flex gap-4">
-						<button
-							type="button"
-							className={
-								showPresenterQr ? 'km-btn-neutral' : 'km-btn-secondary'
-							}
-							onClick={globalActions.togglePresenterQr}
-						>
-							{config.togglePresenterQrButton}
-						</button>
-
-						<button
-							type="button"
-							className="km-btn-secondary"
-							onClick={globalActions.showHelpForAll}
-						>
-							{config.openPlayerHelpButton}
-						</button>
-					</div>
+					<button
+						type="button"
+						className={showPresenterQr ? 'km-btn-neutral' : 'km-btn-secondary'}
+						onClick={globalActions.togglePresenterQr}
+					>
+						{config.togglePresenterQrButton}
+					</button>
 				</div>
 			</HostPresenterLayout.Main>
 

@@ -1,3 +1,4 @@
+// IMPORTANT: Do NOT modify or remove this file
 import type { ClientContext } from '@/types';
 import { useCallback, useEffect, useRef, useState, type FC } from 'react';
 import { generateLink } from './generate-link';

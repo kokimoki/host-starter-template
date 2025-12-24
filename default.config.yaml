@@ -61,10 +61,6 @@ stopButton: 'Stop Game'
 
 loading: 'Loading...'
 
-menuConnections: 'Connections'
-menuGameLobby: 'Lobby'
-menuHelp: 'Help'
-
 menuHelpMd: |
   # Help
 

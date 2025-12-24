@@ -7,6 +7,8 @@ applyTo: '**/*.tsx,**/*.ts'
 
 The `useDynamicStore` hook enables creation of isolated, room-based state management using Kokimoki stores. This is useful for scenarios where subsets of players need to share state without affecting the global store.
 
+For store fundamentals, see [Kokimoki SDK Stores](./kokimoki-sdk.instructions.md#stores).
+
 ## When to Use Dynamic Stores
 
 **Use for:**

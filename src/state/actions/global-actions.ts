@@ -20,17 +20,5 @@ export const globalActions = {
 		await kmClient.transact([globalStore], ([globalState]) => {
 			globalState.showPresenterQr = !globalState.showPresenterQr;
 		});
-	},
-
-	async showHelpForAll() {
-		await kmClient.transact([globalStore], ([globalState]) => {
-			globalState.showHelpForAll = true;
-		});
-	},
-
-	async hideHelpForAll() {
-		await kmClient.transact([globalStore], ([globalState]) => {
-			globalState.showHelpForAll = false;
-		});
 	}
 };
