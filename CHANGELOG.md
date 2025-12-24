@@ -21,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-- Removed `vatio` and `zod` packages, now provided by `@kokimoki/app` and `@kokimoki/kit` respectively
+- Removed `valtio` and `zod` packages, now provided by `@kokimoki/app` and `@kokimoki/kit` respectively
 
 ## [1.0.3] - 2025-11-25
 
