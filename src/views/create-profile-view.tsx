@@ -23,8 +23,11 @@ export const CreateProfileView: React.FC<Props> = () => {
 		if (!trimmedName) return;
 
 		setIsLoading(true);
-		await playerActions.setPlayerName(trimmedName);
-		setIsLoading(false);
+		try {
+			await playerActions.setPlayerName(trimmedName);
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	return (

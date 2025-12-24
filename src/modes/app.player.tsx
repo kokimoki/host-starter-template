@@ -1,6 +1,6 @@
 import { PlayerMenu } from '@/components/menu';
 import { NameLabel } from '@/components/name-label';
-import { withKmProviders } from '@/components/with-km-poviders';
+import { withKmProviders } from '@/components/with-km-providers';
 import { config } from '@/config';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { useGlobalController } from '@/hooks/useGlobalController';
