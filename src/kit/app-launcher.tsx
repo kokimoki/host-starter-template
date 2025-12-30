@@ -65,6 +65,7 @@ async function prepareComponent(
 			App = (await appImports.player()).default;
 			break;
 		default:
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			throw new Error('Unknown mode: ' + (kmClient.clientContext as any).mode);
 	}
 
