@@ -23,7 +23,7 @@ export const SharedStateView: React.FC<React.PropsWithChildren> = () => {
 			<article className="prose">
 				{started && (
 					<KmTimeCountdown
-						className={`mb-8 font-sans font-extrabold ${isHost ? 'text-6xl' : ''}`}
+						className={`mb-8 inline-block font-sans font-extrabold ${isHost ? 'text-6xl' : ''}`}
 						ms={serverTime - startTimestamp}
 					/>
 				)}
