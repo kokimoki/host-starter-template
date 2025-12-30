@@ -34,7 +34,12 @@
 
 html,
 body {
-	color: var(--color-slate-900);
+	@apply text-slate-900;
+}
+
+// Prevent auto-refresh when overscrolling on mobile
+body {
+	@apply overscroll-none;
 }
 
 .km-input {
