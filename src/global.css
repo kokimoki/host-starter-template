@@ -37,7 +37,7 @@ body {
 	@apply text-slate-900;
 }
 
-// Prevent auto-refresh when overscrolling on mobile
+/* Prevent auto-refresh when overscrolling on mobile */
 body {
 	@apply overscroll-none;
 }
