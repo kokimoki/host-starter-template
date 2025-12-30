@@ -60,7 +60,7 @@ const App: React.FC = () => {
 			</HostPresenterLayout.Main>
 
 			<HostPresenterLayout.Footer>
-				<div className="inline-flex gap-4">
+				<div className="inline-flex flex-wrap gap-4">
 					{!started && isHost && (
 						<button
 							type="button"
@@ -83,8 +83,7 @@ const App: React.FC = () => {
 							{config.stopButton}
 						</button>
 					)}
-				</div>
-				<div className="inline-flex gap-4">
+
 					<a
 						href={playerLink}
 						target="_blank"
