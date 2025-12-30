@@ -28,7 +28,15 @@ export default defineConfig([
 	{
 		rules: {
 			// React scope no longer necessary with new JSX transform.
-			'react/react-in-jsx-scope': 'off'
+			'react/react-in-jsx-scope': 'off',
+			'@typescript-eslint/no-unused-vars': [
+				'error',
+				{
+					argsIgnorePattern: '^_',
+					varsIgnorePattern: '^_'
+				}
+			],
+			'no-console': ['warn', { allow: ['warn', 'error'] }]
 		}
 	},
 
