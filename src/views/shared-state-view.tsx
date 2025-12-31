@@ -1,6 +1,7 @@
 import { config } from '@/config';
 import { useServerTimer } from '@/hooks/useServerTime';
 import { kmClient } from '@/services/km-client';
+import { globalActions } from '@/state/actions/global-actions';
 import { globalStore } from '@/state/stores/global-store';
 import { useSnapshot } from '@kokimoki/app';
 import { KmTimeCountdown } from '@kokimoki/shared';
@@ -22,10 +23,19 @@ export const SharedStateView: React.FC<React.PropsWithChildren> = () => {
 		<>
 			<article className="prose">
 				{started && (
-					<KmTimeCountdown
-						className={`mb-8 inline-block font-sans font-extrabold ${isHost ? 'text-6xl' : ''}`}
-						ms={serverTime - startTimestamp}
-					/>
+					<>
+						<KmTimeCountdown
+							className={`mb-8 inline-block font-sans font-extrabold ${isHost ? 'text-6xl' : ''}`}
+							ms={serverTime - startTimestamp}
+						/>
+						<button
+							type="button"
+							className="km-btn-error"
+							onClick={() => globalActions.dealDamage(10)}
+						>
+							Deal damage
+						</button>
+					</>
 				)}
 
 				<Markdown>

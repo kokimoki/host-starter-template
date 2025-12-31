@@ -28,6 +28,8 @@ export const schema = z.object({
 	playerNamePlaceholder: z.string().default('Your name...'),
 	playerNameLabel: z.string().default('Name:'),
 	playerNameButton: z.string().default('Continue'),
+	selectTeamLabel: z.string().default('Select Your Team:'),
+	playerTeamLabel: z.string().default('Team:'),
 
 	playerLinkLabel: z.string().default('Player Link'),
 	presenterLinkLabel: z.string().default('Presenter Link'),

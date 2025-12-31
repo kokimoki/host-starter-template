@@ -6,6 +6,7 @@ import { HostPresenterLayout } from '@/layouts/host-presenter';
 import { kmClient } from '@/services/km-client';
 import { globalStore } from '@/state/stores/global-store';
 import { cn } from '@/utils/cn';
+import { BattleView } from '@/views/battle-view';
 import { ConnectionsView } from '@/views/connections-view';
 import { useSnapshot } from '@kokimoki/app';
 import { KmQrCode } from '@kokimoki/shared';
@@ -13,7 +14,7 @@ import * as React from 'react';
 
 const App: React.FC = () => {
 	const { title } = config;
-	const { showPresenterQr } = useSnapshot(globalStore.proxy);
+	const { showPresenterQr, started } = useSnapshot(globalStore.proxy);
 
 	useGlobalController();
 	useDocumentTitle(title);
@@ -29,16 +30,27 @@ const App: React.FC = () => {
 	return (
 		<>
 			<HostPresenterLayout.Root>
-				<HostPresenterLayout.Header />
-
 				<HostPresenterLayout.Main>
-					<ConnectionsView>
-						<KmQrCode
-							data={playerLink}
-							size={200}
-							className={cn(!showPresenterQr && 'invisible')}
-						/>
-					</ConnectionsView>
+					{started ? (
+						<BattleView>
+							<KmQrCode
+								data={playerLink}
+								size={200}
+								className={cn(
+									'fixed top-8 right-8',
+									!showPresenterQr && 'invisible'
+								)}
+							/>
+						</BattleView>
+					) : (
+						<ConnectionsView>
+							<KmQrCode
+								data={playerLink}
+								size={200}
+								className={cn(!showPresenterQr && 'invisible')}
+							/>
+						</ConnectionsView>
+					)}
 				</HostPresenterLayout.Main>
 			</HostPresenterLayout.Root>
 		</>

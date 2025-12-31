@@ -9,12 +9,12 @@ export const playerActions = {
 		});
 	},
 
-	async setPlayerName(name: string) {
+	async setPlayerName(name: string, team: 0 | 1) {
 		await kmClient.transact(
 			[playerStore, globalStore],
 			([playerState, globalState]) => {
 				playerState.name = name;
-				globalState.players[kmClient.id] = { name };
+				globalState.players[kmClient.id] = { name, team };
 			}
 		);
 	}

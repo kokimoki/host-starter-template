@@ -1,4 +1,5 @@
 import { Logo } from '@/components/logo';
+import { kmClient } from '@/services/km-client';
 import { cn } from '@/utils/cn';
 import * as React from 'react';
 
@@ -7,16 +8,23 @@ interface LayoutProps {
 	className?: string;
 }
 
-const HostPresenterRoot: React.FC<LayoutProps> = ({ children, className }) => (
-	<div
-		className={cn(
-			'grid min-h-dvh grid-rows-[auto_1fr_auto] bg-slate-100',
-			className
-		)}
-	>
-		{children}
-	</div>
-);
+const HostPresenterRoot: React.FC<LayoutProps> = ({ children, className }) => {
+	const isPresenter = kmClient.clientContext.mode === 'presenter';
+
+	return (
+		<div
+			className={cn(
+				'grid min-h-dvh bg-slate-100',
+				isPresenter
+					? 'cursor-none grid-rows-[1fr] select-none'
+					: 'grid-rows-[auto_1fr_auto]',
+				className
+			)}
+		>
+			{children}
+		</div>
+	);
+};
 
 const HostPresenterHeader: React.FC<LayoutProps> = ({
 	children,

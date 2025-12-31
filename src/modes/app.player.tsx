@@ -5,6 +5,7 @@ import { config } from '@/config';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { useGlobalController } from '@/hooks/useGlobalController';
 import { PlayerLayout } from '@/layouts/player';
+import { kmClient } from '@/services/km-client';
 import { playerActions } from '@/state/actions/player-actions';
 import { globalStore } from '@/state/stores/global-store';
 import { playerStore } from '@/state/stores/player-store';
@@ -18,10 +19,13 @@ import * as React from 'react';
 const App: React.FC = () => {
 	const { title } = config;
 	const { name, currentView } = useSnapshot(playerStore.proxy);
-	const { started } = useSnapshot(globalStore.proxy);
+	const { started, players, teams } = useSnapshot(globalStore.proxy);
 
 	useGlobalController();
 	useDocumentTitle(title);
+
+	const player = players[kmClient.id];
+	const teamName = player ? teams[player.team].name : undefined;
 
 	React.useEffect(() => {
 		// While game start, force view to 'shared-state', otherwise to 'lobby'
@@ -56,7 +60,7 @@ const App: React.FC = () => {
 				</PlayerLayout.Main>
 
 				<PlayerLayout.Footer>
-					<NameLabel name={name} />
+					<NameLabel name={name} teamName={teamName} />
 				</PlayerLayout.Footer>
 			</PlayerLayout.Root>
 		);
@@ -72,7 +76,7 @@ const App: React.FC = () => {
 			</PlayerLayout.Main>
 
 			<PlayerLayout.Footer>
-				<NameLabel name={name} />
+				<NameLabel name={name} teamName={teamName} />
 			</PlayerLayout.Footer>
 		</PlayerLayout.Root>
 	);
