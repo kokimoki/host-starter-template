@@ -1,30 +1,57 @@
 import { kmClient } from '@/services/km-client';
 
+type HexColor = `#${string}`;
+
 export interface TeamStats {
 	name: string;
+	color: HexColor;
 	health: number;
 	armor: number;
+}
+
+export interface EnemyStats {
+	name: string;
+	color: HexColor;
+	health: number;
+	armor: number;
+	maxHealth: number;
+	maxArmor: number;
 }
 
 export interface GlobalState {
 	controllerConnectionId: string;
 	started: boolean;
 	startTimestamp: number;
-	players: Record<string, { name: string; team: 0 | 1 }>;
+	roundStartTimestamp: number;
+	players: Record<string, { name: string }>;
 	showPresenterQr: boolean;
-	teams: [TeamStats, TeamStats]; // [team1, team2]
+	team: TeamStats;
+	round: number;
+	enemy: EnemyStats;
 }
 
 const initialState: GlobalState = {
 	controllerConnectionId: '',
 	started: false,
 	startTimestamp: 0,
+	roundStartTimestamp: 0,
 	players: {},
 	showPresenterQr: true,
-	teams: [
-		{ name: 'Orcs', health: 100, armor: 10 },
-		{ name: 'Demons', health: 100, armor: 0 }
-	]
+	team: {
+		name: 'Players',
+		color: '#61c2bf',
+		health: 100,
+		armor: 50
+	},
+	round: 1,
+	enemy: {
+		name: 'AI Boss',
+		color: '#c26161',
+		health: 100,
+		armor: 80,
+		maxHealth: 100,
+		maxArmor: 80
+	}
 };
 
 export const globalStore = kmClient.store<GlobalState>('global', initialState);

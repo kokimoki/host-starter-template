@@ -1,7 +1,5 @@
 import { config } from '@/config';
 import { playerActions } from '@/state/actions/player-actions';
-import { globalStore } from '@/state/stores/global-store';
-import { useSnapshot } from '@kokimoki/app';
 import * as React from 'react';
 import Markdown from 'react-markdown';
 
@@ -16,9 +14,7 @@ interface Props {
  */
 export const CreateProfileView: React.FC<Props> = () => {
 	const [name, setName] = React.useState('');
-	const [selectedTeam, setSelectedTeam] = React.useState<0 | 1>(0);
 	const [isLoading, setIsLoading] = React.useState(false);
-	const { teams } = useSnapshot(globalStore.proxy);
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -28,7 +24,7 @@ export const CreateProfileView: React.FC<Props> = () => {
 
 		setIsLoading(true);
 		try {
-			await playerActions.setPlayerName(trimmedName, selectedTeam);
+			await playerActions.setPlayerName(trimmedName);
 		} finally {
 			setIsLoading(false);
 		}
@@ -50,34 +46,6 @@ export const CreateProfileView: React.FC<Props> = () => {
 					maxLength={50}
 					className="km-input"
 				/>
-
-				<div className="space-y-2">
-					<label className="block text-center font-medium text-slate-700">
-						{config.selectTeamLabel}
-					</label>
-					<div className="grid grid-cols-2 gap-3">
-						<button
-							type="button"
-							onClick={() => setSelectedTeam(0)}
-							disabled={isLoading}
-							className={
-								selectedTeam === 0 ? 'km-btn-primary' : 'km-btn-secondary'
-							}
-						>
-							{teams[0].name}
-						</button>
-						<button
-							type="button"
-							onClick={() => setSelectedTeam(1)}
-							disabled={isLoading}
-							className={
-								selectedTeam === 1 ? 'km-btn-primary' : 'km-btn-secondary'
-							}
-						>
-							{teams[1].name}
-						</button>
-					</div>
-				</div>
 
 				<button
 					type="submit"

@@ -2,11 +2,20 @@ import { kmClient } from '@/services/km-client';
 
 export interface PlayerState {
 	name: string;
-	currentView: 'lobby' | 'shared-state' | 'connections';
+	health: number;
+	currentView:
+		| 'lobby'
+		| 'shared-state'
+		| 'connections'
+		| 'round'
+		| 'victory'
+		| 'game-over'
+		| 'reward';
 }
 
 const initialState: PlayerState = {
 	name: '',
+	health: 100,
 	currentView: 'lobby'
 };
 

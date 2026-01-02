@@ -56,6 +56,22 @@ const App: React.FC = () => {
 					>
 						{config.togglePresenterQrButton}
 					</button>
+
+					<button
+						type="button"
+						onClick={globalActions.nextRound}
+						className="km-btn-primary"
+					>
+						Next round
+					</button>
+
+					<button
+						type="button"
+						onClick={() => globalActions.dealDamageToPlayer(10)}
+						className="km-btn-primary"
+					>
+						deal damage to player
+					</button>
 				</div>
 			</HostPresenterLayout.Main>
 

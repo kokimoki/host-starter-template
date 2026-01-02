@@ -3,9 +3,11 @@ import { globalStore } from '../stores/global-store';
 
 export const globalActions = {
 	async startGame() {
+		const timestamp = kmClient.serverTimestamp();
 		await kmClient.transact([globalStore], ([globalState]) => {
 			globalState.started = true;
-			globalState.startTimestamp = kmClient.serverTimestamp();
+			globalState.startTimestamp = timestamp;
+			globalState.roundStartTimestamp = timestamp;
 		});
 	},
 
@@ -24,24 +26,30 @@ export const globalActions = {
 
 	async dealDamage(damage: number) {
 		await kmClient.transact([globalStore], ([globalState]) => {
-			const player = globalState.players[kmClient.id];
-			if (!player) return;
+			globalState.enemy.health = Math.max(globalState.enemy.health - damage, 0);
+		});
+		if (globalStore.proxy.enemy.health <= 0) {
+			console.log('enemy dead');
+		}
+	},
 
-			const oppositeTeam = player.team === 0 ? 1 : 0;
-			const team = globalState.teams[oppositeTeam];
+	async dealDamageToPlayer(damage: number) {
+		await kmClient.transact([globalStore], ([globalState]) => {
+			globalState.team.health = Math.max(globalState.team.health - damage, 0);
+		});
+		if (globalStore.proxy.team.health <= 0) {
+			console.log('team dead');
+		}
+	},
 
-			// Armor acts as additional HP - deplete armor first, then health
-			let remainingDamage = damage;
-
-			if (team.armor > 0) {
-				const armorDamage = Math.min(team.armor, remainingDamage);
-				team.armor -= armorDamage;
-				remainingDamage -= armorDamage;
-			}
-
-			if (remainingDamage > 0) {
-				team.health = Math.max(0, team.health - remainingDamage);
-			}
+	async nextRound() {
+		const timestamp = kmClient.serverTimestamp();
+		await kmClient.transact([globalStore], ([globalState]) => {
+			globalState.round += 1;
+			globalState.roundStartTimestamp = timestamp;
+			// Reset enemy health for new round
+			globalState.enemy.health = globalState.enemy.maxHealth;
+			globalState.enemy.armor = globalState.enemy.maxArmor;
 		});
 	}
 };

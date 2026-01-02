@@ -8,6 +8,7 @@ import { globalStore } from '@/state/stores/global-store';
 import { cn } from '@/utils/cn';
 import { BattleView } from '@/views/battle-view';
 import { ConnectionsView } from '@/views/connections-view';
+import { RoundView } from '@/views/round-view';
 import { useSnapshot } from '@kokimoki/app';
 import { KmQrCode } from '@kokimoki/shared';
 import * as React from 'react';
@@ -15,9 +16,26 @@ import * as React from 'react';
 const App: React.FC = () => {
 	const { title } = config;
 	const { showPresenterQr, started } = useSnapshot(globalStore.proxy);
+	const [showRound, setShowRound] = React.useState(false);
 
 	useGlobalController();
 	useDocumentTitle(title);
+
+	React.useEffect(() => {
+		if (started) {
+			// Show round view first
+			setShowRound(true);
+
+			// Then switch to battle view after 5 seconds
+			const timer = setTimeout(() => {
+				setShowRound(false);
+			}, 5000);
+
+			return () => clearTimeout(timer);
+		} else {
+			setShowRound(false);
+		}
+	}, [started]);
 
 	if (kmClient.clientContext.mode !== 'presenter') {
 		throw new Error('App presenter rendered in non-presenter mode');
@@ -32,16 +50,20 @@ const App: React.FC = () => {
 			<HostPresenterLayout.Root>
 				<HostPresenterLayout.Main>
 					{started ? (
-						<BattleView>
-							<KmQrCode
-								data={playerLink}
-								size={200}
-								className={cn(
-									'fixed top-8 right-8',
-									!showPresenterQr && 'invisible'
-								)}
-							/>
-						</BattleView>
+						showRound ? (
+							<RoundView />
+						) : (
+							<BattleView>
+								<KmQrCode
+									data={playerLink}
+									size={200}
+									className={cn(
+										'fixed top-8 right-8',
+										!showPresenterQr && 'invisible'
+									)}
+								/>
+							</BattleView>
+						)
 					) : (
 						<ConnectionsView>
 							<KmQrCode

@@ -84,8 +84,6 @@ createProfileMd: |
 playerNamePlaceholder: 'Your name...'
 playerNameLabel: 'Name:'
 playerNameButton: 'Continue'
-selectTeamLabel: 'Select Your Team:'
-playerTeamLabel: 'Team:'
 
 playerLinkLabel: 'Player Link'
 presenterLinkLabel: 'Presenter Link'
