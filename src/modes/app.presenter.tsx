@@ -58,7 +58,7 @@ const App: React.FC = () => {
 									data={playerLink}
 									size={200}
 									className={cn(
-										'fixed top-8 right-8',
+										'fixed top-8 right-8 z-10',
 										!showPresenterQr && 'invisible'
 									)}
 								/>

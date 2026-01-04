@@ -7,7 +7,6 @@ export const globalActions = {
 		await kmClient.transact([globalStore], ([globalState]) => {
 			globalState.started = true;
 			globalState.startTimestamp = timestamp;
-			globalState.roundStartTimestamp = timestamp;
 		});
 	},
 
@@ -27,10 +26,12 @@ export const globalActions = {
 	async dealDamage(damage: number) {
 		await kmClient.transact([globalStore], ([globalState]) => {
 			globalState.enemy.health = Math.max(globalState.enemy.health - damage, 0);
+
+			// Set roundEndTimestamp when enemy dies
+			if (globalState.enemy.health <= 0 && !globalState.roundEndTimestamp) {
+				globalState.roundEndTimestamp = kmClient.serverTimestamp();
+			}
 		});
-		if (globalStore.proxy.enemy.health <= 0) {
-			console.log('enemy dead');
-		}
 	},
 
 	async dealDamageToPlayer(damage: number) {
@@ -42,12 +43,18 @@ export const globalActions = {
 		}
 	},
 
+	async healPlayer(amount: number) {
+		await kmClient.transact([globalStore], ([globalState]) => {
+			globalState.team.health = Math.min(globalState.team.health + amount, 100);
+		});
+	},
+
 	async nextRound() {
 		const timestamp = kmClient.serverTimestamp();
 		await kmClient.transact([globalStore], ([globalState]) => {
 			globalState.round += 1;
-			globalState.roundStartTimestamp = timestamp;
-			// Reset enemy health for new round
+			globalState.startTimestamp = timestamp;
+			globalState.roundEndTimestamp = 0;
 			globalState.enemy.health = globalState.enemy.maxHealth;
 			globalState.enemy.armor = globalState.enemy.maxArmor;
 		});

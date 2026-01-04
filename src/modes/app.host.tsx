@@ -72,6 +72,14 @@ const App: React.FC = () => {
 					>
 						deal damage to player
 					</button>
+
+					<button
+						type="button"
+						onClick={() => globalActions.healPlayer(10)}
+						className="km-btn-primary"
+					>
+						heal player
+					</button>
 				</div>
 			</HostPresenterLayout.Main>
 

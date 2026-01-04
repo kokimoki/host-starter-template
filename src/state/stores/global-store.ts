@@ -22,7 +22,7 @@ export interface GlobalState {
 	controllerConnectionId: string;
 	started: boolean;
 	startTimestamp: number;
-	roundStartTimestamp: number;
+	roundEndTimestamp?: number;
 	players: Record<string, { name: string }>;
 	showPresenterQr: boolean;
 	team: TeamStats;
@@ -34,19 +34,19 @@ const initialState: GlobalState = {
 	controllerConnectionId: '',
 	started: false,
 	startTimestamp: 0,
-	roundStartTimestamp: 0,
+	roundEndTimestamp: 0,
 	players: {},
 	showPresenterQr: true,
 	team: {
 		name: 'Players',
-		color: '#61c2bf',
+		color: '#FB2C36',
 		health: 100,
 		armor: 50
 	},
 	round: 1,
 	enemy: {
 		name: 'AI Boss',
-		color: '#c26161',
+		color: '#FB2C36',
 		health: 100,
 		armor: 80,
 		maxHealth: 100,

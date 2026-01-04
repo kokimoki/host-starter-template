@@ -93,3 +93,21 @@ openPlayerHelpButton: 'Force Players Help to Open'
 
 menuAriaLabel: 'Open menu drawer'
 menuHelpAriaLabel: 'Open help drawer'
+
+roundMd: |
+  Get ready for battle!
+
+victoryMd: |
+  # Victory!
+
+  Congratulations on defeating the enemy!
+
+rewardMd: |
+  # Reward
+
+  Vote with the team to select your reward.
+
+gameOverMd: |
+  # Game over!
+
+  If there was magic here, it's long gone now.

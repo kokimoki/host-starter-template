@@ -18,37 +18,62 @@ import { RoundView } from '@/views/round-view';
 import { SharedStateView } from '@/views/shared-state-view';
 import { VictoryView } from '@/views/victory-view';
 import { useSnapshot } from '@kokimoki/app';
+import { useKmConfettiContext } from '@kokimoki/shared';
 import * as React from 'react';
 
 const App: React.FC = () => {
 	const { title } = config;
 	const { name, currentView } = useSnapshot(playerStore.proxy);
-	const { started, roundStartTimestamp, enemy, team } = useSnapshot(
-		globalStore.proxy
-	);
+	const { started, startTimestamp, roundEndTimestamp, enemy, team } =
+		useSnapshot(globalStore.proxy);
 	const serverTime = useServerTimer();
+	const confetti = useKmConfettiContext();
 
 	useGlobalController();
 	useDocumentTitle(title);
 
 	React.useEffect(() => {
+		if (enemy.health <= 0 && roundEndTimestamp) {
+			const elapsed = serverTime - roundEndTimestamp;
+
+			confetti.triggerConfetti();
+
+			if (elapsed < 6000) {
+				playerActions.setCurrentView('victory');
+			} else {
+				confetti.stopConfetti();
+				playerActions.setCurrentView('reward');
+			}
+			return;
+		}
+
 		if (team.health <= 0) {
 			playerActions.setCurrentView('game-over');
 			return;
 		}
 
-		if (enemy.health <= 0) {
-			playerActions.setCurrentView('victory');
+		if (!started) {
+			playerActions.setCurrentView('lobby');
 			return;
 		}
 
-		const view = !started
-			? 'lobby'
-			: roundStartTimestamp && serverTime - roundStartTimestamp < 5000
-				? 'round'
-				: 'shared-state';
-		playerActions.setCurrentView(view);
-	}, [started, roundStartTimestamp, serverTime, enemy.health, team.health]);
+		if (startTimestamp) {
+			const elapsed = serverTime - startTimestamp;
+
+			if (elapsed < 5000) {
+				playerActions.setCurrentView('round');
+			} else {
+				playerActions.setCurrentView('shared-state');
+			}
+		}
+	}, [
+		started,
+		startTimestamp,
+		roundEndTimestamp,
+		serverTime,
+		enemy.health,
+		team.health
+	]);
 
 	if (!name) {
 		return (
@@ -82,7 +107,9 @@ const App: React.FC = () => {
 
 	return (
 		<PlayerLayout.Root>
-			<PlayerLayout.Header />
+			<PlayerLayout.Header>
+				<PlayerMenu />
+			</PlayerLayout.Header>
 
 			<PlayerLayout.Main>
 				{currentView === 'round' && <RoundView />}
