@@ -12,7 +12,7 @@ export function useHealthAnimation(
 	value: number,
 	options: { damageDuration?: number; healDuration?: number } = {}
 ) {
-	const { damageDuration = 750, healDuration = 1500 } = options;
+	const { damageDuration = 750, healDuration = 2000 } = options;
 	const [isDamaged, setIsDamaged] = useState(false);
 	const [isHealing, setIsHealing] = useState(false);
 	const previousValueRef = useRef(value);

@@ -111,3 +111,49 @@ body {
 .health-heal-animation {
 	animation: health-heal 1.5s ease-in-out;
 }
+
+/* Floating animation */
+@keyframes float {
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-12px);
+	}
+}
+
+.float-animation {
+	animation: float 3s ease-in-out infinite;
+}
+
+/* brightness animation */
+@keyframes brightness-pulse {
+	0%,
+	100% {
+		filter: brightness(1) saturate(1);
+		transform: scale(1);
+	}
+	50% {
+		filter: brightness(1.5) saturate(1.25);
+		transform: scale(1.05);
+	}
+}
+
+.brightness-pulse-animation {
+	animation: brightness-pulse 3s ease-in-out infinite;
+}
+
+/* Heart heal animation - float from bottom to top */
+@keyframes heart-rise {
+	0% {
+		transform: translateY(0) scale(0.5);
+	}
+	100% {
+		transform: translateY(-110dvh) scale(1.5);
+	}
+}
+
+.heart-rise-animation {
+	animation: heart-rise 2s ease-out forwards;
+}

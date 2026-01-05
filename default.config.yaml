@@ -4,40 +4,20 @@
 title: 'Host Starter'
 
 gameLobbyMd: |
-  # Game Lobby
+  # Get ready
 
-  This is a sample markdown to demonstrate various markdown features.
+  Host is stating the game soon. Meanwhile, get familiar with the rules.
 
-  ## Starting soon
+  ## Gameplay
 
-  Game is starting soon. **Get ready!**
+  Each turn the team votes on one action to take. Actions can be attacking the enemy, defending the team or powering up for future turns.
 
   ## Rules
 
-  1. Wait for the host to start the game.
-  2. Follow the instructions on the presenter screen.
-  3. Open [Games for Crowds](https://gamesforcrowds.com) for more info.
-
-  ## What people say
-
-  > **This game is awesome!** - Player 1
-
-  > **I had a good time playing this.** - Player 2
-
-  > **Always looking forward to the next round!**  - Player 3
-
-  ---
-
-  ## Sample Code
-
-  ```
-  // Code block
-  console.log('Hello, world!');
-  ```
-
-  ## Sample Image
-
-  ![Logo](/logo.svg)
+  1. Block resets to 0 after every turn.
+  2. Strength increases attack effectiveness.
+  3. Fortitude increases block effectiveness.
+  4. At the start of the round the team heals for 5 health.
 
 connectionsMd: |
   Scan the QR to join the game.
@@ -96,6 +76,11 @@ menuHelpAriaLabel: 'Open help drawer'
 
 roundMd: |
   Get ready for battle!
+
+turnMd: |
+  # Your Turn!
+
+  Vote with the team what action to take next.
 
 victoryMd: |
   # Victory!

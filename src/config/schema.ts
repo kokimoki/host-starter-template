@@ -38,6 +38,7 @@ export const schema = z.object({
 	menuHelpAriaLabel: z.string().default('Open help drawer'),
 
 	roundMd: z.string().default('Get ready for battle!'),
+	turnMd: z.string().default('# Your Turn!'),
 	victoryMd: z.string().default('# Victory!'),
 	rewardMd: z.string().default('# Reward'),
 	gameOverMd: z.string().default('# Game Over')
