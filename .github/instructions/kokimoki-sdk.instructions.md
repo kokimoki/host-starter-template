@@ -62,6 +62,8 @@ Development toolkit for building real-time collaborative game applications
 
 - Generate text response (stories, explanations, summaries) via `kmClient.ai.chat`
 - Generate structured JSON (quiz questions, game content) via `kmClient.ai.generateJson`
+  - **CRITICAL**: The prompt must include the word "json"
+  - **CRITICAL**: The required schema must be explicitly written in the prompt
 - Transform images via `kmClient.ai.modifyImage`
 
 ## Leaderboard
