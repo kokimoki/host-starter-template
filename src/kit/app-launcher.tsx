@@ -108,6 +108,7 @@ export async function launchApp(
 		document.getElementById('connecting')?.remove();
 		renderComponent(<Dev nPlayerWindows={options.nPlayerWindows} />);
 	} else {
+		// eslint-disable-next-line no-console
 		console.log = console.log.bind(console, `[${key}]`);
 
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment

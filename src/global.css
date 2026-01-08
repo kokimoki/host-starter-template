@@ -34,16 +34,11 @@
 
 html,
 body {
-	@apply text-slate-900;
-}
-
-/* Prevent auto-refresh when overscrolling on mobile */
-body {
-	@apply overscroll-none;
+	@apply overscroll-none text-slate-900;
 }
 
 .km-input {
-	@apply rounded-xl border border-slate-300 bg-slate-50 px-5 py-3 transition-colors focus:ring-2 focus:ring-blue-500 focus:outline-none;
+	@apply w-full max-w-96 rounded-xl border border-slate-300 bg-slate-50 px-5 py-3 transition-colors focus:ring-2 focus:ring-blue-500 focus:outline-none disabled:opacity-50;
 }
 
 .km-btn-primary,
