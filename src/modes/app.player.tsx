@@ -1,34 +1,33 @@
 import { PlayerMenu } from '@/components/menu';
 import { NameLabel } from '@/components/name-label';
 import { withKmProviders } from '@/components/with-km-providers';
+import { withModeGuard } from '@/components/with-mode-guard';
 import { config } from '@/config';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { useGlobalController } from '@/hooks/useGlobalController';
 import { PlayerLayout } from '@/layouts/player';
-import { playerActions } from '@/state/actions/player-actions';
-import { globalStore } from '@/state/stores/global-store';
-import { playerStore } from '@/state/stores/player-store';
-import { ConnectionsView } from '@/views/connections-view';
+import { localPlayerActions } from '@/state/actions/local-player-actions';
+import { gameStore } from '@/state/stores/game-store';
+import { localPlayerStore } from '@/state/stores/local-player-store';
 import { CreateProfileView } from '@/views/create-profile-view';
 import { GameLobbyView } from '@/views/game-lobby-view';
-import { SharedStateView } from '@/views/shared-state-view';
+import { GameStateView } from '@/views/game-state-view';
 import { useSnapshot } from '@kokimoki/app';
 import * as React from 'react';
 
 const App: React.FC = () => {
-	const { title } = config;
-	const { name, currentView } = useSnapshot(playerStore.proxy);
-	const { started } = useSnapshot(globalStore.proxy);
-
+	useDocumentTitle(config.title);
 	useGlobalController();
-	useDocumentTitle(title);
+
+	const { name, currentView } = useSnapshot(localPlayerStore.proxy);
+	const { started } = useSnapshot(gameStore.proxy);
 
 	React.useEffect(() => {
 		// While game start, force view to 'shared-state', otherwise to 'lobby'
 		if (started) {
-			playerActions.setCurrentView('shared-state');
+			localPlayerActions.setCurrentView('game-state');
 		} else {
-			playerActions.setCurrentView('lobby');
+			localPlayerActions.setCurrentView('lobby');
 		}
 	}, [started]);
 
@@ -51,8 +50,7 @@ const App: React.FC = () => {
 				</PlayerLayout.Header>
 
 				<PlayerLayout.Main>
-					{currentView === 'lobby' && <GameLobbyView />}
-					{currentView === 'connections' && <ConnectionsView />}
+					<GameLobbyView />
 				</PlayerLayout.Main>
 
 				<PlayerLayout.Footer>
@@ -67,7 +65,7 @@ const App: React.FC = () => {
 			<PlayerLayout.Header />
 
 			<PlayerLayout.Main>
-				{currentView === 'shared-state' && <SharedStateView />}
+				{currentView === 'game-state' && <GameStateView />}
 				{/* Add new views here */}
 			</PlayerLayout.Main>
 
@@ -78,4 +76,4 @@ const App: React.FC = () => {
 	);
 };
 
-export default withKmProviders(App);
+export default withKmProviders(withModeGuard(App, 'player'));

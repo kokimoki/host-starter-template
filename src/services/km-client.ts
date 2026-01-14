@@ -1,8 +1,10 @@
 import type { Config } from '@/config/schema';
-import type { ClientContext } from '@/types';
+import type { ClientContext } from '@/types/client';
 import { KokimokiClient } from '@kokimoki/app';
 
-// Get kokimoki env
+/**
+ * Kokimoki environment variables
+ */
 export const kmEnv: {
 	dev: boolean;
 	test: boolean;
@@ -16,7 +18,10 @@ export const kmEnv: {
 	assets: string;
 } = JSON.parse(document.getElementById('kokimoki-env')!.textContent!);
 
-// Export the config
+/**
+ * Kokimoki app configuration.
+ * Used to get the app configuration from the environment variables.
+ */
 export function getConfig(): Config {
 	if (kmEnv.configObject) {
 		return kmEnv.configObject;
@@ -29,7 +34,13 @@ export function getConfig(): Config {
 	throw new Error('No Kokimoki config provided');
 }
 
-// Create a Kokimoki client
+/**
+ * Kokimoki client to interact with the Kokimoki SDK platform.
+ * Used to manage the app state, interact with the Kokimoki services,
+ * provices access to the client context and more.
+ *
+ * @returns Kokimoki client instance
+ */
 export const kmClient = new KokimokiClient<ClientContext>(
 	kmEnv.host,
 	kmEnv.appId,

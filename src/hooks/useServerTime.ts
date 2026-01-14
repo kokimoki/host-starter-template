@@ -3,8 +3,12 @@ import { useEffect, useRef, useState } from 'react';
 
 /**
  * Hook to get the server time, updated at a specified interval
- * @param ms - The interval in milliseconds to update the server time (default: 250ms)
+ *
+ * @param  ms The interval in milliseconds to update the server time (default: 250ms)
  * @returns The current server timestamp
+ *
+ * @example // updates every 500ms
+ * const serverTime = useServerTimer(500);
  */
 export function useServerTimer(ms = 250) {
 	const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);

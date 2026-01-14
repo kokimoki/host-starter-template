@@ -30,14 +30,10 @@ gameLobbyMd: |
 
   ## Sample Code
 
-  ```
+  ```typescript
   // Code block
   console.log('Hello, world!');
   ```
-
-  ## Sample Image
-
-  ![Logo](/logo.svg)
 
 connectionsMd: |
   Scan the QR to join the game.
@@ -89,7 +85,8 @@ playerLinkLabel: 'Player Link'
 presenterLinkLabel: 'Presenter Link'
 
 togglePresenterQrButton: 'Toggle Presenter QR'
-openPlayerHelpButton: 'Force Players Help to Open'
 
 menuAriaLabel: 'Open menu drawer'
 menuHelpAriaLabel: 'Open help drawer'
+
+gameDurationLabel: 'Game duration (mins)'

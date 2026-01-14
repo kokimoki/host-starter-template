@@ -1,16 +1,21 @@
 import { config } from '@/config';
 import { cn } from '@/utils/cn';
-import * as React from 'react';
+
+interface LogoProps {
+	className?: string;
+}
 
 /**
- *
- * This example is **optional** and can be removed if not needed
+ * Example component demonstrating how to display the app logo.
+ * Modify or replace with your own implementation.
  */
-export const Logo: React.FC<{ className?: string }> = ({ className }) => (
-	<img
-		src="https://static.kokimoki.com/gfc/v2/logo.svg"
-		alt={config.title}
-		title={config.title}
-		className={cn('h-9', className)}
-	/>
-);
+export function Logo({ className }: LogoProps) {
+	return (
+		<img
+			src="https://static.kokimoki.com/gfc/v2/logo.svg"
+			alt={config.title}
+			title={config.title}
+			className={cn('h-9', className)}
+		/>
+	);
+}

@@ -1,18 +1,14 @@
 import { config } from '@/config';
-import { playerActions } from '@/state/actions/player-actions';
+import { localPlayerActions } from '@/state/actions/local-player-actions';
 import * as React from 'react';
 import Markdown from 'react-markdown';
 
-interface Props {
-	className?: string;
-}
-
 /**
- * View to create a player profile by entering a name
- *
- * This example is **optional** and can be removed if not needed
+ * Example view demonstrating how to create a player profile form.
+ * Shows usage of local player actions for registration.
+ * Modify or replace with your own implementation.
  */
-export const CreateProfileView: React.FC<Props> = () => {
+export function CreateProfileView() {
 	const [name, setName] = React.useState('');
 	const [isLoading, setIsLoading] = React.useState(false);
 
@@ -24,7 +20,7 @@ export const CreateProfileView: React.FC<Props> = () => {
 
 		setIsLoading(true);
 		try {
-			await playerActions.setPlayerName(trimmedName);
+			await localPlayerActions.setPlayerName(trimmedName);
 		} finally {
 			setIsLoading(false);
 		}
@@ -64,4 +60,4 @@ export const CreateProfileView: React.FC<Props> = () => {
 			</form>
 		</div>
 	);
-};
+}

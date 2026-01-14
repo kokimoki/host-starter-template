@@ -1,16 +1,14 @@
 import { config } from '@/config';
-import React from 'react';
 import Markdown from 'react-markdown';
 
 /**
- * View to display the game lobby information before the game starts
- *
- * This example is **optional** and can be removed if not needed
+ * Example view demonstrating how to display lobby content before game starts.
+ * Modify or replace with your own implementation.
  */
-export const GameLobbyView: React.FC<React.PropsWithChildren> = () => {
+export function GameLobbyView() {
 	return (
 		<article className="prose">
 			<Markdown>{config.gameLobbyMd}</Markdown>
 		</article>
 	);
-};
+}

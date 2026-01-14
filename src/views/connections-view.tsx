@@ -1,24 +1,21 @@
 import { config } from '@/config';
-import { usePlayersWithStatus } from '@/hooks/usePlayersWithStatus';
+import { usePlayersWithOnlineStatus } from '@/hooks/usePlayersWithStatus';
 import { kmClient } from '@/services/km-client';
 import { cn } from '@/utils/cn';
-import React from 'react';
+import type { ReactNode } from 'react';
 import Markdown from 'react-markdown';
 
-interface Props {
-	className?: string;
+interface ConnectionViewProps {
+	children?: ReactNode;
 }
 
 /**
- * View to display players who have joined the game and their online status.
- *
- * This example is **optional** and can be removed if not needed
+ * Example view demonstrating how to display players and their online status.
+ * Shows usage of `usePlayersWithOnlineStatus` hook for player list with presence.
+ * Modify or replace with your own implementation.
  */
-export const ConnectionsView: React.FC<React.PropsWithChildren<Props>> = ({
-	children
-}) => {
-	const { players } = usePlayersWithStatus();
-	const onlinePlayersCount = players.filter((p) => p.isOnline).length;
+export function ConnectionsView({ children }: ConnectionViewProps) {
+	const { players, onlinePlayersCount } = usePlayersWithOnlineStatus();
 
 	const isPresenter = kmClient.clientContext.mode === 'presenter';
 
@@ -64,4 +61,4 @@ export const ConnectionsView: React.FC<React.PropsWithChildren<Props>> = ({
 			)}
 		</div>
 	);
-};
+}

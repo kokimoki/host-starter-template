@@ -1,15 +1,13 @@
 import { config } from '@/config';
 import { useKmModal } from '@kokimoki/shared';
 import { HelpCircle } from 'lucide-react';
-import * as React from 'react';
 import Markdown from 'react-markdown';
 
 /**
- * Menu component to navigate between different views in the player layout
- *
- * This example is **optional** and can be removed if not needed
+ * Example component demonstrating how to create a player menu with help drawer.
+ * Modify or replace with your own implementation.
  */
-export const PlayerMenu: React.FC = () => {
+export function PlayerMenu() {
 	const { openDrawer } = useKmModal();
 
 	const handleOpenHelp = () => {
@@ -38,4 +36,4 @@ export const PlayerMenu: React.FC = () => {
 			</button>
 		</div>
 	);
-};
+}

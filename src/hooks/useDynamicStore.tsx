@@ -24,9 +24,17 @@ export interface UseDynamicStoreResult<T extends object> {
 
 /**
  * Hook to manage dynamic Kokimoki stores with connection state
- * @param roomName - The unique name of the Kokimoki store (room)
- * @param initialState - The initial state for the Kokimoki store
- * @returns An object containing the Kokimoki store and connection states
+ *
+ * @param roomName The unique name of the Kokimoki store (room)
+ * @param initialState  The initial state for the Kokimoki store
+ * @returns An object containing the Kokimoki store and dynamic store connection states
+ *
+ * @example
+ * interface RoomStateType {
+ *  roomTitle: string;
+ * }
+ *
+ * const { store, isConnected, isConnecting } = useDynamicStore<RoomStateType>('my-room', { roomTitle: 'My title' });
  */
 export function useDynamicStore<T extends object>(
 	roomName: string,

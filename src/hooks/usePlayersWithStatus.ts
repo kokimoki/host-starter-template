@@ -1,19 +1,33 @@
-import { globalStore } from '@/state/stores/global-store';
+import { playersStore } from '@/state/stores/players-store';
 import { useSnapshot } from '@kokimoki/app';
+import { useStoreConnections } from './useStoreConnections';
 
 /**
- * Hook to get the list of players with their online status.
- * @returns An array of players with their id, player value and online status.
+ * Hook to get the list of players with their online status and the count of online players
+ *
+ * @returns An array of players with their id, player value and online status. Also returns the count of online players.
+ *
+ * @example
+ * const { players, onlinePlayersCount } = usePlayersWithOnlineStatus();
  */
-export function usePlayersWithStatus() {
-	const { players } = useSnapshot(globalStore.proxy);
-	const { clientIds: onlinePlayerIds } = useSnapshot(globalStore.connections);
+export function usePlayersWithOnlineStatus() {
+	const { players } = useSnapshot(playersStore.proxy);
+	const { clientIds: onlinePlayerIds } = useStoreConnections(playersStore);
 
-	const playersList = Object.entries(players).map(([id, player]) => ({
-		id,
-		...player,
-		isOnline: onlinePlayerIds.has(id)
-	}));
+	const playersWithOnlineStatus = Object.entries(players).map(
+		([id, player]) => ({
+			id,
+			...player,
+			isOnline: onlinePlayerIds.has(id)
+		})
+	);
 
-	return { players: playersList };
+	const onlinePlayersCount = playersWithOnlineStatus.filter(
+		(p) => p.isOnline
+	).length;
+
+	return {
+		players: playersWithOnlineStatus,
+		onlinePlayersCount
+	};
 }
