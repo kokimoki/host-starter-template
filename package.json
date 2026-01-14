@@ -1,7 +1,7 @@
 {
 	"name": "@kokimoki/host-starter",
 	"private": true,
-	"version": "1.0.5",
+	"version": "1.1.0",
 	"type": "module",
 	"description": "A starter template for building a host-based games using Kokimoki SDK",
 	"scripts": {
