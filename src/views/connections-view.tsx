@@ -1,5 +1,5 @@
 import { config } from '@/config';
-import { usePlayersWithOnlineStatus } from '@/hooks/usePlayersWithStatus';
+import { usePlayersWithOnlineStatus } from '@/hooks/usePlayersWithOnlineStatus';
 import { kmClient } from '@/services/km-client';
 import { cn } from '@/utils/cn';
 import type { ReactNode } from 'react';
