@@ -19,12 +19,12 @@ const initialState: GameSettingsState = {
 /**
  * Domain: Game Settings
  *
- * Shared store for game configuration - parameters that define HOW the game plays.
+ * Global store for game configuration - parameters that define HOW the game plays.
  * Synced across all clients. Typically modified by host before or during game.
  *
  * Use this store for:
  * - Game duration, round count
- * - Game settings/options changed by hsost
+ * - Game settings/options changed by host
  * - Team configurations
  * - Dynamic questions/content for the game
  * - Any settings that affect dynamic game rules/setup and need to be shared

@@ -21,14 +21,14 @@ const initialState: HostState = {
 /**
  * Domain: Host Controller
  *
- * Shared store for host-specific controller state.
+ * Global store for host-specific controller state.
  * Synced across all clients.
  *
  * Use this store for:
  * - Host controls that affect the overall game session
  * - Presenter display settings (QR visibility, etc.)
  * - Host UI preferences that affect other views
- * - Any host-level data that needs to be shared
+ * - Any host-level data that needs to be synced globally
  *
  * @see hostActions for state mutations
  */

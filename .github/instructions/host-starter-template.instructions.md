@@ -55,10 +55,10 @@ State is organized into domain-specific stores, each responsible for one area:
 
 | Store                                                              | Domain           | Type   | Description                                  |
 | ------------------------------------------------------------------ | ---------------- | ------ | -------------------------------------------- |
-| [gameStore](../../src/state/stores/game-store.ts)                  | Game Runtime     | Shared | Game lifecycle, current phase, timestamps    |
-| [gameSettingsStore](../../src/state/stores/game-settings-store.ts) | Game Settings    | Shared | Game configuration (duration, rounds, rules) |
-| [playersStore](../../src/state/stores/players-store.ts)            | Players Registry | Shared | Player profiles, scores, team assignments    |
-| [hostStore](../../src/state/stores/host-store.ts)                  | Host Controller  | Shared | Host controls, presenter display settings    |
+| [gameStore](../../src/state/stores/game-store.ts)                  | Game Runtime     | Global | Game lifecycle, current phase, timestamps    |
+| [gameSettingsStore](../../src/state/stores/game-settings-store.ts) | Game Settings    | Global | Game configuration (duration, rounds, rules) |
+| [playersStore](../../src/state/stores/players-store.ts)            | Players Registry | Global | Player profiles, scores, team assignments    |
+| [hostStore](../../src/state/stores/host-store.ts)                  | Host Controller  | Global | Host controls, presenter display settings    |
 | [localPlayerStore](../../src/state/stores/local-player-store.ts)   | Local Player     | Local  | Current player's device-only state           |
 
 - Each store has corresponding actions file in `src/state/actions/`.
@@ -103,11 +103,11 @@ return (
 );
 ```
 
-### Game Store (Shared)
+### Game Store (Global)
 
 - [gameStore](../../src/state/stores/game-store.ts) contains game runtime state
 - Actions defined in [game-actions.ts](../../src/state/actions/game-actions.ts)
-- This store is one of others domain-specific shared stores
+- This store is one of others domain-specific global stores
 
 **Example: Game Lifecycle**
 
@@ -301,7 +301,7 @@ export const Button = () => <button>Start Game</button>;
 
 ## Global controller
 
-[useGlobalController.ts](../../src/hooks/useGlobalController.ts) maintains a single controller connection for logic that should only run on one device at a time (e.g. handling global timers, assigning player roles, running physics simulations).
+[useGlobalController.ts](../../src/hooks/useGlobalController.ts) maintains a single controller connection for logic that should only run on one device at a time (e.g. handling global timers, assigning player roles, running physics simulations) and update shared states, ensuring consistency across all clients.
 
 ### Example: Time-based logic
 

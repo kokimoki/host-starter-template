@@ -18,13 +18,13 @@ const initialState: PlayersState = {
 /**
  * Domain: Players Registry
  *
- * Shared store for all players data - the central registry of who's playing.
+ * Global store for all players data - the central registry of who's playing.
  * Synced across all clients.
  *
  * Use this store for:
  * - Player profiles (name, avatar, team)
  * - Player scores/stats
- * - Any players data that needs to be shared
+ * - Any players data that needs to be synced globally
  *
  *
  * @see playersActions for state mutations

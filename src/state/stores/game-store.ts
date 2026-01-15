@@ -20,7 +20,7 @@ const initialState: GameState = {
 /**
  * Domain: Game Runtime
  *
- * Shared store for game runtime state - current status of the game session.
+ * Global store for game runtime state - current status of the game session.
  *
  * Synced across all clients.
  *
@@ -28,7 +28,7 @@ const initialState: GameState = {
  * - Game lifecycle
  * - Current game state (round/phase)
  * - Active timers
- * - Any dynamic data that reflects the game progress and needs to be shared
+ * - Any dynamic data that reflects the game progress and needs to be synced globally
  *
  * @see gameActions for state mutations
  */
