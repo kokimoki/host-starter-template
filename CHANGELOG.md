@@ -10,7 +10,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added more code documentations
-- Added stores versioning
 - Updated `host-starter-template.instructions.md`
 
 ### Changed
