@@ -7,7 +7,7 @@ import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { useGlobalController } from '@/hooks/useGlobalController';
 import { generateLink } from '@/kit/generate-link';
 import { HostPresenterLayout } from '@/layouts/host-presenter';
-import { hostStore } from '@/state/stores/host-store';
+import { hostSettingsStore } from '@/state/stores/host-settings-store';
 import { cn } from '@/utils/cn';
 import { ConnectionsView } from '@/views/connections-view';
 import { useSnapshot } from '@kokimoki/app';
@@ -17,7 +17,7 @@ function App({ clientContext }: ModeGuardProps<'presenter'>) {
 	useGlobalController();
 	useDocumentTitle(config.title);
 
-	const { showPresenterQr } = useSnapshot(hostStore.proxy);
+	const { showPresenterQr } = useSnapshot(hostSettingsStore.proxy);
 
 	const playerLink = generateLink(clientContext.playerCode, {
 		mode: 'player'

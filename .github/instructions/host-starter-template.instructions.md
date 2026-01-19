@@ -53,34 +53,16 @@ See [Kokimoki SDK Stores](./kokimoki-sdk.instructions.md#stores) for store funda
 
 State is organized into domain-specific stores, each responsible for one area:
 
-| Store                                                              | Domain           | Type   | Description                                  |
-| ------------------------------------------------------------------ | ---------------- | ------ | -------------------------------------------- |
-| [gameStore](../../src/state/stores/game-store.ts)                  | Game Runtime     | Global | Game lifecycle, current phase, timestamps    |
-| [gameSettingsStore](../../src/state/stores/game-settings-store.ts) | Game Settings    | Global | Game configuration (duration, rounds, rules) |
-| [playersStore](../../src/state/stores/players-store.ts)            | Players Registry | Global | Player profiles, scores, team assignments    |
-| [hostStore](../../src/state/stores/host-store.ts)                  | Host Controller  | Global | Host controls, presenter display settings    |
-| [localPlayerStore](../../src/state/stores/local-player-store.ts)   | Local Player     | Local  | Current player's device-only state           |
+| Store                                                              | Domain             | Type   | Description                                                        |
+| ------------------------------------------------------------------ | ------------------ | ------ | ------------------------------------------------------------------ |
+| [gameSessionStore](../../src/state/stores/game-session-store.ts)   | Game Session       | Global | Game lifecycle, phase, timestamps, controller                      |
+| [gameConfigStore](../../src/state/stores/game-config-store.ts)     | Game Configuration | Global | Game configuration (duration, rounds, rules)                       |
+| [playersStore](../../src/state/stores/players-store.ts)            | Players Registry   | Global | Player profiles, scores, team assignments                          |
+| [hostSettingsStore](../../src/state/stores/host-settings-store.ts) | Host Settings      | Global | Host settings, Presenter display preferences (QR visibility, etc.) |
+| [localPlayerStore](../../src/state/stores/local-player-store.ts)   | Local Player       | Local  | Current player's device-only state                                 |
 
 - Each store has corresponding actions file in `src/state/actions/`.
 - Stores can be created/removed following game requirements and established domain-specific patterns.
-
-### Store versioning
-
-**CRITICAL:** Increment store version when changing the state schema to avoid conflicts with existing data.
-
-```typescript
-// In store file
-const VERSION = 1; // Increment when schema changes
-const STORE_KEY = `game/${VERSION}`;
-
-export const gameStore = kmClient.store<GameState>(STORE_KEY, initialState);
-```
-
-When to increment version:
-
-- Adding/removing properties from state interface
-- Changing property types
-- Restructuring nested objects
 
 ### Local Player Store (Device only)
 
@@ -103,18 +85,18 @@ return (
 );
 ```
 
-### Game Store (Global)
+### Game Session Store (Global)
 
-- [gameStore](../../src/state/stores/game-store.ts) contains game runtime state
-- Actions defined in [game-actions.ts](../../src/state/actions/game-actions.ts)
+- [gameSessionStore](../../src/state/stores/game-session-store.ts) contains game session state
+- Actions defined in [game-session-actions.ts](../../src/state/actions/game-session-actions.ts)
 - This store is one of others domain-specific global stores
 
 **Example: Game Lifecycle**
 
 ```typescript
-export const gameActions = {
+export const gameSessionActions = {
   async startGame() {
-    await kmClient.transact([gameStore], ([state]) => {
+    await kmClient.transact([gameSessionStore], ([state]) => {
       state.started = true;
       state.startTimestamp = kmClient.serverTimestamp();
     });
@@ -158,7 +140,7 @@ import { useServerTimer } from '@/hooks/useServerTime';
 import { KmTimeCountdown } from '@kokimoki/shared';
 
 const serverTime = useServerTimer();
-const { startTimestamp } = useSnapshot(gameStore.proxy);
+const { startTimestamp } = useSnapshot(gameSessionStore.proxy);
 const elapsedMs = serverTime - startTimestamp;
 
 return <KmTimeCountdown ms={elapsedMs} />;
@@ -314,7 +296,7 @@ useEffect(() => {
 
   // Check if round time expired and start a new round
   const handleNewRound = async () => {
-    await kmClient.transact([gameStore], ([state]) => {
+    await kmClient.transact([gameSessionStore], ([state]) => {
       if (serverTime - state.roundStartTime > 30000) {
         state.currentRound += 1;
         state.roundStartTime = kmClient.serverTimestamp();
@@ -331,7 +313,7 @@ useEffect(() => {
 ```tsx
 // Inside useGlobalController.ts
 // role: "wizard", "warrior", "archer", "healer", etc.
-const { assignedRoles } = useSnapshot(gameStore.proxy); // { [role]: clientId | null }
+const { assignedRoles } = useSnapshot(gameSessionStore.proxy); // { [role]: clientId | null }
 const { clientIds: onlinePlayerIds } = useStoreConnections(playersStore); // Set<string>
 
 useEffect(() => {
@@ -341,7 +323,7 @@ useEffect(() => {
 
   // Check current connections to ensure each role has one assigned player
   const handleRoleAssignment = async () => {
-    await kmClient.transact([gameStore], ([gameState]) => {
+    await kmClient.transact([gameSessionStore], ([gameState]) => {
       const unassignedPlayers = Array.from(onlinePlayerIds).filter(
         (id) => !Object.values(assignedRoles).includes(id)
       );
@@ -370,7 +352,7 @@ useEffect(() => {
 ### Example: Waiting for Game Start
 
 ```tsx
-const { started } = useSnapshot(gameStore.proxy);
+const { started } = useSnapshot(gameSessionStore.proxy);
 
 if (!started) return <WaitingView />;
 
@@ -380,7 +362,7 @@ return <GameView />;
 ### Example: Player View on Start
 
 ```tsx
-const { started } = useSnapshot(gameStore.proxy);
+const { started } = useSnapshot(gameSessionStore.proxy);
 
 React.useEffect(() => {
   if (started) {
@@ -405,6 +387,10 @@ return <GameView />;
 const isHost = kmClient.clientContext.mode === 'host';
 
 return (
-  <>{isHost && <button onClick={gameActions.startGame}>Start Game</button>}</>
+  <>
+    {isHost && (
+      <button onClick={gameSessionActions.startGame}>Start Game</button>
+    )}
+  </>
 );
 ```

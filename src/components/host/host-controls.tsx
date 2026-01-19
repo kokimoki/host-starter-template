@@ -1,9 +1,9 @@
 import { config } from '@/config';
-import { gameSettingsActions } from '@/state/actions/game-settings-actions';
-import { hostActions } from '@/state/actions/host-actions';
-import { gameSettingsStore } from '@/state/stores/game-settings-store';
-import { gameStore } from '@/state/stores/game-store';
-import { hostStore } from '@/state/stores/host-store';
+import { gameConfigActions } from '@/state/actions/game-settings-actions';
+import { hostSettingsActions } from '@/state/actions/host-actions';
+import { gameConfigStore } from '@/state/stores/game-config-store';
+import { gameSessionStore } from '@/state/stores/game-session-store';
+import { hostSettingsStore } from '@/state/stores/host-settings-store';
 import { useSnapshot } from '@kokimoki/app';
 
 /**
@@ -12,9 +12,9 @@ import { useSnapshot } from '@kokimoki/app';
  * Modify or replace with your own implementation.
  */
 export function HostControls() {
-	const { started } = useSnapshot(gameStore.proxy);
-	const { gameDuration } = useSnapshot(gameSettingsStore.proxy);
-	const { showPresenterQr } = useSnapshot(hostStore.proxy);
+	const { started } = useSnapshot(gameSessionStore.proxy);
+	const { gameDuration } = useSnapshot(gameConfigStore.proxy);
+	const { showPresenterQr } = useSnapshot(hostSettingsStore.proxy);
 
 	return (
 		<>
@@ -28,7 +28,7 @@ export function HostControls() {
 					max={60}
 					value={gameDuration}
 					onChange={(e) =>
-						gameSettingsActions.changeGameDuration(Number(e.target.value))
+						gameConfigActions.changeGameDuration(Number(e.target.value))
 					}
 					disabled={started}
 					className="km-input"
@@ -38,7 +38,7 @@ export function HostControls() {
 			<button
 				type="button"
 				className={showPresenterQr ? 'km-btn-neutral' : 'km-btn-secondary'}
-				onClick={hostActions.togglePresenterQr}
+				onClick={hostSettingsActions.togglePresenterQr}
 			>
 				{config.togglePresenterQrButton}
 			</button>

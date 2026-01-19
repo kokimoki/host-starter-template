@@ -1,8 +1,8 @@
 import { config } from '@/config';
 import { useServerTimer } from '@/hooks/useServerTime';
 import { kmClient } from '@/services/km-client';
-import { gameSettingsStore } from '@/state/stores/game-settings-store';
-import { gameStore } from '@/state/stores/game-store';
+import { gameConfigStore } from '@/state/stores/game-config-store';
+import { gameSessionStore } from '@/state/stores/game-session-store';
 import { useSnapshot } from '@kokimoki/app';
 import { KmTimeCountdown } from '@kokimoki/shared';
 import Markdown from 'react-markdown';
@@ -13,8 +13,8 @@ import Markdown from 'react-markdown';
  * Modify or replace with your own implementation.
  */
 export function GameStateView() {
-	const { started, startTimestamp } = useSnapshot(gameStore.proxy);
-	const { gameDuration } = useSnapshot(gameSettingsStore.proxy);
+	const { started, startTimestamp } = useSnapshot(gameSessionStore.proxy);
+	const { gameDuration } = useSnapshot(gameConfigStore.proxy);
 	const serverTime = useServerTimer();
 
 	const isHost = kmClient.clientContext.mode === 'host';

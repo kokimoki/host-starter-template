@@ -7,7 +7,7 @@ import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { useGlobalController } from '@/hooks/useGlobalController';
 import { PlayerLayout } from '@/layouts/player';
 import { localPlayerActions } from '@/state/actions/local-player-actions';
-import { gameStore } from '@/state/stores/game-store';
+import { gameSessionStore } from '@/state/stores/game-session-store';
 import { localPlayerStore } from '@/state/stores/local-player-store';
 import { CreateProfileView } from '@/views/create-profile-view';
 import { GameLobbyView } from '@/views/game-lobby-view';
@@ -20,7 +20,7 @@ const App: React.FC = () => {
 	useGlobalController();
 
 	const { name, currentView } = useSnapshot(localPlayerStore.proxy);
-	const { started } = useSnapshot(gameStore.proxy);
+	const { started } = useSnapshot(gameSessionStore.proxy);
 
 	React.useEffect(() => {
 		// While game start, force view to 'shared-state', otherwise to 'lobby'

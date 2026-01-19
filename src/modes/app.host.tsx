@@ -8,8 +8,8 @@ import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { useGlobalController } from '@/hooks/useGlobalController';
 import { generateLink } from '@/kit/generate-link';
 import { HostPresenterLayout } from '@/layouts/host-presenter';
-import { gameActions } from '@/state/actions/game-actions';
-import { gameStore } from '@/state/stores/game-store';
+import { gameSessionActions } from '@/state/actions/game-session-actions';
+import { gameSessionStore } from '@/state/stores/game-session-store';
 import { GameStateView } from '@/views/game-state-view';
 import { useSnapshot } from '@kokimoki/app';
 import { CirclePlay, CircleStop, SquareArrowOutUpRight } from 'lucide-react';
@@ -19,7 +19,7 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 	useDocumentTitle(config.title);
 	useGlobalController();
 
-	const { started } = useSnapshot(gameStore.proxy);
+	const { started } = useSnapshot(gameSessionStore.proxy);
 	const [buttonCooldown, setButtonCooldown] = React.useState(true);
 
 	// Button cooldown to prevent accidentally spamming start/stop
@@ -58,7 +58,7 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 						<button
 							type="button"
 							className="km-btn-primary"
-							onClick={gameActions.startGame}
+							onClick={gameSessionActions.startGame}
 							disabled={buttonCooldown}
 						>
 							<CirclePlay className="size-5" />
@@ -69,7 +69,7 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 						<button
 							type="button"
 							className="km-btn-error"
-							onClick={gameActions.stopGame}
+							onClick={gameSessionActions.stopGame}
 							disabled={buttonCooldown}
 						>
 							<CircleStop className="size-5" />

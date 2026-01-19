@@ -1,7 +1,6 @@
 import { kmClient } from '@/services/km-client';
-import { gameSettingsStore } from '@/state/stores/game-settings-store';
-import { gameStore } from '@/state/stores/game-store';
-import { hostStore } from '@/state/stores/host-store';
+import { gameConfigStore } from '@/state/stores/game-config-store';
+import { gameSessionStore } from '@/state/stores/game-session-store';
 import { useSnapshot } from '@kokimoki/app';
 import { useEffect } from 'react';
 import { useServerTimer } from './useServerTime';
@@ -18,7 +17,7 @@ import { useStoreConnections } from './useStoreConnections';
  * - Any operation that modifies global state based on conditions
  *
  * How it works:
- * - One client is elected as the "global controller" and stored in `hostStore.controllerConnectionId`
+ * - One client is elected as the "global controller" and stored in `gameSessionStore.controllerConnectionId`
  * - If the current controller goes offline, another client is automatically elected
  * - All clients run this hook, but only the controller executes the guarded logic
  *
@@ -40,11 +39,11 @@ import { useStoreConnections } from './useStoreConnections';
  *   handleNextRound();
  * }, [isGlobalController, serverTime]);
  *
- * @see hostStore for `controllerConnectionId` storage entry
+ * @see gameSessionStore for `controllerConnectionId` storage entry
  */
 export function useGlobalController(): boolean {
-	const { controllerConnectionId } = useSnapshot(hostStore.proxy);
-	const { connectionIds } = useStoreConnections(hostStore);
+	const { controllerConnectionId } = useSnapshot(gameSessionStore.proxy);
+	const { connectionIds } = useStoreConnections(gameSessionStore);
 
 	const isGlobalController = controllerConnectionId === kmClient.connectionId;
 	const serverTime = useServerTimer(1000); // tick every second
@@ -58,10 +57,10 @@ export function useGlobalController(): boolean {
 
 		// Select new host, sorting by connection id
 		kmClient
-			.transact([hostStore], ([hostState]) => {
+			.transact([gameSessionStore], ([gameSessionState]) => {
 				const connectionIdsArray = Array.from(connectionIds);
 				connectionIdsArray.sort();
-				hostState.controllerConnectionId = connectionIdsArray[0] || '';
+				gameSessionState.controllerConnectionId = connectionIdsArray[0] || '';
 			})
 			.then(() => {})
 			.catch(() => {});
@@ -78,18 +77,18 @@ export function useGlobalController(): boolean {
 		// All global controller logic does not need to be time-based
 		const handleGameEnd = async () => {
 			await kmClient.transact(
-				[gameSettingsStore, gameStore],
-				([gameSettingsState, gameState]) => {
-					if (!gameState.started) {
+				[gameConfigStore, gameSessionStore],
+				([gameConfigState, gameSessionState]) => {
+					if (!gameSessionState.started) {
 						return;
 					}
 
-					const gameDurationMs = gameSettingsState.gameDuration * 60 * 1000;
+					const gameDurationMs = gameConfigState.gameDuration * 60 * 1000;
 
 					// End the game if duration has elapsed
-					if (serverTime - gameState.startTimestamp > gameDurationMs) {
-						gameState.started = false;
-						gameState.startTimestamp = 0;
+					if (serverTime - gameSessionState.startTimestamp > gameDurationMs) {
+						gameSessionState.started = false;
+						gameSessionState.startTimestamp = 0;
 					}
 				}
 			);

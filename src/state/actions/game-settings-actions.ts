@@ -1,16 +1,16 @@
 import { kmClient } from '@/services/km-client';
-import { gameSettingsStore } from '../stores/game-settings-store';
+import { gameConfigStore } from '../stores/game-config-store';
 
 /**
  * Actions for game settings mutations.
  *
  * Typically used by host to configure game parameters.
  */
-export const gameSettingsActions = {
+export const gameConfigActions = {
 	/** Change game duration in minutes */
 	async changeGameDuration(duration: number) {
-		await kmClient.transact([gameSettingsStore], ([gameSettingsState]) => {
-			gameSettingsState.gameDuration = duration;
+		await kmClient.transact([gameConfigStore], ([gameConfigState]) => {
+			gameConfigState.gameDuration = duration;
 		});
 	}
 };

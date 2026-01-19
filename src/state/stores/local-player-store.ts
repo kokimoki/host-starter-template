@@ -6,13 +6,6 @@ export interface LocalPlayerState {
 	currentView: 'lobby' | 'game-state';
 }
 
-/**
- * Store version - increment when schema changes to reset state.
- * This avoids conflicts with old data structure.
- */
-const VERSION = 1;
-const STORE_KEY = `local-player/${VERSION}`;
-
 const initialState: LocalPlayerState = {
 	name: '',
 	currentView: 'lobby'
@@ -34,6 +27,6 @@ const initialState: LocalPlayerState = {
  * @see localPlayerActions for state mutations
  */
 export const localPlayerStore = kmClient.localStore<LocalPlayerState>(
-	STORE_KEY,
+	'local-player',
 	initialState
 );
