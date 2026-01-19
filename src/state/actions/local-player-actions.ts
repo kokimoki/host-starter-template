@@ -8,9 +8,9 @@ import { playersStore } from '../stores/players-store';
 /**
  * Actions for local player mutations.
  * Handles current player's state changes.
- * Some actions may affect shared stores (e.g., player registration).
+ * Some actions may affect global stores (e.g., player registration).
  *
- * Note: Uses `kmClient.id` to identify current player in shared stores.
+ * Note: Uses `kmClient.id` to identify current player in global stores.
  */
 export const localPlayerActions = {
 	/** Change current player's view/navigation state */
@@ -21,8 +21,9 @@ export const localPlayerActions = {
 	},
 
 	/**
-	 * Set player name - updates both local store and shared players registry.
-	 * This is an example of a multi-store transaction.
+	 * Set player name - updates both local store and globals players list.
+	 *
+	 * Note: This is an example of a multi-store transaction.
 	 */
 	async setPlayerName(name: string) {
 		await kmClient.transact(

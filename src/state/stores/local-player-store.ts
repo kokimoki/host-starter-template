@@ -20,7 +20,7 @@ const initialState: LocalPlayerState = {
  * - Player's own profile data
  * - Current player UI view/navigation state
  * - Player preferences
- * - Any local data that shouldn't be shared with others
+ * - Any local data that shouldn't be synced globally with other players
  *
  * Note: Uses `kmClient.localStore` for local-only storage.
  *

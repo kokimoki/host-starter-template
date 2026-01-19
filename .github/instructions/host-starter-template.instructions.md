@@ -53,13 +53,12 @@ See [Kokimoki SDK Stores](./kokimoki-sdk.instructions.md#stores) for store funda
 
 State is organized into domain-specific stores, each responsible for one area:
 
-| Store                                                              | Domain             | Type   | Description                                                        |
-| ------------------------------------------------------------------ | ------------------ | ------ | ------------------------------------------------------------------ |
-| [gameSessionStore](../../src/state/stores/game-session-store.ts)   | Game Session       | Global | Game lifecycle, phase, timestamps, controller                      |
-| [gameConfigStore](../../src/state/stores/game-config-store.ts)     | Game Configuration | Global | Game configuration (duration, rounds, rules)                       |
-| [playersStore](../../src/state/stores/players-store.ts)            | Players Registry   | Global | Player profiles, scores, team assignments                          |
-| [hostSettingsStore](../../src/state/stores/host-settings-store.ts) | Host Settings      | Global | Host settings, Presenter display preferences (QR visibility, etc.) |
-| [localPlayerStore](../../src/state/stores/local-player-store.ts)   | Local Player       | Local  | Current player's device-only state                                 |
+| Store                                                            | Domain             | Type   | Description                                                                    |
+| ---------------------------------------------------------------- | ------------------ | ------ | ------------------------------------------------------------------------------ |
+| [gameSessionStore](../../src/state/stores/game-session-store.ts) | Game Session       | Global | Game lifecycle, phase, timestamps, controller                                  |
+| [gameConfigStore](../../src/state/stores/game-config-store.ts)   | Game Configuration | Global | Game configuration (duration, rounds, rules) and host display preferences      |
+| [playersStore](../../src/state/stores/players-store.ts)          | Players Registry   | Global | Central registry of all players - profiles, scores, teams                      |
+| [localPlayerStore](../../src/state/stores/local-player-store.ts) | Local Player       | Local  | Current player's device-only state                                             |
 
 - Each store has corresponding actions file in `src/state/actions/`.
 - Stores can be created/removed following game requirements and established domain-specific patterns.

@@ -9,7 +9,7 @@ import Markdown from 'react-markdown';
 
 /**
  * Example view demonstrating how to display game state with countdown timer.
- * Shows usage of server timer and game settings for synchronized time display.
+ * Shows usage of server timer and game configuration for synchronized time display.
  * Modify or replace with your own implementation.
  */
 export function GameStateView() {

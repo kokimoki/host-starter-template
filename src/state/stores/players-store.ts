@@ -24,6 +24,6 @@ const initialState: PlayersState = {
  * @see localPlayerActions.setPlayerName for player registration
  */
 export const playersStore = kmClient.store<PlayersState>(
-	'players',
+	'players-registry',
 	initialState
 );
