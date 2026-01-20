@@ -1,7 +1,7 @@
 // IMPORTANT: Do NOT modify or remove this file
+import { type Config } from '@/config';
 import { kmClient, kmEnv } from '@/services/km-client';
 import React, { type ReactNode } from 'react';
-import { type Config } from '../config';
 
 interface AppImports {
 	host: () => Promise<{ default: React.ComponentType }>;

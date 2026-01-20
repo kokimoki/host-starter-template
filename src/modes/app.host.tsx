@@ -1,23 +1,26 @@
+import { HostControls } from '@/components/host/host-controls';
+import {
+	type ModeGuardProps,
+	withModeGuard
+} from '@/components/with-mode-guard';
 import { config } from '@/config';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { useGlobalController } from '@/hooks/useGlobalController';
 import { generateLink } from '@/kit/generate-link';
 import { HostPresenterLayout } from '@/layouts/host-presenter';
-import { kmClient } from '@/services/km-client';
-import { globalActions } from '@/state/actions/global-actions';
-import { globalStore } from '@/state/stores/global-store';
-import { SharedStateView } from '@/views/shared-state-view';
+import { gameSessionActions } from '@/state/actions/game-session-actions';
+import { gameSessionStore } from '@/state/stores/game-session-store';
+import { GameStateView } from '@/views/game-state-view';
 import { useSnapshot } from '@kokimoki/app';
 import { CirclePlay, CircleStop, SquareArrowOutUpRight } from 'lucide-react';
 import * as React from 'react';
 
-const App: React.FC = () => {
+function App({ clientContext }: ModeGuardProps<'host'>) {
+	useDocumentTitle(config.title);
 	useGlobalController();
-	const { title } = config;
-	const isHost = kmClient.clientContext.mode === 'host';
-	const { started, showPresenterQr } = useSnapshot(globalStore.proxy);
+
+	const { started } = useSnapshot(gameSessionStore.proxy);
 	const [buttonCooldown, setButtonCooldown] = React.useState(true);
-	useDocumentTitle(title);
 
 	// Button cooldown to prevent accidentally spamming start/stop
 	React.useEffect(() => {
@@ -29,17 +32,13 @@ const App: React.FC = () => {
 		return () => clearTimeout(timeout);
 	}, [started]);
 
-	if (kmClient.clientContext.mode !== 'host') {
-		throw new Error('App host rendered in non-host mode');
-	}
-
-	const playerLink = generateLink(kmClient.clientContext.playerCode, {
+	const playerLink = generateLink(clientContext.playerCode, {
 		mode: 'player'
 	});
 
-	const presenterLink = generateLink(kmClient.clientContext.presenterCode, {
+	const presenterLink = generateLink(clientContext.presenterCode, {
 		mode: 'presenter',
-		playerCode: kmClient.clientContext.playerCode
+		playerCode: clientContext.playerCode
 	});
 
 	return (
@@ -47,36 +46,30 @@ const App: React.FC = () => {
 			<HostPresenterLayout.Header />
 			<HostPresenterLayout.Main>
 				<div className="space-y-4">
-					<SharedStateView />
+					<GameStateView />
 
-					<button
-						type="button"
-						className={showPresenterQr ? 'km-btn-neutral' : 'km-btn-secondary'}
-						onClick={globalActions.togglePresenterQr}
-					>
-						{config.togglePresenterQrButton}
-					</button>
+					<HostControls />
 				</div>
 			</HostPresenterLayout.Main>
 
 			<HostPresenterLayout.Footer>
 				<div className="inline-flex flex-wrap gap-4">
-					{!started && isHost && (
+					{!started && (
 						<button
 							type="button"
 							className="km-btn-primary"
-							onClick={globalActions.startGame}
+							onClick={gameSessionActions.startGame}
 							disabled={buttonCooldown}
 						>
 							<CirclePlay className="size-5" />
 							{config.startButton}
 						</button>
 					)}
-					{started && isHost && (
+					{started && (
 						<button
 							type="button"
 							className="km-btn-error"
-							onClick={globalActions.stopGame}
+							onClick={gameSessionActions.stopGame}
 							disabled={buttonCooldown}
 						>
 							<CircleStop className="size-5" />
@@ -107,6 +100,6 @@ const App: React.FC = () => {
 			</HostPresenterLayout.Footer>
 		</HostPresenterLayout.Root>
 	);
-};
+}
 
-export default App;
+export default withModeGuard(App, 'host');

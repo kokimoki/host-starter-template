@@ -35,7 +35,8 @@ export const schema = z.object({
 	togglePresenterQrButton: z.string().default('Toggle Presenter QR'),
 
 	menuAriaLabel: z.string().default('Open menu drawer'),
-	menuHelpAriaLabel: z.string().default('Open help drawer')
+	menuHelpAriaLabel: z.string().default('Open help drawer'),
+	gameDurationLabel: z.string().default('Game Duration (mins)')
 });
 
 export type Config = z.infer<typeof schema>;

@@ -7,7 +7,7 @@ interface LayoutProps {
 	className?: string;
 }
 
-const PlayerRoot: React.FC<LayoutProps> = ({ children, className }) => (
+const PlayerRoot = ({ children, className }: LayoutProps) => (
 	<div
 		className={cn(
 			'grid min-h-dvh grid-rows-[auto_1fr_auto] bg-slate-100',
@@ -18,7 +18,7 @@ const PlayerRoot: React.FC<LayoutProps> = ({ children, className }) => (
 	</div>
 );
 
-const PlayerHeader: React.FC<LayoutProps> = ({ children, className }) => (
+const PlayerHeader = ({ children, className }: LayoutProps) => (
 	<header
 		className={cn(
 			'sticky top-0 z-10 bg-slate-50/95 shadow-xs backdrop-blur-xs',
@@ -32,7 +32,7 @@ const PlayerHeader: React.FC<LayoutProps> = ({ children, className }) => (
 	</header>
 );
 
-const PlayerMain: React.FC<LayoutProps> = ({ children, className }) => (
+const PlayerMain = ({ children, className }: LayoutProps) => (
 	<main
 		className={cn('container mx-auto flex items-center px-4 py-16', className)}
 	>
@@ -40,7 +40,7 @@ const PlayerMain: React.FC<LayoutProps> = ({ children, className }) => (
 	</main>
 );
 
-const PlayerFooter: React.FC<LayoutProps> = ({ children, className }) => (
+const PlayerFooter = ({ children, className }: LayoutProps) => (
 	<footer
 		className={cn(
 			'sticky bottom-0 z-10 border-t border-slate-200 bg-slate-50/95 backdrop-blur-xs',
@@ -53,6 +53,9 @@ const PlayerFooter: React.FC<LayoutProps> = ({ children, className }) => (
 
 /**
  * Layout components for the `player` mode
+ *
+ * These compound components can be used to structure the player view
+ * and provide a consistent layout across different screens.
  */
 export const PlayerLayout = {
 	Root: PlayerRoot,

@@ -7,7 +7,7 @@ interface LayoutProps {
 	className?: string;
 }
 
-const HostPresenterRoot: React.FC<LayoutProps> = ({ children, className }) => (
+const HostPresenterRoot = ({ children, className }: LayoutProps) => (
 	<div
 		className={cn(
 			'grid min-h-dvh grid-rows-[auto_1fr_auto] bg-slate-100',
@@ -18,10 +18,7 @@ const HostPresenterRoot: React.FC<LayoutProps> = ({ children, className }) => (
 	</div>
 );
 
-const HostPresenterHeader: React.FC<LayoutProps> = ({
-	children,
-	className
-}) => (
+const HostPresenterHeader = ({ children, className }: LayoutProps) => (
 	<header
 		className={cn(
 			'sticky top-0 z-10 bg-slate-50/95 shadow-xs backdrop-blur-xs',
@@ -35,7 +32,7 @@ const HostPresenterHeader: React.FC<LayoutProps> = ({
 	</header>
 );
 
-const HostPresenterMain: React.FC<LayoutProps> = ({ children, className }) => (
+const HostPresenterMain = ({ children, className }: LayoutProps) => (
 	<main
 		className={cn('container mx-auto flex items-center px-4 py-16', className)}
 	>
@@ -43,10 +40,7 @@ const HostPresenterMain: React.FC<LayoutProps> = ({ children, className }) => (
 	</main>
 );
 
-const HostPresenterFooter: React.FC<LayoutProps> = ({
-	children,
-	className
-}) => (
+const HostPresenterFooter = ({ children, className }: LayoutProps) => (
 	<footer
 		className={cn(
 			'sticky bottom-0 z-10 border-t border-slate-200 bg-slate-50/95 backdrop-blur-xs',
@@ -61,6 +55,9 @@ const HostPresenterFooter: React.FC<LayoutProps> = ({
 
 /**
  * Layout components for the `host` and `presenter` modes
+ *
+ * These compound components can be used to structure the host/presenter view
+ * and provide a consistent layout across different screens.
  */
 export const HostPresenterLayout = {
 	Root: HostPresenterRoot,

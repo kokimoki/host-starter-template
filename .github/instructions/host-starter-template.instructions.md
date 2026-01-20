@@ -9,9 +9,9 @@ applyTo: '**'
 
 This project is based on a host starter template using [Kokimoki SDK](./kokimoki-sdk.instructions.md). The template provides:
 
-- Real-time communication via [globalStore](../../src/state/stores/global-store.ts)
-- Presence tracking via `globalStore.connections`
-- Local player state via [playerStore](../../src/state/stores/player-store.ts)
+- Real-time communication via domain-specific shared stores
+- Presence tracking via [usePlayersWithOnlineStatus](../../src/hooks/usePlayersWithOnlineStatus.ts) hook
+- Local player state via [localPlayerStore](../../src/state/stores/local-player-store.ts)
 
 ## Spec-driven development
 
@@ -49,24 +49,33 @@ Based on the mode, one of the following files is used as the root component:
 
 See [Kokimoki SDK Stores](./kokimoki-sdk.instructions.md#stores) for store fundamentals.
 
-### Player store (Local)
+### Domain-specific stores
 
-- [playerStore](../../src/state/stores/player-store.ts) contains device-local data
-- Player state actions defined in [player-actions.ts](../../src/state/actions/player-actions.ts)
+State is organized into domain-specific stores, each responsible for one area:
 
-**Example: View Routing**
+| Store                                                            | Domain             | Type   | Description                                                                    |
+| ---------------------------------------------------------------- | ------------------ | ------ | ------------------------------------------------------------------------------ |
+| [gameSessionStore](../../src/state/stores/game-session-store.ts) | Game Session       | Global | Game lifecycle, phase, timestamps, controller                                  |
+| [gameConfigStore](../../src/state/stores/game-config-store.ts)   | Game Configuration | Global | Game configuration (duration, rounds, rules) and host display preferences      |
+| [playersStore](../../src/state/stores/players-store.ts)          | Players Registry   | Global | Central registry of all players - profiles, scores, teams                      |
+| [localPlayerStore](../../src/state/stores/local-player-store.ts) | Local Player       | Local  | Current player's device-only state                                             |
+
+- Each store has corresponding actions file in `src/state/actions/`.
+- Stores can be created/removed following game requirements and established domain-specific patterns.
+
+### Local Player Store (Device only)
+
+- [localPlayerStore](../../src/state/stores/local-player-store.ts) contains device-local data (NOT synced)
+- Actions defined in [local-player-actions.ts](../../src/state/actions/local-player-actions.ts)
+
+**Example: Player View Routing**
 
 ```tsx
-// Define state
-interface PlayerState {
-  currentView: 'lobby' | 'game' | 'results';
-}
-
 // Navigate
-await playerActions.setCurrentView('game');
+await localPlayerActions.setCurrentView('game');
 
 // Render
-const { currentView } = useSnapshot(playerStore.proxy);
+const { currentView } = useSnapshot(localPlayerStore.proxy);
 return (
   <>
     {currentView === 'lobby' && <LobbyView />}
@@ -75,17 +84,18 @@ return (
 );
 ```
 
-### Global Store (Shared)
+### Game Session Store (Global)
 
-- [globalStore](../../src/state/stores/global-store.ts) contains shared data across all players
-- Global state actions defined in [global-actions.ts](../../src/state/actions/global-actions.ts)
+- [gameSessionStore](../../src/state/stores/game-session-store.ts) contains game session state
+- Actions defined in [game-session-actions.ts](../../src/state/actions/game-session-actions.ts)
+- This store is one of others domain-specific global stores
 
-**Example: Game Actions**
+**Example: Game Lifecycle**
 
 ```typescript
-export const globalActions = {
+export const gameSessionActions = {
   async startGame() {
-    await kmClient.transact([globalStore], ([state]) => {
+    await kmClient.transact([gameSessionStore], ([state]) => {
       state.started = true;
       state.startTimestamp = kmClient.serverTimestamp();
     });
@@ -93,25 +103,24 @@ export const globalActions = {
 };
 ```
 
-**Example: Player-specific Data**
+### Multi-store transactions
+
+- Update multiple stores atomically when needed in a single transaction.
+- Action location is defined based on the intent/actor.
+
+**Example: Player registration**
 
 ```typescript
-interface GlobalStore {
-  players: Record<string, { score: number }>; // key is clientId
+async setPlayerName(name: string) {
+  await kmClient.transact(
+    [localPlayerStore, playersStore],
+    ([localPlayerState, playersState]) => {
+      localPlayerState.name = name;
+      playersState.players[kmClient.id] = { name };
+    }
+  );
 }
-
-await kmClient.transact([globalStore], ([globalState]) => {
-  if (!globalState.players[kmClient.id]) {
-    globalState.players[kmClient.id] = { score: 0 };
-  }
-  globalState.players[kmClient.id].score += 1;
-});
 ```
-
-### Combining Stores
-
-- Update both `playerStore` and `globalStore` in a single transaction when needed
-- Create combined actions in [global-actions.ts](../../src/state/actions/global-actions.ts)
 
 ### Dynamic Stores
 
@@ -130,7 +139,7 @@ import { useServerTimer } from '@/hooks/useServerTime';
 import { KmTimeCountdown } from '@kokimoki/shared';
 
 const serverTime = useServerTimer();
-const { startTimestamp } = useSnapshot(globalStore.proxy);
+const { startTimestamp } = useSnapshot(gameSessionStore.proxy);
 const elapsedMs = serverTime - startTimestamp;
 
 return <KmTimeCountdown ms={elapsedMs} />;
@@ -138,7 +147,7 @@ return <KmTimeCountdown ms={elapsedMs} />;
 
 ## Generate Links (Host/Presenter)
 
-- Use [generateLink](../../src/kit/generate-link.ts) to create join links
+- Use [generateLink](../../src/kit/generate-link.ts) to create join links based on client context
 - Use [KmQrCode](./kokimoki-shared.instructions.md#kmqrcode) to display QR codes for join links
 - Use [KmCopyButton](./kokimoki-shared.instructions.md#kmcopybutton) to copy links to clipboard
 
@@ -273,9 +282,9 @@ export const Button = () => <button>Start Game</button>;
 
 ## Global controller
 
-[useGlobalController.ts](../../src/hooks/useGlobalController.ts) maintains a single controller connection for logic that should only run on one device at a time (e.g. handling global timers, assigning player roles, running physics simulations).
+[useGlobalController.ts](../../src/hooks/useGlobalController.ts) maintains a single controller connection for logic that should only run on one device at a time (e.g. handling global timers, assigning player roles, running physics simulations) and update shared states, ensuring consistency across all clients.
 
-### Example: Time-based logic\*\*
+### Example: Time-based logic
 
 ```tsx
 // Inside useGlobalController.ts
@@ -286,7 +295,7 @@ useEffect(() => {
 
   // Check if round time expired and start a new round
   const handleNewRound = async () => {
-    await kmClient.transact([globalStore], ([state]) => {
+    await kmClient.transact([gameSessionStore], ([state]) => {
       if (serverTime - state.roundStartTime > 30000) {
         state.currentRound += 1;
         state.roundStartTime = kmClient.serverTimestamp();
@@ -303,8 +312,8 @@ useEffect(() => {
 ```tsx
 // Inside useGlobalController.ts
 // role: "wizard", "warrior", "archer", "healer", etc.
-const { assignedRoles } = useSnapshot(globalStore.proxy); // { [role]: clientId | null }
-const onlinePlayerIds = useSnapshot(globalStore.connections).clientIds; // Set<string>
+const { assignedRoles } = useSnapshot(gameSessionStore.proxy); // { [role]: clientId | null }
+const { clientIds: onlinePlayerIds } = useStoreConnections(playersStore); // Set<string>
 
 useEffect(() => {
   if (!isGlobalController) {
@@ -313,7 +322,7 @@ useEffect(() => {
 
   // Check current connections to ensure each role has one assigned player
   const handleRoleAssignment = async () => {
-    await kmClient.transact([globalStore], ([globalState]) => {
+    await kmClient.transact([gameSessionStore], ([gameState]) => {
       const unassignedPlayers = Array.from(onlinePlayerIds).filter(
         (id) => !Object.values(assignedRoles).includes(id)
       );
@@ -327,7 +336,7 @@ useEffect(() => {
           !assignedPlayerId
         ) {
           const newPlayerId = unassignedPlayers.shift() || null;
-          globalState.assignedRoles[role] = newPlayerId;
+          gameState.assignedRoles[role] = newPlayerId;
         }
       });
     });
@@ -342,7 +351,7 @@ useEffect(() => {
 ### Example: Waiting for Game Start
 
 ```tsx
-const { started } = useSnapshot(globalStore.proxy);
+const { started } = useSnapshot(gameSessionStore.proxy);
 
 if (!started) return <WaitingView />;
 
@@ -352,11 +361,11 @@ return <GameView />;
 ### Example: Player View on Start
 
 ```tsx
-const { started } = useSnapshot(globalStore.proxy);
+const { started } = useSnapshot(gameSessionStore.proxy);
 
 React.useEffect(() => {
   if (started) {
-    playerActions.setCurrentView('game');
+    localPlayerActions.setCurrentView('game');
   }
 }, [started]);
 ```
@@ -364,7 +373,7 @@ React.useEffect(() => {
 ### Example: Player Name Entry Flow
 
 ```tsx
-const { name } = useSnapshot(playerStore.proxy);
+const { name } = useSnapshot(localPlayerStore.proxy);
 
 if (!name) return <CreateProfileView />;
 
@@ -377,6 +386,10 @@ return <GameView />;
 const isHost = kmClient.clientContext.mode === 'host';
 
 return (
-  <>{isHost && <button onClick={globalActions.startGame}>Start Game</button>}</>
+  <>
+    {isHost && (
+      <button onClick={gameSessionActions.startGame}>Start Game</button>
+    )}
+  </>
 );
 ```

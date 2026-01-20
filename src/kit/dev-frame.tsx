@@ -1,14 +1,14 @@
 // IMPORTANT: Do NOT modify or remove this file
-import type { ClientContext } from '@/types';
-import { useCallback, useEffect, useRef, useState, type FC } from 'react';
+import type { ClientContext } from '@/types/client';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { generateLink } from './generate-link';
 
-interface Props {
+interface DevFrameProps {
 	clientKey: string;
 	context: ClientContext;
 }
 
-export const DevFrame: FC<Props> = ({ clientKey, context }) => {
+export function DevFrame({ clientKey, context }: DevFrameProps) {
 	const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
 	const [link, setLink] = useState('');
@@ -71,4 +71,4 @@ export const DevFrame: FC<Props> = ({ clientKey, context }) => {
 			/>
 		</div>
 	);
-};
+}

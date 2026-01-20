@@ -13,6 +13,7 @@ export default defineConfig({
 		react(),
 		wasm(),
 		topLevelAwait(),
+
 		kokimokiKitPlugin({
 			conceptId: '',
 			schema,

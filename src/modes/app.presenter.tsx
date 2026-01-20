@@ -1,28 +1,25 @@
+import {
+	withModeGuard,
+	type ModeGuardProps
+} from '@/components/with-mode-guard';
 import { config } from '@/config';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { useGlobalController } from '@/hooks/useGlobalController';
 import { generateLink } from '@/kit/generate-link';
 import { HostPresenterLayout } from '@/layouts/host-presenter';
-import { kmClient } from '@/services/km-client';
-import { globalStore } from '@/state/stores/global-store';
+import { gameConfigStore } from '@/state/stores/game-config-store';
 import { cn } from '@/utils/cn';
 import { ConnectionsView } from '@/views/connections-view';
 import { useSnapshot } from '@kokimoki/app';
 import { KmQrCode } from '@kokimoki/shared';
-import * as React from 'react';
 
-const App: React.FC = () => {
-	const { title } = config;
-	const { showPresenterQr } = useSnapshot(globalStore.proxy);
-
+function App({ clientContext }: ModeGuardProps<'presenter'>) {
 	useGlobalController();
-	useDocumentTitle(title);
+	useDocumentTitle(config.title);
 
-	if (kmClient.clientContext.mode !== 'presenter') {
-		throw new Error('App presenter rendered in non-presenter mode');
-	}
+	const { showPresenterQr } = useSnapshot(gameConfigStore.proxy);
 
-	const playerLink = generateLink(kmClient.clientContext.playerCode, {
+	const playerLink = generateLink(clientContext.playerCode, {
 		mode: 'player'
 	});
 
@@ -36,13 +33,13 @@ const App: React.FC = () => {
 						<KmQrCode
 							data={playerLink}
 							size={200}
-							className={cn(!showPresenterQr && 'invisible')}
+							className={cn({ invisible: !showPresenterQr })}
 						/>
 					</ConnectionsView>
 				</HostPresenterLayout.Main>
 			</HostPresenterLayout.Root>
 		</>
 	);
-};
+}
 
-export default App;
+export default withModeGuard(App, 'presenter');
