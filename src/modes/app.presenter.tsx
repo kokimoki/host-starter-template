@@ -2,24 +2,26 @@ import {
 	withModeGuard,
 	type ModeGuardProps
 } from '@/components/with-mode-guard';
-import { config } from '@/config';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { useGlobalController } from '@/hooks/useGlobalController';
-import { generateLink } from '@/kit/generate-link';
 import { HostPresenterLayout } from '@/layouts/host-presenter';
+import { kmClient } from '@/services/km-client';
 import { gameConfigStore } from '@/state/stores/game-config-store';
 import { cn } from '@/utils/cn';
 import { ConnectionsView } from '@/views/connections-view';
 import { useSnapshot } from '@kokimoki/app';
 import { KmQrCode } from '@kokimoki/shared';
+import { useTranslation } from 'react-i18next';
 
 function App({ clientContext }: ModeGuardProps<'presenter'>) {
+	const { t } = useTranslation();
+	const { title } = useSnapshot(gameConfigStore.proxy);
 	useGlobalController();
-	useDocumentTitle(config.title);
+	useDocumentTitle(title || t('defaultTitle'));
 
 	const { showPresenterQr } = useSnapshot(gameConfigStore.proxy);
 
-	const playerLink = generateLink(clientContext.playerCode, {
+	const playerLink = kmClient.generateLink(clientContext.playerCode, {
 		mode: 'player'
 	});
 

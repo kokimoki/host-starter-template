@@ -2,11 +2,11 @@ import { PlayerMenu } from '@/components/menu';
 import { NameLabel } from '@/components/name-label';
 import { withKmProviders } from '@/components/with-km-providers';
 import { withModeGuard } from '@/components/with-mode-guard';
-import { config } from '@/config';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { useGlobalController } from '@/hooks/useGlobalController';
 import { PlayerLayout } from '@/layouts/player';
 import { localPlayerActions } from '@/state/actions/local-player-actions';
+import { gameConfigStore } from '@/state/stores/game-config-store';
 import { gameSessionStore } from '@/state/stores/game-session-store';
 import { localPlayerStore } from '@/state/stores/local-player-store';
 import { CreateProfileView } from '@/views/create-profile-view';
@@ -14,9 +14,12 @@ import { GameLobbyView } from '@/views/game-lobby-view';
 import { GameStateView } from '@/views/game-state-view';
 import { useSnapshot } from '@kokimoki/app';
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 
 const App: React.FC = () => {
-	useDocumentTitle(config.title);
+	const { t } = useTranslation();
+	const { title } = useSnapshot(gameConfigStore.proxy);
+	useDocumentTitle(title || t('defaultTitle'));
 	useGlobalController();
 
 	const { name, currentView } = useSnapshot(localPlayerStore.proxy);

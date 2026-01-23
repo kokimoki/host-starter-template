@@ -1,6 +1,6 @@
-import { config } from '@/config';
 import { localPlayerActions } from '@/state/actions/local-player-actions';
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import Markdown from 'react-markdown';
 
 /**
@@ -9,6 +9,7 @@ import Markdown from 'react-markdown';
  * Modify or replace with your own implementation.
  */
 export function CreateProfileView() {
+	const { t } = useTranslation();
 	const [name, setName] = React.useState('');
 	const [isLoading, setIsLoading] = React.useState(false);
 
@@ -29,12 +30,12 @@ export function CreateProfileView() {
 	return (
 		<div className="mx-auto w-full max-w-96 space-y-12">
 			<article className="prose text-center">
-				<Markdown>{config.createProfileMd}</Markdown>
+				<Markdown>{t('createProfileMd')}</Markdown>
 			</article>
 			<form onSubmit={handleSubmit} className="grid gap-4">
 				<input
 					type="text"
-					placeholder={config.playerNamePlaceholder}
+					placeholder={t('playerNamePlaceholder')}
 					value={name}
 					onChange={(e) => setName(e.target.value)}
 					disabled={isLoading}
@@ -51,10 +52,10 @@ export function CreateProfileView() {
 					{isLoading ? (
 						<>
 							<span className="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-b-2 border-white"></span>
-							{config.loading}
+							{t('loading')}
 						</>
 					) : (
-						config.playerNameButton
+						t('playerNameButton')
 					)}
 				</button>
 			</form>

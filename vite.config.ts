@@ -5,7 +5,7 @@ import { resolve } from 'path';
 import { defineConfig } from 'vite';
 import topLevelAwait from 'vite-plugin-top-level-await';
 import wasm from 'vite-plugin-wasm';
-import { schema } from './src/config/schema';
+import { kokimokiConfig } from './kokimoki.config';
 
 export default defineConfig({
 	plugins: [
@@ -13,39 +13,7 @@ export default defineConfig({
 		react(),
 		wasm(),
 		topLevelAwait(),
-
-		kokimokiKitPlugin({
-			conceptId: '',
-			schema,
-			deployCodes: [
-				{
-					name: 'host',
-					description: 'Link for hosts',
-					clientContext: {
-						mode: 'host',
-						playerCode: '$player',
-						presenterCode: '$presenter'
-					}
-				},
-				{
-					name: 'presenter',
-					description: 'Link for presenters',
-					clientContext: {
-						mode: 'presenter',
-						playerCode: '$player'
-					}
-				},
-				{
-					name: 'player',
-					description: 'Link for players',
-					clientContext: {
-						mode: 'player'
-					}
-				}
-			],
-			defaultProjectConfigPath: './default.config.yaml',
-			defaultProjectStylePath: './kokimoki.style.css'
-		})
+		kokimokiKitPlugin(kokimokiConfig)
 	],
 	resolve: {
 		alias: {

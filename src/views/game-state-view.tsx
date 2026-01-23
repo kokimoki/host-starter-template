@@ -1,10 +1,10 @@
-import { config } from '@/config';
 import { useServerTimer } from '@/hooks/useServerTime';
 import { kmClient } from '@/services/km-client';
 import { gameConfigStore } from '@/state/stores/game-config-store';
 import { gameSessionStore } from '@/state/stores/game-session-store';
 import { useSnapshot } from '@kokimoki/app';
 import { KmTimeCountdown } from '@kokimoki/shared';
+import { useTranslation } from 'react-i18next';
 import Markdown from 'react-markdown';
 
 /**
@@ -13,6 +13,7 @@ import Markdown from 'react-markdown';
  * Modify or replace with your own implementation.
  */
 export function GameStateView() {
+	const { t } = useTranslation();
 	const { started, startTimestamp } = useSnapshot(gameSessionStore.proxy);
 	const { gameDuration } = useSnapshot(gameConfigStore.proxy);
 	const serverTime = useServerTimer();
@@ -35,7 +36,7 @@ export function GameStateView() {
 				)}
 
 				<Markdown>
-					{isHost ? config.sharedStateMd : config.sharedStatePlayerMd}
+					{isHost ? t('sharedStateMd') : t('sharedStatePlayerMd')}
 				</Markdown>
 			</article>
 		</>

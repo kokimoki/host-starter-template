@@ -1,4 +1,4 @@
-import { config } from '@/config';
+import { useTranslation } from 'react-i18next';
 
 interface NameLabelProps {
 	name: string;
@@ -9,9 +9,11 @@ interface NameLabelProps {
  * Modify or replace with your own implementation.
  */
 export function NameLabel({ name }: NameLabelProps) {
+	const { t } = useTranslation();
+
 	return (
 		<div className="flex items-center gap-2">
-			<span className="text-slate-500">{config.playerNameLabel}</span>
+			<span className="text-slate-500">{t('playerNameLabel')}</span>
 			<span className="font-semibold">{name}</span>
 		</div>
 	);

@@ -1,13 +1,10 @@
 import { kmClient } from '@/services/km-client';
+import type { GameConfigState } from '@/state/schemas';
 
-export interface GameConfigState {
-	/** Duration of the game in minutes */
-	gameDuration: number;
-	/** Whether to display QR code on presenter screen */
-	showPresenterQr: boolean;
-}
+export type { GameConfigState };
 
 const initialState: GameConfigState = {
+	title: '',
 	gameDuration: 10,
 	showPresenterQr: true
 };
