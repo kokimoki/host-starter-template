@@ -28,9 +28,6 @@ async function main() {
 	// Wait for stores to sync
 	await kmClient.waitForReady();
 
-	// Remove connecting overlay
-	document.getElementById('connecting')?.remove();
-
 	// Render the app
 	ReactDOM.createRoot(document.getElementById('root')!).render(
 		<React.StrictMode>
