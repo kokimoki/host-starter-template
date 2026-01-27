@@ -1,3 +1,4 @@
+import { assetsBase } from '@/services/km-client';
 import { gameConfigStore } from '@/state/stores/game-config-store';
 import { cn } from '@/utils/cn';
 import { useSnapshot } from '@kokimoki/app';
@@ -18,7 +19,7 @@ export function Logo({ className }: LogoProps) {
 
 	return (
 		<img
-			src="https://static.kokimoki.com/gfc/v2/logo.svg"
+			src={`${assetsBase}logo.svg`}
 			alt={displayTitle}
 			title={displayTitle}
 			className={cn('h-9', className)}

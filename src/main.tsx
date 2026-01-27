@@ -7,8 +7,8 @@ async function main() {
 	// Connect to Kokimoki server
 	await kmClient.connect();
 
-	// Wait for i18n before importing app modules
-	await kmClient.i18n.init('en');
+	// Wait for i18n (reads lang from <html> element)
+	await kmClient.i18n.init();
 
 	// Load the appropriate app module based on mode
 	let App: React.ComponentType;

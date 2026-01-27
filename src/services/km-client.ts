@@ -8,6 +8,11 @@ import { initReactI18next } from 'react-i18next';
 export const kmEnv: KokimokiEnv = getKmEnv();
 
 /**
+ * Base URL for static assets (CDN in production, root in dev)
+ */
+export const assetsBase = kmEnv.assets;
+
+/**
  * Kokimoki client to interact with the Kokimoki SDK platform.
  * Used to manage the app state, interact with the Kokimoki services,
  * provides access to the client context and more.

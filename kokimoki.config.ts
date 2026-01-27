@@ -25,7 +25,7 @@ export const kokimokiConfig: KokimokiKitConfig = {
 	 *
 	 * Each deploy code generates a unique link with its clientContext.
 	 * The `mode` in clientContext determines which src/modes/app.{mode}.tsx is loaded.
-	 * Use `$name` syntax to auto-generate linked codes (e.g., $player creates a player code).
+	 * Use `$name` syntax to auto-generate linked codes (e.g., $player for playerCode).
 	 */
 	deployCodes: [
 		{
@@ -33,8 +33,8 @@ export const kokimokiConfig: KokimokiKitConfig = {
 			description: 'Link for hosts',
 			clientContext: {
 				mode: 'host',
-				playerCode: '$player', // Auto-generates linked player code
-				presenterCode: '$presenter' // Auto-generates linked presenter code
+				playerCode: '$player', // Auto-fills linked player code
+				presenterCode: '$presenter' // Auto-fills linked presenter code
 			}
 		},
 		{
@@ -42,7 +42,7 @@ export const kokimokiConfig: KokimokiKitConfig = {
 			description: 'Link for presenters',
 			clientContext: {
 				mode: 'presenter',
-				playerCode: '$player'
+				playerCode: '$player' // Auto-fills linked player code
 			}
 		},
 		{
@@ -95,6 +95,22 @@ export const kokimokiConfig: KokimokiKitConfig = {
 		{ pattern: 'players-registry', schema: playersStoreSchema },
 		{ pattern: 'local-player', schema: localPlayerStoreSchema, local: true }
 	],
+
+	/**
+	 * Default App Meta - SEO and social sharing defaults
+	 *
+	 * These values are used as initial state for the built-in appMetaStore.
+	 * The server uses these for HTML meta tag injection.
+	 */
+	defaultAppMeta: {
+		lang: 'en',
+		title: 'Host Starter',
+		description: 'Powered by Kokimoki.',
+		ogTitle: 'Host Starter',
+		ogDescription: 'Powered by Kokimoki.',
+		ogImage: '/og-image.webp',
+		favicon: '/favicon.png'
+	},
 
 	// Path to i18n translation files (see src/i18n/ for structure)
 	i18nPath: './src/i18n',
