@@ -19,7 +19,7 @@ export function Logo({ className }: LogoProps) {
 
 	return (
 		<img
-			src={`${assetsBase}logo.svg`}
+			src={`${assetsBase}/logo.svg`}
 			alt={displayTitle}
 			title={displayTitle}
 			className={cn('h-9', className)}
