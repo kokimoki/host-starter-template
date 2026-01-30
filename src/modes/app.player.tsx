@@ -2,10 +2,9 @@ import { PlayerMenu } from '@/components/menu';
 import { NameLabel } from '@/components/name-label';
 import { withKmProviders } from '@/components/with-km-providers';
 import { withModeGuard } from '@/components/with-mode-guard';
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { useGlobalController } from '@/hooks/useGlobalController';
+import { useMeta } from '@/hooks/useMeta';
 import { PlayerLayout } from '@/layouts/player';
-import { kmClient } from '@/services/km-client';
 import { localPlayerActions } from '@/state/actions/local-player-actions';
 import { gameSessionStore } from '@/state/stores/game-session-store';
 import { localPlayerStore } from '@/state/stores/local-player-store';
@@ -14,12 +13,9 @@ import { GameLobbyView } from '@/views/game-lobby-view';
 import { GameStateView } from '@/views/game-state-view';
 import { useSnapshot } from '@kokimoki/app';
 import * as React from 'react';
-import { useTranslation } from 'react-i18next';
 
 const App: React.FC = () => {
-	const { t } = useTranslation();
-	const { title } = useSnapshot(kmClient.metaStore.proxy);
-	useDocumentTitle(title || t('meta:title'));
+	useMeta();
 	useGlobalController();
 
 	const { name, currentView } = useSnapshot(localPlayerStore.proxy);

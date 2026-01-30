@@ -7,7 +7,14 @@ import { gameConfigStore } from '../stores/game-config-store';
  * Typically used by host to configure game parameters and presenter display preferences.
  */
 export const gameConfigActions = {
-	/** Set game title (empty string means use default from i18n) */
+	/** Set game language */
+	async setLanguage(lang: string) {
+		await kmClient.transact([kmClient.metaStore], ([metaState]) => {
+			metaState.lang = lang;
+		});
+	},
+
+	/** Set game title */
 	async setTitle(title: string) {
 		await kmClient.transact([kmClient.metaStore], ([metaState]) => {
 			metaState.title = title;

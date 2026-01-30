@@ -3,8 +3,8 @@ import {
 	type ModeGuardProps,
 	withModeGuard
 } from '@/components/with-mode-guard';
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { useGlobalController } from '@/hooks/useGlobalController';
+import { useMeta } from '@/hooks/useMeta';
 import { HostPresenterLayout } from '@/layouts/host-presenter';
 import { kmClient } from '@/services/km-client';
 import { gameSessionActions } from '@/state/actions/game-session-actions';
@@ -17,8 +17,7 @@ import { useTranslation } from 'react-i18next';
 
 function App({ clientContext }: ModeGuardProps<'host'>) {
 	const { t } = useTranslation();
-	const { title } = useSnapshot(kmClient.metaStore.proxy);
-	useDocumentTitle(title || t('meta:title'));
+	useMeta();
 	useGlobalController();
 
 	const { started } = useSnapshot(gameSessionStore.proxy);
