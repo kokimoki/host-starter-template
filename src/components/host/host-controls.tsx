@@ -9,8 +9,16 @@ import { useTranslation } from 'react-i18next';
 const LANGUAGES = [
 	{ code: 'en', label: 'English' },
 	{ code: 'es', label: 'Español' },
-	{ code: 'et', label: 'Eesti keel' }
-	// Add more languages as needed
+	{ code: 'et', label: 'Eesti keel' },
+	{ code: 'de', label: 'Deutsch' },
+	{ code: 'fr', label: 'Français' },
+	{ code: 'it', label: 'Italiano' },
+	{ code: 'ja', label: '日本語' },
+	{ code: 'ko', label: '한국어' },
+	{ code: 'nl', label: 'Nederlands' },
+	{ code: 'pt', label: 'Português' },
+	{ code: 'ru', label: 'Русский' },
+	{ code: 'zh', label: '中文' }
 ];
 
 /**
@@ -28,6 +36,44 @@ export function HostControls() {
 	const [localLanguage, setLocalLanguage] = React.useState(lang);
 	const [localTitle, setLocalTitle] = React.useState(title || '');
 	const [localDuration, setLocalDuration] = React.useState(gameDuration);
+
+	// Handle requested language translation
+	const [requestedLang, setRequestedLang] = React.useState(lang);
+	const [requestedLangStatus, setRequestedLangStatus] = React.useState<
+		'processing' | 'available' | 'not_available'
+	>('available');
+
+	React.useEffect(() => {
+		if (!localLanguage || requestedLang === localLanguage) {
+			return;
+		}
+
+		setRequestedLang(localLanguage);
+		setRequestedLangStatus('processing');
+
+		kmClient.i18n.requestTranslation(localLanguage).then((result) => {
+			if (result.status === 'already_available') {
+				setRequestedLangStatus('available');
+			}
+		});
+	}, [requestedLang, localLanguage]);
+
+	React.useEffect(() => {
+		if (!requestedLang || requestedLangStatus !== 'processing') {
+			return;
+		}
+
+		const checkInterval = setInterval(async () => {
+			const result = await kmClient.i18n.getTranslationStatus(requestedLang);
+			setRequestedLangStatus(result.status);
+
+			if (result.status !== 'processing') {
+				clearInterval(checkInterval);
+			}
+		}, 2000);
+
+		return () => clearInterval(checkInterval);
+	}, [requestedLang, requestedLangStatus]);
 
 	// Sync local state when store changes (e.g., from another client)
 	React.useEffect(() => {
@@ -49,13 +95,7 @@ export function HostControls() {
 
 	const handleSave = async () => {
 		if (localLanguage !== lang && localLanguage) {
-			const translationResult =
-				await kmClient.i18n.requestTranslation(localLanguage);
-			console.log('Translation status:', translationResult);
-
-			if (translationResult.status === 'already_available') {
-				await gameConfigActions.setLanguage(localLanguage);
-			}
+			await gameConfigActions.setLanguage(localLanguage);
 		}
 
 		if (localTitle !== title) {
@@ -67,6 +107,7 @@ export function HostControls() {
 		}
 	};
 
+	// Reset local state to store values
 	const handleReset = () => {
 		setLocalLanguage(lang);
 		setLocalTitle(title || '');
@@ -92,6 +133,12 @@ export function HostControls() {
 						</option>
 					))}
 				</select>
+				{requestedLangStatus === 'processing' && (
+					<span className="text-sm text-yellow-500">Loading...</span>
+				)}
+				{requestedLangStatus === 'not_available' && (
+					<span className="text-sm text-red-500">Failed</span>
+				)}
 			</div>
 			<div className="flex items-center gap-4">
 				<label htmlFor="title" className="text-sm font-medium">
@@ -129,7 +176,9 @@ export function HostControls() {
 					type="button"
 					className="km-btn-primary"
 					onClick={handleSave}
-					disabled={started || !hasChanges}
+					disabled={
+						started || !hasChanges || requestedLangStatus === 'processing'
+					}
 				>
 					{t('ui:saveButton')}
 				</button>
