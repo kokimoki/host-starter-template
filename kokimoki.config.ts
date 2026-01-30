@@ -14,12 +14,8 @@ import {
  * See @kokimoki/kit docs for all available options.
  */
 export const kokimokiConfig: KokimokiKitConfig = {
-	// Connection settings (use staging for development, remove for production)
-	host: 'y-wss.staging.kokimoki.com',
-	endpoint: 'https://api.staging.kokimoki.com',
-
 	// Unique identifier for this game concept (assigned by Kokimoki)
-	conceptId: '695ba8d39cb9bef7ebd65991',
+	conceptId: '',
 
 	/**
 	 * Deploy Codes - Define different entry points/modes for the application
