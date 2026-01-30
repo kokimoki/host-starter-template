@@ -40,7 +40,7 @@ export function HostControls() {
 	// Handle requested language translation
 	const [requestedLang, setRequestedLang] = React.useState(lang);
 	const [requestedLangStatus, setRequestedLangStatus] = React.useState<
-		'processing' | 'available' | 'not_available'
+		'processing' | 'available' | 'failed'
 	>('available');
 
 	React.useEffect(() => {
@@ -51,10 +51,8 @@ export function HostControls() {
 		setRequestedLang(localLanguage);
 		setRequestedLangStatus('processing');
 
-		kmClient.i18n.requestTranslation(localLanguage).then((result) => {
-			if (result.status === 'already_available') {
-				setRequestedLangStatus('available');
-			}
+		kmClient.i18n.requestTranslation(localLanguage).then((status) => {
+			setRequestedLangStatus(status);
 		});
 	}, [requestedLang, localLanguage]);
 
@@ -64,10 +62,10 @@ export function HostControls() {
 		}
 
 		const checkInterval = setInterval(async () => {
-			const result = await kmClient.i18n.getTranslationStatus(requestedLang);
-			setRequestedLangStatus(result.status);
+			const status = await kmClient.i18n.getTranslationStatus(requestedLang);
+			setRequestedLangStatus(status);
 
-			if (result.status !== 'processing') {
+			if (status !== 'processing') {
 				clearInterval(checkInterval);
 			}
 		}, 2000);
@@ -136,7 +134,7 @@ export function HostControls() {
 				{requestedLangStatus === 'processing' && (
 					<span className="text-sm text-yellow-500">Loading...</span>
 				)}
-				{requestedLangStatus === 'not_available' && (
+				{requestedLangStatus === 'failed' && (
 					<span className="text-sm text-red-500">Failed</span>
 				)}
 			</div>
