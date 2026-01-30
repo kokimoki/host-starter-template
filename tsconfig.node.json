@@ -9,5 +9,9 @@
 		"strict": true,
 		"noEmit": true
 	},
-	"include": ["vite.config.ts", "src/config/schema.ts"]
+	"include": [
+		"vite.config.ts",
+		"kokimoki.config.ts",
+		"src/state/schemas/**/*.ts"
+	]
 }

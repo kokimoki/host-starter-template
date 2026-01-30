@@ -1,10 +1,7 @@
 import { kmClient } from '@/services/km-client';
+import type { LocalPlayerState } from '@/state/schemas';
 
-export interface LocalPlayerState {
-	/** Player's display name (also registered in playersStore) */
-	name: string;
-	currentView: 'lobby' | 'game-state';
-}
+export type { LocalPlayerState };
 
 const initialState: LocalPlayerState = {
 	name: '',

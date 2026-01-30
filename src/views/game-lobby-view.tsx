@@ -1,4 +1,4 @@
-import { config } from '@/config';
+import { useTranslation } from 'react-i18next';
 import Markdown from 'react-markdown';
 
 /**
@@ -6,9 +6,11 @@ import Markdown from 'react-markdown';
  * Modify or replace with your own implementation.
  */
 export function GameLobbyView() {
+	const { t } = useTranslation();
+
 	return (
 		<article className="prose">
-			<Markdown>{config.gameLobbyMd}</Markdown>
+			<Markdown>{t('ui:gameLobbyMd')}</Markdown>
 		</article>
 	);
 }

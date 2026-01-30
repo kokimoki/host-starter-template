@@ -1,48 +1,32 @@
-import type { Config } from '@/config/schema';
 import type { ClientContext } from '@/types/client';
-import { KokimokiClient } from '@kokimoki/app';
+import { getKmClient, getKmEnv, type KokimokiEnv } from '@kokimoki/app';
+import { initReactI18next } from 'react-i18next';
 
 /**
  * Kokimoki environment variables
  */
-export const kmEnv: {
-	dev: boolean;
-	test: boolean;
-	host: string;
-	appId: string;
-	code?: string;
-	clientContext?: string;
-	config?: string;
-	configObject?: Config;
-	base: string;
-	assets: string;
-} = JSON.parse(document.getElementById('kokimoki-env')!.textContent!);
+export const kmEnv: KokimokiEnv = getKmEnv();
 
 /**
- * Kokimoki app configuration.
- * Used to get the app configuration from the environment variables.
+ * Base URL for static assets (CDN in production, root in dev)
  */
-export function getConfig(): Config {
-	if (kmEnv.configObject) {
-		return kmEnv.configObject;
-	}
-
-	if (kmEnv.config) {
-		return JSON.parse(kmEnv.config);
-	}
-
-	throw new Error('No Kokimoki config provided');
+export function getAssetPath(path: string): string {
+	return kmEnv.assets.replace(/\/+$/, '') + '/' + path.replace(/^\/+/, '');
 }
 
 /**
  * Kokimoki client to interact with the Kokimoki SDK platform.
  * Used to manage the app state, interact with the Kokimoki services,
- * provices access to the client context and more.
+ * provides access to the client context and more.
  *
  * @returns Kokimoki client instance
  */
-export const kmClient = new KokimokiClient<ClientContext>(
-	kmEnv.host,
-	kmEnv.appId,
-	kmEnv.code
-);
+export const kmClient = getKmClient<ClientContext>();
+
+/**
+ * i18n instance for translations
+ * Uses react-i18next for React integration
+ */
+export const i18n = kmClient.i18n.createI18n({
+	use: [initReactI18next]
+});

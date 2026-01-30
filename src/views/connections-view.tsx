@@ -1,8 +1,8 @@
-import { config } from '@/config';
 import { usePlayersWithOnlineStatus } from '@/hooks/usePlayersWithOnlineStatus';
 import { kmClient } from '@/services/km-client';
 import { cn } from '@/utils/cn';
 import type { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import Markdown from 'react-markdown';
 
 interface ConnectionViewProps {
@@ -15,6 +15,7 @@ interface ConnectionViewProps {
  * Modify or replace with your own implementation.
  */
 export function ConnectionsView({ children }: ConnectionViewProps) {
+	const { t } = useTranslation();
 	const { players, onlinePlayersCount } = usePlayersWithOnlineStatus();
 
 	const isPresenter = kmClient.clientContext.mode === 'presenter';
@@ -29,10 +30,10 @@ export function ConnectionsView({ children }: ConnectionViewProps) {
 					)}
 				>
 					<h1>
-						{onlinePlayersCount} {config.players}
+						{onlinePlayersCount} {t('ui:players')}
 					</h1>
 
-					<Markdown>{config.connectionsMd}</Markdown>
+					<Markdown>{t('ui:connectionsMd')}</Markdown>
 				</article>
 
 				{children}
@@ -52,7 +53,7 @@ export function ConnectionsView({ children }: ConnectionViewProps) {
 											: 'text-slate-400 italic'
 									)}
 								>
-									{player.isOnline ? config.online : config.offline}
+									{player.isOnline ? t('ui:online') : t('ui:offline')}
 								</span>
 							</div>
 						</li>

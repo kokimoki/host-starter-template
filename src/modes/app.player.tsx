@@ -2,9 +2,8 @@ import { PlayerMenu } from '@/components/menu';
 import { NameLabel } from '@/components/name-label';
 import { withKmProviders } from '@/components/with-km-providers';
 import { withModeGuard } from '@/components/with-mode-guard';
-import { config } from '@/config';
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { useGlobalController } from '@/hooks/useGlobalController';
+import { useMeta } from '@/hooks/useMeta';
 import { PlayerLayout } from '@/layouts/player';
 import { localPlayerActions } from '@/state/actions/local-player-actions';
 import { gameSessionStore } from '@/state/stores/game-session-store';
@@ -16,7 +15,7 @@ import { useSnapshot } from '@kokimoki/app';
 import * as React from 'react';
 
 const App: React.FC = () => {
-	useDocumentTitle(config.title);
+	useMeta();
 	useGlobalController();
 
 	const { name, currentView } = useSnapshot(localPlayerStore.proxy);

@@ -1,31 +1,39 @@
-// IMPORTANT: Do NOT modify this file
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { config } from './config';
-import { launchApp } from './kit/app-launcher.tsx';
-import { ErrorBoundary } from './kit/error-boundary.tsx';
+import './global.css';
+import { kmClient } from './services/km-client';
 
-const appImports = {
-	host: () => import('./modes/app.host.tsx'),
-	presenter: () => import('./modes/app.presenter.tsx'),
-	player: () => import('./modes/app.player.tsx'),
-	dev: () => import('./kit/dev.tsx')
-};
+async function main() {
+	// Connect to Kokimoki server
+	await kmClient.connect();
 
-function renderComponent(component: React.ReactNode) {
+	// Wait for i18n (reads lang from <html> element)
+	await kmClient.i18n.init();
+
+	// Load the appropriate app module based on mode
+	let App: React.ComponentType;
+
+	switch (kmClient.clientContext.mode) {
+		case 'host':
+			App = (await import('./modes/app.host')).default;
+			break;
+		case 'presenter':
+			App = (await import('./modes/app.presenter')).default;
+			break;
+		case 'player':
+			App = (await import('./modes/app.player')).default;
+			break;
+	}
+
+	// Wait for stores to sync
+	await kmClient.waitForReady();
+
+	// Render the app
 	ReactDOM.createRoot(document.getElementById('root')!).render(
 		<React.StrictMode>
-			<ErrorBoundary
-				fallback={
-					<div className="flex h-screen items-center justify-center px-4 font-semibold text-red-800">
-						App failed to load. Please check console errors.
-					</div>
-				}
-			>
-				{component}
-			</ErrorBoundary>
+			<App />
 		</React.StrictMode>
 	);
 }
 
-launchApp(config, appImports, renderComponent);
+main();

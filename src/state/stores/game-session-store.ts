@@ -1,11 +1,7 @@
 import { kmClient } from '@/services/km-client';
+import type { GameSessionState } from '@/state/schemas';
 
-export interface GameSessionState {
-	started: boolean;
-	startTimestamp: number;
-	/** Connection ID of the current global controller */
-	controllerConnectionId: string;
-}
+export type { GameSessionState };
 
 const initialState: GameSessionState = {
 	started: false,

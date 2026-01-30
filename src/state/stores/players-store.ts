@@ -1,8 +1,7 @@
 import { kmClient } from '@/services/km-client';
+import type { PlayersState } from '@/state/schemas';
 
-export interface PlayersState {
-	players: Record<string, { name: string }>;
-}
+export type { PlayersState };
 
 const initialState: PlayersState = {
 	players: {}

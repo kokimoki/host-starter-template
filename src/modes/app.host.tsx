@@ -3,20 +3,21 @@ import {
 	type ModeGuardProps,
 	withModeGuard
 } from '@/components/with-mode-guard';
-import { config } from '@/config';
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { useGlobalController } from '@/hooks/useGlobalController';
-import { generateLink } from '@/kit/generate-link';
+import { useMeta } from '@/hooks/useMeta';
 import { HostPresenterLayout } from '@/layouts/host-presenter';
+import { kmClient } from '@/services/km-client';
 import { gameSessionActions } from '@/state/actions/game-session-actions';
 import { gameSessionStore } from '@/state/stores/game-session-store';
 import { GameStateView } from '@/views/game-state-view';
 import { useSnapshot } from '@kokimoki/app';
 import { CirclePlay, CircleStop, SquareArrowOutUpRight } from 'lucide-react';
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 
 function App({ clientContext }: ModeGuardProps<'host'>) {
-	useDocumentTitle(config.title);
+	const { t } = useTranslation();
+	useMeta();
 	useGlobalController();
 
 	const { started } = useSnapshot(gameSessionStore.proxy);
@@ -32,11 +33,11 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 		return () => clearTimeout(timeout);
 	}, [started]);
 
-	const playerLink = generateLink(clientContext.playerCode, {
+	const playerLink = kmClient.generateLink(clientContext.playerCode, {
 		mode: 'player'
 	});
 
-	const presenterLink = generateLink(clientContext.presenterCode, {
+	const presenterLink = kmClient.generateLink(clientContext.presenterCode, {
 		mode: 'presenter',
 		playerCode: clientContext.playerCode
 	});
@@ -62,7 +63,7 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 							disabled={buttonCooldown}
 						>
 							<CirclePlay className="size-5" />
-							{config.startButton}
+							{t('ui:startButton')}
 						</button>
 					)}
 					{started && (
@@ -73,7 +74,7 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 							disabled={buttonCooldown}
 						>
 							<CircleStop className="size-5" />
-							{config.stopButton}
+							{t('ui:stopButton')}
 						</button>
 					)}
 
@@ -83,7 +84,7 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 						rel="noreferrer"
 						className="km-btn-secondary"
 					>
-						{config.playerLinkLabel}
+						{t('ui:playerLinkLabel')}
 						<SquareArrowOutUpRight className="size-5" />
 					</a>
 
@@ -93,7 +94,7 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 						rel="noreferrer"
 						className="km-btn-secondary"
 					>
-						{config.presenterLinkLabel}
+						{t('ui:presenterLinkLabel')}
 						<SquareArrowOutUpRight className="size-5" />
 					</a>
 				</div>
