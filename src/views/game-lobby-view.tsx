@@ -10,7 +10,7 @@ export function GameLobbyView() {
 
 	return (
 		<article className="prose">
-			<Markdown>{t('gameLobbyMd')}</Markdown>
+			<Markdown>{t('ui:gameLobbyMd')}</Markdown>
 		</article>
 	);
 }

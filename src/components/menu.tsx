@@ -17,7 +17,7 @@ export function PlayerMenu() {
 				<div className="max-h-full w-full overflow-y-auto">
 					<div className="container mx-auto px-4 py-16">
 						<article className="prose">
-							<Markdown>{t('menuHelpMd')}</Markdown>
+							<Markdown>{t('ui:menuHelpMd')}</Markdown>
 						</article>
 					</div>
 				</div>
@@ -33,7 +33,7 @@ export function PlayerMenu() {
 				className="flex size-9 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-slate-900 hover:text-slate-50"
 			>
 				<HelpCircle className="size-5" />
-				<span className="sr-only">{t('menuHelpAriaLabel')}</span>
+				<span className="sr-only">{t('ui:menuHelpAriaLabel')}</span>
 			</button>
 		</div>
 	);

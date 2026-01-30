@@ -5,8 +5,8 @@ import { withModeGuard } from '@/components/with-mode-guard';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { useGlobalController } from '@/hooks/useGlobalController';
 import { PlayerLayout } from '@/layouts/player';
+import { kmClient } from '@/services/km-client';
 import { localPlayerActions } from '@/state/actions/local-player-actions';
-import { gameConfigStore } from '@/state/stores/game-config-store';
 import { gameSessionStore } from '@/state/stores/game-session-store';
 import { localPlayerStore } from '@/state/stores/local-player-store';
 import { CreateProfileView } from '@/views/create-profile-view';
@@ -18,8 +18,8 @@ import { useTranslation } from 'react-i18next';
 
 const App: React.FC = () => {
 	const { t } = useTranslation();
-	const { title } = useSnapshot(gameConfigStore.proxy);
-	useDocumentTitle(title || t('defaultTitle'));
+	const { title } = useSnapshot(kmClient.metaStore.proxy);
+	useDocumentTitle(title || t('meta:title'));
 	useGlobalController();
 
 	const { name, currentView } = useSnapshot(localPlayerStore.proxy);

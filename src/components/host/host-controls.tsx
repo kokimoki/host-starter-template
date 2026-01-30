@@ -1,3 +1,4 @@
+import { kmClient } from '@/services/km-client';
 import { gameConfigActions } from '@/state/actions/game-config-actions';
 import { gameConfigStore } from '@/state/stores/game-config-store';
 import { gameSessionStore } from '@/state/stores/game-session-store';
@@ -12,18 +13,17 @@ import { useTranslation } from 'react-i18next';
  */
 export function HostControls() {
 	const { t } = useTranslation();
+	const { title } = useSnapshot(kmClient.metaStore.proxy);
 	const { started } = useSnapshot(gameSessionStore.proxy);
-	const { title, gameDuration, showPresenterQr } = useSnapshot(
-		gameConfigStore.proxy
-	);
+	const { gameDuration, showPresenterQr } = useSnapshot(gameConfigStore.proxy);
 
 	// Local state for form inputs
-	const [localTitle, setLocalTitle] = React.useState(title);
+	const [localTitle, setLocalTitle] = React.useState(title || '');
 	const [localDuration, setLocalDuration] = React.useState(gameDuration);
 
 	// Sync local state when store changes (e.g., from another client)
 	React.useEffect(() => {
-		setLocalTitle(title);
+		setLocalTitle(title || '');
 	}, [title]);
 
 	React.useEffect(() => {
@@ -42,7 +42,7 @@ export function HostControls() {
 	};
 
 	const handleReset = () => {
-		setLocalTitle(title);
+		setLocalTitle(title || '');
 		setLocalDuration(gameDuration);
 	};
 
@@ -50,13 +50,13 @@ export function HostControls() {
 		<>
 			<div className="flex items-center gap-4">
 				<label htmlFor="title" className="text-sm font-medium">
-					{t('gameTitleLabel')}:
+					{t('ui:gameTitleLabel')}:
 				</label>
 				<input
 					id="title"
 					type="text"
 					value={localTitle}
-					placeholder={t('defaultTitle')}
+					placeholder={t('meta:title')}
 					onChange={(e) => setLocalTitle(e.target.value)}
 					disabled={started}
 					className="km-input"
@@ -65,7 +65,7 @@ export function HostControls() {
 
 			<div className="flex items-center gap-4">
 				<label htmlFor="duration" className="text-sm font-medium">
-					{t('gameDurationLabel')}:
+					{t('ui:gameDurationLabel')}:
 				</label>
 				<input
 					id="duration"
@@ -86,7 +86,7 @@ export function HostControls() {
 					onClick={handleSave}
 					disabled={started || !hasChanges}
 				>
-					{t('saveButton')}
+					{t('ui:saveButton')}
 				</button>
 				<button
 					type="button"
@@ -94,7 +94,7 @@ export function HostControls() {
 					onClick={handleReset}
 					disabled={started || !hasChanges}
 				>
-					{t('resetButton')}
+					{t('ui:resetButton')}
 				</button>
 			</div>
 
@@ -103,7 +103,7 @@ export function HostControls() {
 				className={showPresenterQr ? 'km-btn-neutral' : 'km-btn-secondary'}
 				onClick={gameConfigActions.togglePresenterQr}
 			>
-				{t('togglePresenterQrButton')}
+				{t('ui:togglePresenterQrButton')}
 			</button>
 		</>
 	);

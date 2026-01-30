@@ -8,7 +8,6 @@ import { useGlobalController } from '@/hooks/useGlobalController';
 import { HostPresenterLayout } from '@/layouts/host-presenter';
 import { kmClient } from '@/services/km-client';
 import { gameSessionActions } from '@/state/actions/game-session-actions';
-import { gameConfigStore } from '@/state/stores/game-config-store';
 import { gameSessionStore } from '@/state/stores/game-session-store';
 import { GameStateView } from '@/views/game-state-view';
 import { useSnapshot } from '@kokimoki/app';
@@ -18,8 +17,8 @@ import { useTranslation } from 'react-i18next';
 
 function App({ clientContext }: ModeGuardProps<'host'>) {
 	const { t } = useTranslation();
-	const { title } = useSnapshot(gameConfigStore.proxy);
-	useDocumentTitle(title || t('defaultTitle'));
+	const { title } = useSnapshot(kmClient.metaStore.proxy);
+	useDocumentTitle(title || t('meta:title'));
 	useGlobalController();
 
 	const { started } = useSnapshot(gameSessionStore.proxy);
@@ -65,7 +64,7 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 							disabled={buttonCooldown}
 						>
 							<CirclePlay className="size-5" />
-							{t('startButton')}
+							{t('ui:startButton')}
 						</button>
 					)}
 					{started && (
@@ -76,7 +75,7 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 							disabled={buttonCooldown}
 						>
 							<CircleStop className="size-5" />
-							{t('stopButton')}
+							{t('ui:stopButton')}
 						</button>
 					)}
 
@@ -86,7 +85,7 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 						rel="noreferrer"
 						className="km-btn-secondary"
 					>
-						{t('playerLinkLabel')}
+						{t('ui:playerLinkLabel')}
 						<SquareArrowOutUpRight className="size-5" />
 					</a>
 
@@ -96,7 +95,7 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 						rel="noreferrer"
 						className="km-btn-secondary"
 					>
-						{t('presenterLinkLabel')}
+						{t('ui:presenterLinkLabel')}
 						<SquareArrowOutUpRight className="size-5" />
 					</a>
 				</div>

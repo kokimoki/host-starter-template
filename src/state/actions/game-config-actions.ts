@@ -9,8 +9,9 @@ import { gameConfigStore } from '../stores/game-config-store';
 export const gameConfigActions = {
 	/** Set game title (empty string means use default from i18n) */
 	async setTitle(title: string) {
-		await kmClient.transact([gameConfigStore], ([gameConfigState]) => {
-			gameConfigState.title = title;
+		await kmClient.transact([kmClient.metaStore], ([metaState]) => {
+			metaState.title = title;
+			metaState.ogTitle = title;
 		});
 	},
 

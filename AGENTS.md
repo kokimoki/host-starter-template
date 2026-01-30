@@ -95,7 +95,7 @@ Modes defined in `kokimoki.config.ts` via `deployCodes`. Access via `kmClient.cl
 import { useTranslation } from 'react-i18next';
 
 const { t } = useTranslation();
-return <button>{t('startButton')}</button>;
+return <button>{t('ui:startButton')}</button>;
 ```
 
 - Use `Md` suffix for Markdown content (e.g., `welcomeMessageMd`)

@@ -1,4 +1,5 @@
 import type { KokimokiKitConfig } from '@kokimoki/kit';
+import enMeta from './src/i18n/en/meta.json';
 import {
 	gameConfigStoreSchema,
 	gameSessionStoreSchema,
@@ -99,15 +100,12 @@ export const kokimokiConfig: KokimokiKitConfig = {
 	/**
 	 * Default App Meta - SEO and social sharing defaults
 	 *
-	 * These values are used as initial state for the built-in appMetaStore.
-	 * The server uses these for HTML meta tag injection.
+	 * These values are loaded from i18n/en/meta.json for the built-in appMetaStore.
+	 * ogImage and favicon are set here for server HTML meta tag injection.
 	 */
 	defaultAppMeta: {
+		...enMeta,
 		lang: 'en',
-		title: 'Host Starter',
-		description: 'Powered by Kokimoki.',
-		ogTitle: 'Host Starter',
-		ogDescription: 'Powered by Kokimoki.',
 		ogImage: '/og-image.webp',
 		favicon: '/favicon.png'
 	},

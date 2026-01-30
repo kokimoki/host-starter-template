@@ -30,10 +30,10 @@ export function ConnectionsView({ children }: ConnectionViewProps) {
 					)}
 				>
 					<h1>
-						{onlinePlayersCount} {t('players')}
+						{onlinePlayersCount} {t('ui:players')}
 					</h1>
 
-					<Markdown>{t('connectionsMd')}</Markdown>
+					<Markdown>{t('ui:connectionsMd')}</Markdown>
 				</article>
 
 				{children}
@@ -53,7 +53,7 @@ export function ConnectionsView({ children }: ConnectionViewProps) {
 											: 'text-slate-400 italic'
 									)}
 								>
-									{player.isOnline ? t('online') : t('offline')}
+									{player.isOnline ? t('ui:online') : t('ui:offline')}
 								</span>
 							</div>
 						</li>

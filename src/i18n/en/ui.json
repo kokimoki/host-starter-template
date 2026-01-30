@@ -1,6 +1,4 @@
 {
-	"defaultTitle": "Host Starter",
-
 	"gameLobbyMd": "# Game Lobby\n\nThis is a sample markdown to demonstrate various markdown features.\n\n## Starting soon\n\nGame is starting soon. **Get ready!**\n\n## Rules\n\n1. Wait for the host to start the game.\n2. Follow the instructions on the presenter screen.\n3. Open [Games for Crowds](https://gamesforcrowds.com) for more info.\n\n## What people say\n\n> **This game is awesome!** - Player 1\n\n> **I had a good time playing this.** - Player 2\n\n> **Always looking forward to the next round!** - Player 3\n\n---\n\n## Sample Code\n\n```typescript\n// Code block\nconsole.log('Hello, world!');\n```",
 
 	"connectionsMd": "Scan the QR to join the game.",

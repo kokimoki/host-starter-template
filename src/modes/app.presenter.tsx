@@ -17,7 +17,7 @@ function App({ clientContext }: ModeGuardProps<'presenter'>) {
 	const { t } = useTranslation();
 	const { title } = useSnapshot(gameConfigStore.proxy);
 	useGlobalController();
-	useDocumentTitle(title || t('defaultTitle'));
+	useDocumentTitle(title || t('meta:title'));
 
 	const { showPresenterQr } = useSnapshot(gameConfigStore.proxy);
 

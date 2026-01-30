@@ -4,7 +4,6 @@ import type { GameConfigState } from '@/state/schemas';
 export type { GameConfigState };
 
 const initialState: GameConfigState = {
-	title: '',
 	gameDuration: 10,
 	showPresenterQr: true
 };

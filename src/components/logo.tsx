@@ -1,4 +1,4 @@
-import { assetsBase } from '@/services/km-client';
+import { getAssetPath } from '@/services/km-client';
 import { gameConfigStore } from '@/state/stores/game-config-store';
 import { cn } from '@/utils/cn';
 import { useSnapshot } from '@kokimoki/app';
@@ -15,11 +15,12 @@ interface LogoProps {
 export function Logo({ className }: LogoProps) {
 	const { t } = useTranslation();
 	const { title } = useSnapshot(gameConfigStore.proxy);
-	const displayTitle = title || t('defaultTitle');
+	const displayTitle = title || t('meta:title');
+	const logoSrc = getAssetPath('logo.svg');
 
 	return (
 		<img
-			src={`${assetsBase}/logo.svg`}
+			src={logoSrc}
 			alt={displayTitle}
 			title={displayTitle}
 			className={cn('h-9', className)}
