@@ -85,9 +85,17 @@ export const kokimokiConfig: KokimokiKitConfig = {
 	 * Each store must have a matching schema for type safety and validation.
 	 * Pattern should match the store name used in kmClient.store() or kmClient.localStore().
 	 * Set `local: true` for stores that are device-only (not synced).
+	 *
+	 * Set `isTransferable: true` for stores that can be reused when creating
+	 * new app instances (e.g., game-config). Highly dynamic stores like game-session
+	 * should not be transferable.
 	 */
 	stores: [
-		{ pattern: 'game-config', schema: gameConfigStoreSchema },
+		{
+			pattern: 'game-config',
+			schema: gameConfigStoreSchema,
+			isTransferable: true
+		},
 		{ pattern: 'game-session', schema: gameSessionStoreSchema },
 		{ pattern: 'players-registry', schema: playersStoreSchema },
 		{ pattern: 'local-player', schema: localPlayerStoreSchema, local: true }
