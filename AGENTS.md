@@ -158,3 +158,7 @@ Tailwind CSS with theme customization in `src/global.css`:
 ```
 
 Use `cn()` utility for conditional classes.
+
+## Skills
+
+Use relevant skills from `./skills` directory.
