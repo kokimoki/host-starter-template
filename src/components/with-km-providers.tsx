@@ -1,8 +1,8 @@
 import {
-	KmAudioProvider,
+	KmAudioPlayerProvider,
 	KmConfettiProvider,
 	KmModalProvider
-} from '@kokimoki/shared';
+} from '@kokimoki/react-components';
 import type { ComponentType } from 'react';
 
 /**
@@ -22,13 +22,13 @@ export function withKmProviders<P extends object>(Component: ComponentType<P>) {
 
 	function WithKmProviders(props: P) {
 		return (
-			<KmAudioProvider>
+			<KmAudioPlayerProvider>
 				<KmConfettiProvider>
 					<KmModalProvider>
 						<Component {...props} />
 					</KmModalProvider>
 				</KmConfettiProvider>
-			</KmAudioProvider>
+			</KmAudioPlayerProvider>
 		);
 	}
 

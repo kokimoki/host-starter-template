@@ -10,7 +10,7 @@ import { gameConfigStore } from '@/state/stores/game-config-store';
 import { cn } from '@/utils/cn';
 import { ConnectionsView } from '@/views/connections-view';
 import { useSnapshot } from '@kokimoki/app';
-import { KmQrCode } from '@kokimoki/shared';
+import { KmQrCode } from '@kokimoki/react-components';
 
 function App({ clientContext }: ModeGuardProps<'presenter'>) {
 	useMeta();

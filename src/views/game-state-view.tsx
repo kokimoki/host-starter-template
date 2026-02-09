@@ -1,9 +1,9 @@
+import { TimeCountdown } from '@/components/time-countdown';
 import { useServerTimer } from '@/hooks/useServerTime';
 import { kmClient } from '@/services/km-client';
 import { gameConfigStore } from '@/state/stores/game-config-store';
 import { gameSessionStore } from '@/state/stores/game-session-store';
 import { useSnapshot } from '@kokimoki/app';
-import { KmTimeCountdown } from '@kokimoki/shared';
 import { useTranslation } from 'react-i18next';
 import Markdown from 'react-markdown';
 
@@ -29,7 +29,7 @@ export function GameStateView() {
 		<>
 			<article className="prose">
 				{started && (
-					<KmTimeCountdown
+					<TimeCountdown
 						className={`mb-8 inline-block font-sans font-extrabold ${isHost ? 'text-6xl' : ''}`}
 						ms={remaining}
 					/>

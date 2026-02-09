@@ -8,7 +8,11 @@ Uses Kokimoki SDK with three display modes:
 - **Player** (`src/modes/app.player.tsx`) - Mobile-first interactive gameplay
 - **Presenter** (`src/modes/app.presenter.tsx`) - Large screen display (TV/projector)
 
-Kokimoki SDK docs: `node_modules/@kokimoki/*/docs/`
+Kokimoki SDK docs:
+
+- [@kokimoki/app](node_modules/@kokimoki/app/llms.txt) — core SDK docs
+- [@kokimoki/kit](node_modules/@kokimoki/kit/llms.txt) — Vite plugin & dev tools
+- [@kokimoki/react-components](node_modules/@kokimoki/react-components/dist/llms.txt) — UI components
 
 ## Commands
 
@@ -23,7 +27,7 @@ Kokimoki SDK docs: `node_modules/@kokimoki/*/docs/`
 - **Named exports only** - `export const Component` or `export function hook`
 - **Use `@/` path alias** - `import { View } from '@/views/view'`
 - **Filenames**: `kebab-case` everywhere except `src/utils/` and `src/hooks/` (use `camelCase`)
-- **Check `@kokimoki/shared`** before building new UI components
+- **Always check `@kokimoki/react-components`** for existing UI components before creating new ones
 - **Prefer `lucide-react`** icons over custom SVGs
 
 ## Project Structure
@@ -110,8 +114,8 @@ const serverTime = useServerTimer();
 // Generate join links
 const playerLink = kmClient.generateLink(kmClient.clientContext.playerCode, { mode: 'player' });
 
-// UI components from @kokimoki/shared
-<KmTimeCountdown ms={elapsedMs} />
+// UI components from @kokimoki/react-components
+<KmProgressBar currentValue={elapsedMs} maxValue={durationMs} />
 <KmQrCode value={playerLink} />
 <KmCopyButton text={playerLink} />
 ```

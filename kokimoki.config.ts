@@ -15,7 +15,7 @@ import {
  */
 export const kokimokiConfig: KokimokiKitConfig = {
 	// Unique identifier for this game concept (assigned by Kokimoki)
-	conceptId: '',
+	conceptId: '698a1d700234b08d82e86854',
 
 	/**
 	 * Deploy Codes - Define different entry points/modes for the application
