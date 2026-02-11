@@ -1,4 +1,4 @@
-import { useKmModal } from '@kokimoki/shared';
+import { useKmModal } from '@kokimoki/react-components';
 import { HelpCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import Markdown from 'react-markdown';
