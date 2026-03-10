@@ -61,7 +61,7 @@ src/
 
 - `src/state/stores/` - Store definitions with JSDoc
 - `src/state/actions/` - Mutation functions
-- `src/state/schemas/` - Zod schemas (import `z` from `@kokimoki/kit`)
+- `src/state/schemas/` - Zod schemas (import `z` from `@kokimoki/app`)
 - `kokimoki.config.ts` - Register stores with schemas
 
 ### Transactions

@@ -1,4 +1,4 @@
-import { z } from '@kokimoki/kit';
+import { z } from '@kokimoki/app';
 
 /**
  * Schema for local player store
