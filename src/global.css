@@ -5,7 +5,7 @@
 @import 'tailwindcss';
 
 /* Importing styles from the React component library */
-@import '@kokimoki/react-components/index.css';
+@import '@kokimoki/react-components/styles.css';
 @source '../node_modules/@kokimoki/react-components';
 
 @plugin '@tailwindcss/typography';

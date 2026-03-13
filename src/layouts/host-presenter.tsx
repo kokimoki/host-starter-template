@@ -7,7 +7,7 @@ interface LayoutProps {
 	className?: string;
 }
 
-const HostPresenterRoot = ({ children, className }: LayoutProps) => (
+export const HostPresenterRoot = ({ children, className }: LayoutProps) => (
 	<div
 		className={cn(
 			'grid min-h-dvh grid-rows-[auto_1fr_auto] bg-slate-100',
@@ -18,7 +18,7 @@ const HostPresenterRoot = ({ children, className }: LayoutProps) => (
 	</div>
 );
 
-const HostPresenterHeader = ({ children, className }: LayoutProps) => (
+export const HostPresenterHeader = ({ children, className }: LayoutProps) => (
 	<header
 		className={cn(
 			'sticky top-0 z-10 bg-slate-50/95 shadow-xs backdrop-blur-xs',
@@ -32,7 +32,7 @@ const HostPresenterHeader = ({ children, className }: LayoutProps) => (
 	</header>
 );
 
-const HostPresenterMain = ({ children, className }: LayoutProps) => (
+export const HostPresenterMain = ({ children, className }: LayoutProps) => (
 	<main
 		className={cn('container mx-auto flex items-center px-4 py-16', className)}
 	>
@@ -40,7 +40,7 @@ const HostPresenterMain = ({ children, className }: LayoutProps) => (
 	</main>
 );
 
-const HostPresenterFooter = ({ children, className }: LayoutProps) => (
+export const HostPresenterFooter = ({ children, className }: LayoutProps) => (
 	<footer
 		className={cn(
 			'sticky bottom-0 z-10 border-t border-slate-200 bg-slate-50/95 backdrop-blur-xs',
@@ -52,16 +52,3 @@ const HostPresenterFooter = ({ children, className }: LayoutProps) => (
 		</div>
 	</footer>
 );
-
-/**
- * Layout components for the `host` and `presenter` modes
- *
- * These compound components can be used to structure the host/presenter view
- * and provide a consistent layout across different screens.
- */
-export const HostPresenterLayout = {
-	Root: HostPresenterRoot,
-	Header: HostPresenterHeader,
-	Main: HostPresenterMain,
-	Footer: HostPresenterFooter
-};

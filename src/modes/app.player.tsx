@@ -4,7 +4,7 @@ import { withKmProviders } from '@/components/with-km-providers';
 import { withModeGuard } from '@/components/with-mode-guard';
 import { useGlobalController } from '@/hooks/useGlobalController';
 import { useMeta } from '@/hooks/useMeta';
-import { PlayerLayout } from '@/layouts/player';
+import { PlayerLayout } from '@/layouts';
 import { localPlayerActions } from '@/state/actions/local-player-actions';
 import { gameSessionStore } from '@/state/stores/game-session-store';
 import { localPlayerStore } from '@/state/stores/local-player-store';
