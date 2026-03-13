@@ -92,24 +92,24 @@ export function HostControls() {
 		localDuration !== gameDuration;
 
 	const handleSave = async () => {
-		if (localLanguage !== lang && localLanguage) {
+		if (localLanguage !== kmClient.metaStore.proxy.lang && localLanguage) {
 			await gameConfigActions.setLanguage(localLanguage);
 		}
 
-		if (localTitle !== title) {
+		if (localTitle !== kmClient.metaStore.proxy.title) {
 			await gameConfigActions.setTitle(localTitle);
 		}
 
-		if (localDuration !== gameDuration) {
+		if (localDuration !== gameConfigStore.proxy.gameDuration) {
 			await gameConfigActions.changeGameDuration(localDuration);
 		}
 	};
 
 	// Reset local state to store values
 	const handleReset = () => {
-		setLocalLanguage(lang);
-		setLocalTitle(title || '');
-		setLocalDuration(gameDuration);
+		setLocalLanguage(kmClient.metaStore.proxy.lang);
+		setLocalTitle(kmClient.metaStore.proxy.title || '');
+		setLocalDuration(gameConfigStore.proxy.gameDuration);
 	};
 
 	return (

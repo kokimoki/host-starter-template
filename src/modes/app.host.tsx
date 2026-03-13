@@ -10,15 +10,10 @@ import { kmClient } from '@/services/km-client';
 import { gameSessionActions } from '@/state/actions/game-session-actions';
 import { gameSessionStore } from '@/state/stores/game-session-store';
 import { GameStateView } from '@/views/game-state-view';
-import { useSnapshot, z } from '@kokimoki/app';
+import { useSnapshot } from '@kokimoki/app';
 import { CirclePlay, CircleStop, SquareArrowOutUpRight } from 'lucide-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-
-const a = z.object({
-	playerCode: z.string(),
-	presenterCode: z.string()
-});
 
 function App({ clientContext }: ModeGuardProps<'host'>) {
 	const { t } = useTranslation();
@@ -30,7 +25,6 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 
 	// Button cooldown to prevent accidentally spamming start/stop
 	React.useEffect(() => {
-		console.error('Game state changed, starting cooldown', a);
 		setButtonCooldown(true);
 		const timeout = setTimeout(() => {
 			setButtonCooldown(false);

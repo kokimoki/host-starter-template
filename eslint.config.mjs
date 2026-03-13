@@ -3,6 +3,7 @@ import eslintConfigPrettier from 'eslint-config-prettier/flat';
 import reactPlugin from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import { reactRefresh } from 'eslint-plugin-react-refresh';
+import valtio from 'eslint-plugin-valtio';
 import { defineConfig, globalIgnores } from 'eslint/config';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
@@ -17,7 +18,8 @@ export default defineConfig([
 			tseslint.configs.recommended,
 			reactPlugin.configs.flat.recommended,
 			reactHooks.configs.flat.recommended,
-			reactRefresh.configs.vite()
+			reactRefresh.configs.vite(),
+			valtio.configs['flat/recommended']
 		],
 		settings: { react: { version: 'detect' } },
 		languageOptions: {
