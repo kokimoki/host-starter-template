@@ -1,6 +1,6 @@
 import { usePlayersWithOnlineStatus } from '@/hooks/usePlayersWithOnlineStatus';
 import { kmClient } from '@/services/km-client';
-import { cn } from '@/utils/cn';
+import { cn } from '@kokimoki/react-components/utils';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import Markdown from 'react-markdown';

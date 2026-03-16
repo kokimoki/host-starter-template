@@ -1,9 +1,6 @@
-import { TimeCountdown } from '@/components/time-countdown';
-import { useServerTimer } from '@/hooks/useServerTime';
+import { useGameTimer } from '@/hooks/useGameTimer';
 import { kmClient } from '@/services/km-client';
-import { gameConfigStore } from '@/state/stores/game-config-store';
-import { gameSessionStore } from '@/state/stores/game-session-store';
-import { useSnapshot } from '@kokimoki/app';
+import { KmProgressBar, KmTimeCountdown } from '@kokimoki/react-components';
 import { useTranslation } from 'react-i18next';
 import Markdown from 'react-markdown';
 
@@ -14,25 +11,25 @@ import Markdown from 'react-markdown';
  */
 export function GameStateView() {
 	const { t } = useTranslation();
-	const { started, startTimestamp } = useSnapshot(gameSessionStore.proxy);
-	const { gameDuration } = useSnapshot(gameConfigStore.proxy);
-	const serverTime = useServerTimer();
+	const { remainingMs, elapsedMs, totalMs, isRunning } = useGameTimer();
 
 	const isHost = kmClient.clientContext.mode === 'host';
-
-	// Calculate remaining time (countdown)
-	const elapsed = serverTime - startTimestamp;
-	const durationMs = gameDuration * 60 * 1000;
-	const remaining = Math.max(0, durationMs - elapsed);
 
 	return (
 		<>
 			<article className="prose">
-				{started && (
-					<TimeCountdown
-						className={`mb-8 inline-block font-sans font-extrabold ${isHost ? 'text-6xl' : ''}`}
-						ms={remaining}
-					/>
+				{isRunning && (
+					<div className="mb-8">
+						<KmTimeCountdown
+							className={`inline-flex font-sans font-extrabold ${isHost ? 'text-6xl' : ''}`}
+							ms={remainingMs}
+						/>
+						<KmProgressBar
+							currentValue={elapsedMs}
+							maxValue={totalMs}
+							containerClassName="mt-2"
+						/>
+					</div>
 				)}
 
 				<Markdown>

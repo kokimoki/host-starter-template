@@ -1,6 +1,6 @@
 import { getAssetPath, kmClient } from '@/services/km-client';
-import { cn } from '@/utils/cn';
 import { useSnapshot } from '@kokimoki/app';
+import { cn } from '@kokimoki/react-components/utils';
 import { useTranslation } from 'react-i18next';
 
 interface LogoProps {

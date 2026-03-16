@@ -1,25 +1,5 @@
-import { kmClient } from '@/services/km-client';
-import { gameConfigActions } from '@/state/actions/game-config-actions';
-import { gameConfigStore } from '@/state/stores/game-config-store';
-import { gameSessionStore } from '@/state/stores/game-session-store';
-import { useSnapshot } from '@kokimoki/app';
-import * as React from 'react';
+import { useHostControls } from '@/hooks/useHostControls';
 import { useTranslation } from 'react-i18next';
-
-const LANGUAGES = [
-	{ code: 'en', label: 'English' },
-	{ code: 'es', label: 'Español' },
-	{ code: 'et', label: 'Eesti keel' },
-	{ code: 'de', label: 'Deutsch' },
-	{ code: 'fr', label: 'Français' },
-	{ code: 'it', label: 'Italiano' },
-	{ code: 'ja', label: '日本語' },
-	{ code: 'ko', label: '한국어' },
-	{ code: 'nl', label: 'Nederlands' },
-	{ code: 'pt', label: 'Português' },
-	{ code: 'ru', label: 'Русский' },
-	{ code: 'zh', label: '中文' }
-];
 
 /**
  * Example component demonstrating how to create host-specific controls.
@@ -28,89 +8,7 @@ const LANGUAGES = [
  */
 export function HostControls() {
 	const { t } = useTranslation();
-	const { lang, title } = useSnapshot(kmClient.metaStore.proxy);
-	const { started } = useSnapshot(gameSessionStore.proxy);
-	const { gameDuration, showPresenterQr } = useSnapshot(gameConfigStore.proxy);
-
-	// Local state for form inputs
-	const [localLanguage, setLocalLanguage] = React.useState(lang);
-	const [localTitle, setLocalTitle] = React.useState(title || '');
-	const [localDuration, setLocalDuration] = React.useState(gameDuration);
-
-	// Handle requested language translation
-	const [requestedLang, setRequestedLang] = React.useState(lang);
-	const [requestedLangStatus, setRequestedLangStatus] = React.useState<
-		'processing' | 'available' | 'failed'
-	>('available');
-
-	React.useEffect(() => {
-		if (!localLanguage || requestedLang === localLanguage) {
-			return;
-		}
-
-		setRequestedLang(localLanguage);
-		setRequestedLangStatus('processing');
-
-		kmClient.i18n.requestTranslation(localLanguage).then((status) => {
-			setRequestedLangStatus(status);
-		});
-	}, [requestedLang, localLanguage]);
-
-	React.useEffect(() => {
-		if (!requestedLang || requestedLangStatus !== 'processing') {
-			return;
-		}
-
-		const checkInterval = setInterval(async () => {
-			const status = await kmClient.i18n.getTranslationStatus(requestedLang);
-			setRequestedLangStatus(status);
-
-			if (status !== 'processing') {
-				clearInterval(checkInterval);
-			}
-		}, 2000);
-
-		return () => clearInterval(checkInterval);
-	}, [requestedLang, requestedLangStatus]);
-
-	// Sync local state when store changes (e.g., from another client)
-	React.useEffect(() => {
-		setLocalLanguage(lang);
-	}, [lang]);
-
-	React.useEffect(() => {
-		setLocalTitle(title || '');
-	}, [title]);
-
-	React.useEffect(() => {
-		setLocalDuration(gameDuration);
-	}, [gameDuration]);
-
-	const hasChanges =
-		localLanguage !== lang ||
-		localTitle !== title ||
-		localDuration !== gameDuration;
-
-	const handleSave = async () => {
-		if (localLanguage !== kmClient.metaStore.proxy.lang && localLanguage) {
-			await gameConfigActions.setLanguage(localLanguage);
-		}
-
-		if (localTitle !== kmClient.metaStore.proxy.title) {
-			await gameConfigActions.setTitle(localTitle);
-		}
-
-		if (localDuration !== gameConfigStore.proxy.gameDuration) {
-			await gameConfigActions.changeGameDuration(localDuration);
-		}
-	};
-
-	// Reset local state to store values
-	const handleReset = () => {
-		setLocalLanguage(kmClient.metaStore.proxy.lang);
-		setLocalTitle(kmClient.metaStore.proxy.title || '');
-		setLocalDuration(gameConfigStore.proxy.gameDuration);
-	};
+	const controls = useHostControls();
 
 	return (
 		<>
@@ -120,21 +18,21 @@ export function HostControls() {
 				</label>
 				<select
 					id="language"
-					value={localLanguage}
-					disabled={started}
-					onChange={(e) => setLocalLanguage(e.target.value)}
+					value={controls.language.localLanguage}
+					disabled={controls.isDisabled}
+					onChange={(e) => controls.language.setLocalLanguage(e.target.value)}
 					className="km-input"
 				>
-					{LANGUAGES.map((lang) => (
+					{controls.language.availableLanguages.map((lang) => (
 						<option key={lang.code} value={lang.code}>
 							{lang.label}
 						</option>
 					))}
 				</select>
-				{requestedLangStatus === 'processing' && (
+				{controls.language.translationStatus === 'processing' && (
 					<span className="text-sm text-yellow-500">Loading...</span>
 				)}
-				{requestedLangStatus === 'failed' && (
+				{controls.language.translationStatus === 'failed' && (
 					<span className="text-sm text-red-500">Failed</span>
 				)}
 			</div>
@@ -145,10 +43,10 @@ export function HostControls() {
 				<input
 					id="title"
 					type="text"
-					value={localTitle}
+					value={controls.localTitle}
 					placeholder={t('meta:title')}
-					onChange={(e) => setLocalTitle(e.target.value)}
-					disabled={started}
+					onChange={(e) => controls.setLocalTitle(e.target.value)}
+					disabled={controls.isDisabled}
 					className="km-input"
 				/>
 			</div>
@@ -162,9 +60,9 @@ export function HostControls() {
 					type="number"
 					min={1}
 					max={60}
-					value={localDuration}
-					onChange={(e) => setLocalDuration(Number(e.target.value))}
-					disabled={started}
+					value={controls.localDuration}
+					onChange={(e) => controls.setLocalDuration(Number(e.target.value))}
+					disabled={controls.isDisabled}
 					className="km-input"
 				/>
 			</div>
@@ -173,9 +71,11 @@ export function HostControls() {
 				<button
 					type="button"
 					className="km-btn-primary"
-					onClick={handleSave}
+					onClick={controls.save}
 					disabled={
-						started || !hasChanges || requestedLangStatus === 'processing'
+						controls.isDisabled ||
+						!controls.hasChanges ||
+						controls.language.translationStatus === 'processing'
 					}
 				>
 					{t('ui:saveButton')}
@@ -183,8 +83,8 @@ export function HostControls() {
 				<button
 					type="button"
 					className="km-btn-secondary"
-					onClick={handleReset}
-					disabled={started || !hasChanges}
+					onClick={controls.reset}
+					disabled={controls.isDisabled || !controls.hasChanges}
 				>
 					{t('ui:resetButton')}
 				</button>
@@ -192,8 +92,10 @@ export function HostControls() {
 
 			<button
 				type="button"
-				className={showPresenterQr ? 'km-btn-neutral' : 'km-btn-secondary'}
-				onClick={gameConfigActions.togglePresenterQr}
+				className={
+					controls.showPresenterQr ? 'km-btn-neutral' : 'km-btn-secondary'
+				}
+				onClick={controls.togglePresenterQr}
 			>
 				{t('ui:togglePresenterQrButton')}
 			</button>

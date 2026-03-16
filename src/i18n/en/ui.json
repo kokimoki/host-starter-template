@@ -33,5 +33,10 @@
 	"gameTitleLabel": "Game title",
 	"gameDurationLabel": "Game duration (mins)",
 	"saveButton": "Save",
-	"resetButton": "Reset"
+	"resetButton": "Reset",
+
+	"stopGameConfirmTitle": "Stop Game",
+	"stopGameConfirmDescription": "Are you sure you want to stop the game? This action cannot be undone.",
+	"stopGameConfirmButton": "Stop",
+	"stopGameCancelButton": "Cancel"
 }

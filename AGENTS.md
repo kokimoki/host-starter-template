@@ -46,7 +46,8 @@ src/
     stores/       # Kokimoki stores (global + local)
   views/          # Page-level components
   types/          # TypeScript interfaces
-  utils/          # Utility functions (cn.ts, etc.)
+  utils/          # Utility functions
+  constants/      # Static constants and configuration data (e.g., languages.ts)
 ```
 
 ## State Management

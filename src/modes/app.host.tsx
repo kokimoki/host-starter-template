@@ -3,6 +3,7 @@ import {
 	type ModeGuardProps,
 	withModeGuard
 } from '@/components/with-mode-guard';
+import { withKmProviders } from '@kokimoki/react-components';
 import { useGlobalController } from '@/hooks/useGlobalController';
 import { useMeta } from '@/hooks/useMeta';
 import { HostPresenterLayout } from '@/layouts';
@@ -11,6 +12,7 @@ import { gameSessionActions } from '@/state/actions/game-session-actions';
 import { gameSessionStore } from '@/state/stores/game-session-store';
 import { GameStateView } from '@/views/game-state-view';
 import { useSnapshot } from '@kokimoki/app';
+import { useKmModal } from '@kokimoki/react-components';
 import { CirclePlay, CircleStop, SquareArrowOutUpRight } from 'lucide-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -21,6 +23,7 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 	useGlobalController();
 
 	const { started } = useSnapshot(gameSessionStore.proxy);
+	const { openAlertDialog } = useKmModal();
 	const [buttonCooldown, setButtonCooldown] = React.useState(true);
 
 	// Button cooldown to prevent accidentally spamming start/stop
@@ -41,6 +44,14 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 		mode: 'presenter',
 		playerCode: clientContext.playerCode
 	});
+
+	const handleStopGame = () => {
+		openAlertDialog({
+			title: t('ui:stopGameConfirmTitle'),
+			description: t('ui:stopGameConfirmDescription'),
+			onConfirm: gameSessionActions.stopGame
+		});
+	};
 
 	return (
 		<HostPresenterLayout.Root>
@@ -70,7 +81,7 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 						<button
 							type="button"
 							className="km-btn-error"
-							onClick={gameSessionActions.stopGame}
+							onClick={handleStopGame}
 							disabled={buttonCooldown}
 						>
 							<CircleStop className="size-5" />
@@ -103,4 +114,4 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 	);
 }
 
-export default withModeGuard(App, 'host');
+export default withKmProviders(withModeGuard(App, 'host'));

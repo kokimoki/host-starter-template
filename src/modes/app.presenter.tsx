@@ -7,7 +7,7 @@ import { useMeta } from '@/hooks/useMeta';
 import { HostPresenterLayout } from '@/layouts';
 import { kmClient } from '@/services/km-client';
 import { gameConfigStore } from '@/state/stores/game-config-store';
-import { cn } from '@/utils/cn';
+import { cn } from '@kokimoki/react-components/utils';
 import { ConnectionsView } from '@/views/connections-view';
 import { useSnapshot } from '@kokimoki/app';
 import { KmQrCode } from '@kokimoki/react-components';
