@@ -1,6 +1,7 @@
 import { useServerTimer } from '@/hooks/useServerTime';
 import { gameConfigStore } from '@/state/stores/game-config-store';
 import { gameSessionStore } from '@/state/stores/game-session-store';
+import { minutesToMs } from '@/utils/minutesToMs';
 import { useSnapshot } from '@kokimoki/app';
 
 /**
@@ -22,7 +23,7 @@ export function useGameTimer() {
 	const { gameDuration } = useSnapshot(gameConfigStore.proxy);
 	const serverTime = useServerTimer();
 
-	const totalMs = gameDuration * 60 * 1000;
+	const totalMs = minutesToMs(gameDuration);
 	const elapsedMs = serverTime - startTimestamp;
 	const remainingMs = Math.max(0, totalMs - elapsedMs);
 
@@ -30,6 +31,6 @@ export function useGameTimer() {
 		remainingMs,
 		elapsedMs,
 		totalMs,
-		isRunning: started,
+		isRunning: started
 	};
 }

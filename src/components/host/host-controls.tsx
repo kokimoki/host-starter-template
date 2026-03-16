@@ -14,7 +14,7 @@ export function HostControls() {
 		<>
 			<div className="flex items-center gap-4">
 				<label htmlFor="language" className="text-sm font-medium">
-					{t('ui:languageLabel', 'Language')}:
+					{t('common:languageLabel')}:
 				</label>
 				<select
 					id="language"
@@ -38,7 +38,7 @@ export function HostControls() {
 			</div>
 			<div className="flex items-center gap-4">
 				<label htmlFor="title" className="text-sm font-medium">
-					{t('ui:gameTitleLabel')}:
+					{t('host:gameTitleLabel')}:
 				</label>
 				<input
 					id="title"
@@ -53,7 +53,7 @@ export function HostControls() {
 
 			<div className="flex items-center gap-4">
 				<label htmlFor="duration" className="text-sm font-medium">
-					{t('ui:gameDurationLabel')}:
+					{t('host:gameDurationLabel')}:
 				</label>
 				<input
 					id="duration"
@@ -78,7 +78,7 @@ export function HostControls() {
 						controls.language.translationStatus === 'processing'
 					}
 				>
-					{t('ui:saveButton')}
+					{t('common:saveButton')}
 				</button>
 				<button
 					type="button"
@@ -86,7 +86,7 @@ export function HostControls() {
 					onClick={controls.reset}
 					disabled={controls.isDisabled || !controls.hasChanges}
 				>
-					{t('ui:resetButton')}
+					{t('common:resetButton')}
 				</button>
 			</div>
 
@@ -97,7 +97,7 @@ export function HostControls() {
 				}
 				onClick={controls.togglePresenterQr}
 			>
-				{t('ui:togglePresenterQrButton')}
+				{t('host:togglePresenterQrButton')}
 			</button>
 		</>
 	);

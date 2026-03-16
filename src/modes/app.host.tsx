@@ -47,8 +47,8 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 
 	const handleStopGame = () => {
 		openAlertDialog({
-			title: t('ui:stopGameConfirmTitle'),
-			description: t('ui:stopGameConfirmDescription'),
+			title: t('host:stopGameConfirmTitle'),
+			description: t('host:stopGameConfirmDescription'),
 			onConfirm: gameSessionActions.stopGame
 		});
 	};
@@ -74,7 +74,7 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 							disabled={buttonCooldown}
 						>
 							<CirclePlay className="size-5" />
-							{t('ui:startButton')}
+							{t('common:startButton')}
 						</button>
 					)}
 					{started && (
@@ -85,7 +85,7 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 							disabled={buttonCooldown}
 						>
 							<CircleStop className="size-5" />
-							{t('ui:stopButton')}
+							{t('common:stopButton')}
 						</button>
 					)}
 
@@ -95,7 +95,7 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 						rel="noreferrer"
 						className="km-btn-secondary"
 					>
-						{t('ui:playerLinkLabel')}
+						{t('host:playerLinkLabel')}
 						<SquareArrowOutUpRight className="size-5" />
 					</a>
 
@@ -105,7 +105,7 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 						rel="noreferrer"
 						className="km-btn-secondary"
 					>
-						{t('ui:presenterLinkLabel')}
+						{t('host:presenterLinkLabel')}
 						<SquareArrowOutUpRight className="size-5" />
 					</a>
 				</div>

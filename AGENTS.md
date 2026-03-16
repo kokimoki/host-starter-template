@@ -94,17 +94,37 @@ Modes defined in `kokimoki.config.ts` via `deployCodes`. Access via `kmClient.cl
 
 ## Translations (i18n)
 
-**CRITICAL:** Never hardcode text. Add all strings to `src/i18n/en/common.json`.
+**CRITICAL:** Never hardcode text. Use domain-driven namespaces in `src/i18n/en/`.
+
+### Namespaces
+
+| Namespace   | File             | Purpose                                                        |
+| ----------- | ---------------- | -------------------------------------------------------------- |
+| `common`    | `common.json`    | Shared UI labels: buttons, status indicators, form labels      |
+| `host`      | `host.json`      | Host dashboard: game config, link labels, confirmation dialogs |
+| `player`    | `player.json`    | Player flows: profile creation, menu/help content, lobby       |
+| `presenter` | `presenter.json` | Presenter screen: connections, shared state descriptions       |
+| `meta`      | `meta.json`      | App metadata: title, description, OG tags                      |
 
 ```tsx
 import { useTranslation } from 'react-i18next';
 
 const { t } = useTranslation();
-return <button>{t('ui:startButton')}</button>;
+
+// Common namespace
+t('common:startButton');
+t('common:loading');
+
+// Domain-specific namespaces
+t('host:gameTitleLabel');
+t('player:createProfileMd');
+t('presenter:connectionsMd');
+t('meta:title');
 ```
 
-- Use `Md` suffix for Markdown content (e.g., `welcomeMessageMd`)
+- Use `Md` suffix for Markdown content (e.g., `gameLobbyMd`)
 - Render Markdown with `react-markdown` + `prose` class
+- Place keys in the namespace matching the mode/domain that uses them
 
 ## Timers & Links
 

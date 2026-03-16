@@ -1,6 +1,7 @@
 import { kmClient } from '@/services/km-client';
 import { gameConfigStore } from '@/state/stores/game-config-store';
 import { gameSessionStore } from '@/state/stores/game-session-store';
+import { minutesToMs } from '@/utils/minutesToMs';
 import { useSnapshot } from '@kokimoki/app';
 import { useEffect } from 'react';
 import { useServerTimer } from './useServerTime';
@@ -83,7 +84,7 @@ export function useGlobalController(): boolean {
 						return;
 					}
 
-					const gameDurationMs = gameConfigState.gameDuration * 60 * 1000;
+					const gameDurationMs = minutesToMs(gameConfigState.gameDuration);
 
 					// End the game if duration has elapsed
 					if (serverTime - gameSessionState.startTimestamp > gameDurationMs) {

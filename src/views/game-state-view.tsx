@@ -33,7 +33,7 @@ export function GameStateView() {
 				)}
 
 				<Markdown>
-					{isHost ? t('ui:sharedStateMd') : t('ui:sharedStatePlayerMd')}
+					{isHost ? t('presenter:sharedStateMd') : t('presenter:sharedStatePlayerMd')}
 				</Markdown>
 			</article>
 		</>
