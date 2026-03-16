@@ -5,7 +5,7 @@ import {
 } from '@/components/with-mode-guard';
 import { useGlobalController } from '@/hooks/useGlobalController';
 import { useMeta } from '@/hooks/useMeta';
-import { HostPresenterLayout } from '@/layouts/host-presenter';
+import { HostPresenterLayout } from '@/layouts';
 import { kmClient } from '@/services/km-client';
 import { gameSessionActions } from '@/state/actions/game-session-actions';
 import { gameSessionStore } from '@/state/stores/game-session-store';
