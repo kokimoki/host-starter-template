@@ -5,5 +5,6 @@
 	"playerNameButton": "Continue",
 	"menuHelpMd": "# Help\n\nThis is the help section. Here you can find information about how to play the game and get assistance if needed.\n\n## How to Play\n\n1. Join the game using the provided link or QR code.\n2. Follow the instructions on your screen.\n3. Interact with other players as required by the game.\n\n## Getting Assistance\n\nIf you encounter any issues, please contact the host or refer to the FAQ section on our website.",
 	"menuAriaLabel": "Open menu drawer",
-	"menuHelpAriaLabel": "Open help drawer"
+	"menuHelpAriaLabel": "Open help drawer",
+	"sharedStatePlayerMd": "# Shared State Player\nYou are connected as a player. Host has started the game. In this shared state example the playtime is synchronized between all players."
 }

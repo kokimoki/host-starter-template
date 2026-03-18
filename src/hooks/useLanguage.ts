@@ -17,10 +17,12 @@ type TranslationStatus = 'processing' | 'available' | 'failed';
  * ```tsx
  * const { currentLang, translationStatus, changeLanguage, availableLanguages } = useLanguage();
  *
- * <select value={currentLang} onChange={(e) => changeLanguage(e.target.value)}>
- *   {availableLanguages.map((l) => <option key={l.code} value={l.code}>{l.name}</option>)}
- * </select>
- * {translationStatus === 'processing' && <Spinner />}
+ * <KmSelect
+ *   options={availableLanguages}
+ *   value={currentLang}
+ *   onValueChange={changeLanguage}
+ *   loading={translationStatus === 'processing'}
+ * />
  * ```
  */
 export function useLanguage() {
@@ -71,7 +73,7 @@ export function useLanguage() {
 	};
 
 	return {
-		currentLang: lang,
+		currentLang: pendingLang || lang,
 		translationStatus,
 		changeLanguage,
 		availableLanguages: SUPPORTED_LANGUAGES

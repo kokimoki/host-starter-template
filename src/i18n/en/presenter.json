@@ -1,6 +1,4 @@
 {
 	"connectionsMd": "Scan the QR to join the game.",
-	"sharedStateMd": "# Shared State Host\nThis is an example of shared state view. Host can start the game, open the presenter screen and allow players to join by scanning the QR.\n\n## Host Actions\nHere's a demo of dashboard actions that can be used to control the state on presenter and player screens.",
-	"sharedStatePlayerMd": "# Shared State Player\nYou are connected as a player. Host has started the game. In this shared state example the playtime is synchronized between all players.",
 	"players": "Players Connected"
 }

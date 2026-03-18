@@ -4,6 +4,7 @@
 	"playerLinkLabel": "Player Link",
 	"presenterLinkLabel": "Presenter Link",
 	"togglePresenterQrButton": "Toggle Presenter QR",
+	"translationFailed": "Translation failed",
 	"stopGameConfirmTitle": "Stop Game",
 	"stopGameConfirmDescription": "Are you sure you want to stop the game? This action cannot be undone.",
 	"stopGameConfirmButton": "Stop",

@@ -10,7 +10,6 @@ import { HostPresenterLayout } from '@/layouts';
 import { kmClient } from '@/services/km-client';
 import { gameSessionActions } from '@/state/actions/game-session-actions';
 import { gameSessionStore } from '@/state/stores/game-session-store';
-import { GameStateView } from '@/views/game-state-view';
 import { useSnapshot } from '@kokimoki/app';
 import { useKmModal } from '@kokimoki/react-components';
 import { CirclePlay, CircleStop, SquareArrowOutUpRight } from 'lucide-react';
@@ -58,8 +57,6 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 			<HostPresenterLayout.Header />
 			<HostPresenterLayout.Main>
 				<div className="space-y-4">
-					<GameStateView />
-
 					<HostControls />
 				</div>
 			</HostPresenterLayout.Main>

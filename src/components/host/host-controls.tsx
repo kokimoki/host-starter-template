@@ -4,11 +4,12 @@ import { gameConfigActions } from '@/state/actions/game-config-actions';
 import { gameConfigStore } from '@/state/stores/game-config-store';
 import { gameSessionStore } from '@/state/stores/game-session-store';
 import { useSnapshot } from '@kokimoki/app';
+import { KmSelect } from '@kokimoki/react-components';
 import { useTranslation } from 'react-i18next';
 
 /**
  * Example component demonstrating how to create host-specific controls.
- * Shows usage of game config store and host actions with auto-save pattern.
+ * Shows usage of game config store, host actions, and KmSelect component.
  * Modify or replace with your own implementation.
  */
 export function HostControls() {
@@ -24,28 +25,24 @@ export function HostControls() {
 	return (
 		<>
 			<div className="flex items-center gap-4">
-				<label htmlFor="language" className="text-sm font-medium">
+				<label className="text-sm font-medium" htmlFor="language">
 					{t('common:languageLabel')}:
 				</label>
-				<select
-					id="language"
+				<KmSelect
+					options={availableLanguages}
 					value={currentLang}
-					disabled={isDisabled || translationStatus === 'processing'}
-					onChange={(e) => changeLanguage(e.target.value)}
-					className="km-input"
-				>
-					{availableLanguages.map((lang) => (
-						<option key={lang.code} value={lang.code}>
-							{lang.label}
-						</option>
-					))}
-				</select>
-				{translationStatus === 'processing' && (
-					<span className="text-sm text-yellow-500">Loading...</span>
-				)}
-				{translationStatus === 'failed' && (
-					<span className="text-sm text-red-500">Failed</span>
-				)}
+					onValueChange={changeLanguage}
+					disabled={isDisabled}
+					loading={translationStatus === 'processing'}
+					name="language"
+					error={
+						translationStatus === 'failed'
+							? t('host:translationFailed')
+							: undefined
+					}
+					placeholder={t('common:languageLabel')}
+					triggerClassName="!h-auto !rounded-xl !px-5 !py-3 km-input"
+				/>
 			</div>
 			<div className="flex items-center gap-4">
 				<label htmlFor="title" className="text-sm font-medium">

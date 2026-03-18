@@ -1,5 +1,4 @@
 import { useGameTimer } from '@/hooks/useGameTimer';
-import { kmClient } from '@/services/km-client';
 import { KmProgressBar, KmTimeCountdown } from '@kokimoki/react-components';
 import { useTranslation } from 'react-i18next';
 import Markdown from 'react-markdown';
@@ -13,16 +12,17 @@ export function GameStateView() {
 	const { t } = useTranslation();
 	const { remainingMs, elapsedMs, totalMs, isRunning } = useGameTimer();
 
-	const isHost = kmClient.clientContext.mode === 'host';
-
 	return (
 		<>
 			<article className="prose">
 				{isRunning && (
 					<div className="mb-8">
 						<KmTimeCountdown
-							className={`inline-flex font-sans font-extrabold ${isHost ? 'text-6xl' : ''}`}
 							ms={remainingMs}
+							display="ms"
+							className="font-sans text-4xl font-extrabold"
+							partClassName="tabular-nums"
+							separatorClassName="text-slate-400"
 						/>
 						<KmProgressBar
 							currentValue={elapsedMs}
@@ -32,9 +32,7 @@ export function GameStateView() {
 					</div>
 				)}
 
-				<Markdown>
-					{isHost ? t('presenter:sharedStateMd') : t('presenter:sharedStatePlayerMd')}
-				</Markdown>
+				<Markdown>{t('player:sharedStatePlayerMd')}</Markdown>
 			</article>
 		</>
 	);

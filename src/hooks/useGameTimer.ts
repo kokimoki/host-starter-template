@@ -24,7 +24,7 @@ export function useGameTimer() {
 	const serverTime = useServerTimer();
 
 	const totalMs = minutesToMs(gameDuration);
-	const elapsedMs = serverTime - startTimestamp;
+	const elapsedMs = Math.max(0, serverTime - startTimestamp);
 	const remainingMs = Math.max(0, totalMs - elapsedMs);
 
 	return {
