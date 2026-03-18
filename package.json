@@ -17,7 +17,7 @@
 	},
 	"dependencies": {
 		"@kokimoki/app": "^3.1.6",
-		"@kokimoki/react-components": "^1.0.2",
+		"@kokimoki/react-components": "^1.1.0",
 		"i18next": "^25.8.0",
 		"lucide-react": "^0.562.0",
 		"react": "^19.2.3",
