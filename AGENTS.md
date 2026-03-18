@@ -132,13 +132,17 @@ t('meta:title');
 // Synced timer
 const serverTime = useServerTimer();
 
+// Game timer (composes server time via useServerTimer + stores)
+const { remainingMs, elapsedMs, totalMs, isRunning } = useGameTimer();
+
 // Generate join links
 const playerLink = kmClient.generateLink(kmClient.clientContext.playerCode, { mode: 'player' });
 
 // UI components from @kokimoki/react-components
-<KmProgressBar currentValue={elapsedMs} maxValue={durationMs} />
-<KmQrCode value={playerLink} />
-<KmCopyButton text={playerLink} />
+<KmTimeCountdown ms={remainingMs} display="ms" partClassName="tabular-nums" />
+<KmProgressBar currentValue={elapsedMs} maxValue={totalMs} />
+<KmQrCode data={playerLink} />
+<KmSelect options={languages} value={currentLang} onValueChange={changeLanguage} loading={isTranslating} />
 ```
 
 ## Global Controller
@@ -162,13 +166,13 @@ const isHost = kmClient.clientContext.mode === 'host';
   isHost && <button onClick={gameSessionActions.startGame}>Start</button>;
 }
 
-// Player view routing
+// Player view routing via local store
 const { currentView } = useSnapshot(localPlayerStore.proxy);
 {
   currentView === 'lobby' && <LobbyView />;
 }
 {
-  currentView === 'game' && <GameView />;
+  currentView === 'game-state' && <GameStateView />;
 }
 ```
 
@@ -182,7 +186,7 @@ Tailwind CSS with theme customization in `src/global.css`:
 }
 ```
 
-Use `cn()` utility for conditional classes.
+Use `cn()` from `@kokimoki/react-components/utils` utility for conditional classes.
 
 ## Skills
 
