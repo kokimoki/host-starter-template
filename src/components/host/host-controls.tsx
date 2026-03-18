@@ -29,12 +29,12 @@ export function HostControls() {
 					{t('common:languageLabel')}:
 				</label>
 				<KmSelect
+					id="language"
 					options={availableLanguages}
 					value={currentLang}
 					onValueChange={changeLanguage}
 					disabled={isDisabled}
 					loading={translationStatus === 'processing'}
-					name="language"
 					error={
 						translationStatus === 'failed'
 							? t('host:translationFailed')
