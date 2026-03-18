@@ -1,9 +1,9 @@
 import { HostControls } from '@/components/host/host-controls';
+import { withKmProviders } from '@/components/with-km-providers';
 import {
 	type ModeGuardProps,
 	withModeGuard
 } from '@/components/with-mode-guard';
-import { withKmProviders } from '@kokimoki/react-components';
 import { useGlobalController } from '@/hooks/useGlobalController';
 import { useMeta } from '@/hooks/useMeta';
 import { HostPresenterLayout } from '@/layouts';

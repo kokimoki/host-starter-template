@@ -2,7 +2,7 @@ import { SUPPORTED_LANGUAGES } from '@/constants/languages';
 import { kmClient } from '@/services/km-client';
 import { gameConfigActions } from '@/state/actions/game-config-actions';
 import { useSnapshot } from '@kokimoki/app';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type TranslationStatus = 'processing' | 'available' | 'failed';
 
@@ -11,13 +11,13 @@ type TranslationStatus = 'processing' | 'available' | 'failed';
  * Handles requesting translations from the Kokimoki i18n service
  * and polling for translation status until complete.
  *
- * @returns Language state, translation status, and save/reset handlers.
+ * @returns Current language, translation status, change handler, and available languages.
  *
  * @example
  * ```tsx
- * const { localLanguage, setLocalLanguage, translationStatus, save, reset } = useLanguage();
+ * const { currentLang, translationStatus, changeLanguage, availableLanguages } = useLanguage();
  *
- * <select value={localLanguage} onChange={(e) => setLocalLanguage(e.target.value)}>
+ * <select value={currentLang} onChange={(e) => changeLanguage(e.target.value)}>
  *   {availableLanguages.map((l) => <option key={l.code} value={l.code}>{l.name}</option>)}
  * </select>
  * {translationStatus === 'processing' && <Spinner />}
@@ -26,68 +26,54 @@ type TranslationStatus = 'processing' | 'available' | 'failed';
 export function useLanguage() {
 	const { lang } = useSnapshot(kmClient.metaStore.proxy);
 
-	const [localLanguage, setLocalLanguage] = useState(lang);
-	const [requestedLang, setRequestedLang] = useState(lang);
 	const [translationStatus, setTranslationStatus] =
 		useState<TranslationStatus>('available');
+	const [pendingLang, setPendingLang] = useState<string | null>(null);
 
-	// Request translation when language selection changes
+	// Poll translation status while processing
 	useEffect(() => {
-		if (!localLanguage || requestedLang === localLanguage) {
-			return;
-		}
-
-		setRequestedLang(localLanguage);
-		setTranslationStatus('processing');
-
-		kmClient.i18n.requestTranslation(localLanguage).then((status) => {
-			setTranslationStatus(status);
-		});
-	}, [requestedLang, localLanguage]);
-
-	// Poll translation status every 2s while processing
-	useEffect(() => {
-		if (!requestedLang || translationStatus !== 'processing') {
+		if (!pendingLang || translationStatus !== 'processing') {
 			return;
 		}
 
 		const checkInterval = setInterval(async () => {
-			const status = await kmClient.i18n.getTranslationStatus(requestedLang);
+			const status = await kmClient.i18n.getTranslationStatus(pendingLang);
 			setTranslationStatus(status);
 
-			if (status !== 'processing') {
+			if (status === 'available') {
+				await gameConfigActions.setLanguage(pendingLang);
+				setPendingLang(null);
+				clearInterval(checkInterval);
+			} else if (status === 'failed') {
+				setPendingLang(null);
 				clearInterval(checkInterval);
 			}
 		}, 2000);
 
 		return () => clearInterval(checkInterval);
-	}, [requestedLang, translationStatus]);
+	}, [pendingLang, translationStatus]);
 
-	// Sync local state when store changes (e.g., from another client)
-	useEffect(() => {
-		setLocalLanguage(lang);
-	}, [lang]);
+	const changeLanguage = async (newLang: string) => {
+		if (newLang === kmClient.metaStore.proxy.lang) return;
 
-	const hasChanges = localLanguage !== lang;
+		setTranslationStatus('processing');
+		setPendingLang(newLang);
 
-	const save = useCallback(async () => {
-		if (hasChanges && localLanguage) {
-			await gameConfigActions.setLanguage(localLanguage);
+		const status = await kmClient.i18n.requestTranslation(newLang);
+		setTranslationStatus(status);
+
+		if (status === 'available') {
+			await gameConfigActions.setLanguage(newLang);
+			setPendingLang(null);
+		} else if (status === 'failed') {
+			setPendingLang(null);
 		}
-	}, [hasChanges, localLanguage]);
-
-	const reset = useCallback(() => {
-		setLocalLanguage(kmClient.metaStore.proxy.lang);
-	}, []);
+	};
 
 	return {
 		currentLang: lang,
-		localLanguage,
-		setLocalLanguage,
 		translationStatus,
-		hasChanges,
-		save,
-		reset,
+		changeLanguage,
 		availableLanguages: SUPPORTED_LANGUAGES
 	};
 }

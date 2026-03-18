@@ -1,11 +1,11 @@
 import { PlayerMenu } from '@/components/menu';
 import { NameLabel } from '@/components/name-label';
-import { withKmProviders } from '@kokimoki/react-components';
+import { withKmProviders } from '@/components/with-km-providers';
 import { withModeGuard } from '@/components/with-mode-guard';
 import { useGlobalController } from '@/hooks/useGlobalController';
 import { useMeta } from '@/hooks/useMeta';
-import { usePlayerViewRouter } from '@/hooks/usePlayerViewRouter';
 import { PlayerLayout } from '@/layouts';
+import { localPlayerActions } from '@/state/actions/local-player-actions';
 import { gameSessionStore } from '@/state/stores/game-session-store';
 import { localPlayerStore } from '@/state/stores/local-player-store';
 import { CreateProfileView } from '@/views/create-profile-view';
@@ -17,10 +17,18 @@ import * as React from 'react';
 const App: React.FC = () => {
 	useMeta();
 	useGlobalController();
-	usePlayerViewRouter();
 
 	const { name, currentView } = useSnapshot(localPlayerStore.proxy);
 	const { started } = useSnapshot(gameSessionStore.proxy);
+
+	// Route player view based on game state
+	React.useEffect(() => {
+		if (started) {
+			localPlayerActions.setCurrentView('game-state');
+		} else {
+			localPlayerActions.setCurrentView('lobby');
+		}
+	}, [started]);
 
 	if (!name) {
 		return (

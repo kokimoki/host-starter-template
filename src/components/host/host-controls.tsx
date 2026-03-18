@@ -1,14 +1,25 @@
-import { useHostControls } from '@/hooks/useHostControls';
+import { useLanguage } from '@/hooks/useLanguage';
+import { kmClient } from '@/services/km-client';
+import { gameConfigActions } from '@/state/actions/game-config-actions';
+import { gameConfigStore } from '@/state/stores/game-config-store';
+import { gameSessionStore } from '@/state/stores/game-session-store';
+import { useSnapshot } from '@kokimoki/app';
 import { useTranslation } from 'react-i18next';
 
 /**
  * Example component demonstrating how to create host-specific controls.
- * Shows usage of game config store and host actions.
+ * Shows usage of game config store and host actions with auto-save pattern.
  * Modify or replace with your own implementation.
  */
 export function HostControls() {
 	const { t } = useTranslation();
-	const controls = useHostControls();
+	const { title } = useSnapshot(kmClient.metaStore.proxy);
+	const { gameDuration, showPresenterQr } = useSnapshot(gameConfigStore.proxy);
+	const { started } = useSnapshot(gameSessionStore.proxy);
+	const { currentLang, translationStatus, changeLanguage, availableLanguages } =
+		useLanguage();
+
+	const isDisabled = started;
 
 	return (
 		<>
@@ -18,21 +29,21 @@ export function HostControls() {
 				</label>
 				<select
 					id="language"
-					value={controls.language.localLanguage}
-					disabled={controls.isDisabled}
-					onChange={(e) => controls.language.setLocalLanguage(e.target.value)}
+					value={currentLang}
+					disabled={isDisabled || translationStatus === 'processing'}
+					onChange={(e) => changeLanguage(e.target.value)}
 					className="km-input"
 				>
-					{controls.language.availableLanguages.map((lang) => (
+					{availableLanguages.map((lang) => (
 						<option key={lang.code} value={lang.code}>
 							{lang.label}
 						</option>
 					))}
 				</select>
-				{controls.language.translationStatus === 'processing' && (
+				{translationStatus === 'processing' && (
 					<span className="text-sm text-yellow-500">Loading...</span>
 				)}
-				{controls.language.translationStatus === 'failed' && (
+				{translationStatus === 'failed' && (
 					<span className="text-sm text-red-500">Failed</span>
 				)}
 			</div>
@@ -43,10 +54,15 @@ export function HostControls() {
 				<input
 					id="title"
 					type="text"
-					value={controls.localTitle}
+					defaultValue={title || ''}
 					placeholder={t('meta:title')}
-					onChange={(e) => controls.setLocalTitle(e.target.value)}
-					disabled={controls.isDisabled}
+					onBlur={(e) => {
+						const newTitle = e.target.value;
+						if (newTitle !== title) {
+							gameConfigActions.setTitle(newTitle);
+						}
+					}}
+					disabled={isDisabled}
 					className="km-input"
 				/>
 			</div>
@@ -60,42 +76,22 @@ export function HostControls() {
 					type="number"
 					min={1}
 					max={60}
-					value={controls.localDuration}
-					onChange={(e) => controls.setLocalDuration(Number(e.target.value))}
-					disabled={controls.isDisabled}
+					defaultValue={gameDuration}
+					onBlur={(e) => {
+						const newDuration = Number(e.target.value);
+						if (newDuration !== gameDuration) {
+							gameConfigActions.changeGameDuration(newDuration);
+						}
+					}}
+					disabled={isDisabled}
 					className="km-input"
 				/>
 			</div>
 
-			<div className="flex items-center gap-4">
-				<button
-					type="button"
-					className="km-btn-primary"
-					onClick={controls.save}
-					disabled={
-						controls.isDisabled ||
-						!controls.hasChanges ||
-						controls.language.translationStatus === 'processing'
-					}
-				>
-					{t('common:saveButton')}
-				</button>
-				<button
-					type="button"
-					className="km-btn-secondary"
-					onClick={controls.reset}
-					disabled={controls.isDisabled || !controls.hasChanges}
-				>
-					{t('common:resetButton')}
-				</button>
-			</div>
-
 			<button
 				type="button"
-				className={
-					controls.showPresenterQr ? 'km-btn-neutral' : 'km-btn-secondary'
-				}
-				onClick={controls.togglePresenterQr}
+				className={showPresenterQr ? 'km-btn-neutral' : 'km-btn-secondary'}
+				onClick={gameConfigActions.togglePresenterQr}
 			>
 				{t('host:togglePresenterQrButton')}
 			</button>

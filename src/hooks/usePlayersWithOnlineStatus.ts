@@ -1,6 +1,5 @@
 import { playersStore } from '@/state/stores/players-store';
 import { useSnapshot } from '@kokimoki/app';
-import { useStoreConnections } from './useStoreConnections';
 
 /**
  * Hook to get the list of players with their online status and the count of online players
@@ -12,7 +11,9 @@ import { useStoreConnections } from './useStoreConnections';
  */
 export function usePlayersWithOnlineStatus() {
 	const { players } = useSnapshot(playersStore.proxy);
-	const { clientIds: onlinePlayerIds } = useStoreConnections(playersStore);
+	const { clientIds } = useSnapshot(playersStore.connections);
+
+	const onlinePlayerIds = new Set(clientIds);
 
 	const playersWithOnlineStatus = Object.entries(players).map(
 		([id, player]) => ({
