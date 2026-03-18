@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Update `@kkokimoki/react-components` to `*`
+- Update `@kokimoki/react-components` to `*`
 - Host controls use auto-save on blur instead of save/reset buttons
 - Moved timer display from host to presenter screen
 - Updated `languages.ts` to match `KmSelectOption` shape

@@ -5,6 +5,7 @@ import { gameConfigStore } from '@/state/stores/game-config-store';
 import { gameSessionStore } from '@/state/stores/game-session-store';
 import { useSnapshot } from '@kokimoki/app';
 import { KmSelect } from '@kokimoki/react-components';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 /**
@@ -16,11 +17,16 @@ export function HostControls() {
 	const { t } = useTranslation();
 	const { title } = useSnapshot(kmClient.metaStore.proxy);
 	const { gameDuration, showPresenterQr } = useSnapshot(gameConfigStore.proxy);
-	const { started } = useSnapshot(gameSessionStore.proxy);
+	const { started: isDisabled } = useSnapshot(gameSessionStore.proxy);
 	const { currentLang, translationStatus, changeLanguage, availableLanguages } =
 		useLanguage();
 
-	const isDisabled = started;
+	const [localTitle, setLocalTitle] = useState(title || '');
+	const [localDuration, setLocalDuration] = useState(gameDuration);
+
+	// Sync local state when store changes (e.g., from another client)
+	useEffect(() => setLocalTitle(title || ''), [title]);
+	useEffect(() => setLocalDuration(gameDuration), [gameDuration]);
 
 	return (
 		<>
@@ -51,12 +57,12 @@ export function HostControls() {
 				<input
 					id="title"
 					type="text"
-					defaultValue={title || ''}
+					value={localTitle}
 					placeholder={t('meta:title')}
-					onBlur={(e) => {
-						const newTitle = e.target.value;
-						if (newTitle !== title) {
-							gameConfigActions.setTitle(newTitle);
+					onChange={(e) => setLocalTitle(e.target.value)}
+					onBlur={() => {
+						if (localTitle !== title) {
+							gameConfigActions.setTitle(localTitle);
 						}
 					}}
 					disabled={isDisabled}
@@ -73,11 +79,11 @@ export function HostControls() {
 					type="number"
 					min={1}
 					max={60}
-					defaultValue={gameDuration}
-					onBlur={(e) => {
-						const newDuration = Number(e.target.value);
-						if (newDuration !== gameDuration) {
-							gameConfigActions.changeGameDuration(newDuration);
+					value={localDuration}
+					onChange={(e) => setLocalDuration(Number(e.target.value))}
+					onBlur={() => {
+						if (localDuration !== gameDuration) {
+							gameConfigActions.changeGameDuration(localDuration);
 						}
 					}}
 					disabled={isDisabled}
