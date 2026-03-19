@@ -4,12 +4,7 @@ import {
 	HostPresenterMain,
 	HostPresenterRoot
 } from './host-presenter';
-import {
-	PlayerFooter,
-	PlayerHeader,
-	PlayerMain,
-	PlayerRoot
-} from './player';
+import { PlayerFooter, PlayerHeader, PlayerMain, PlayerRoot } from './player';
 
 /**
  * Layout components for the `host` and `presenter` modes

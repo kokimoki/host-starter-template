@@ -1,10 +1,10 @@
 import { kmClient } from '@/services/km-client';
 import { gameConfigStore } from '@/state/stores/game-config-store';
 import { gameSessionStore } from '@/state/stores/game-session-store';
+import { minutesToMs } from '@/utils/minutesToMs';
 import { useSnapshot } from '@kokimoki/app';
 import { useEffect } from 'react';
 import { useServerTimer } from './useServerTime';
-import { useStoreConnections } from './useStoreConnections';
 
 /**
  * Hook that maintains a single global controller connection across all clients.
@@ -43,22 +43,25 @@ import { useStoreConnections } from './useStoreConnections';
  */
 export function useGlobalController(): boolean {
 	const { controllerConnectionId } = useSnapshot(gameSessionStore.proxy);
-	const { connectionIds } = useStoreConnections(gameSessionStore);
+	const { connectionIds } = useSnapshot(gameSessionStore.connections);
 
 	const isGlobalController = controllerConnectionId === kmClient.connectionId;
+
 	const serverTime = useServerTimer(1000); // tick every second
 
 	// Maintain connection that is assigned to be the global controller
 	useEffect(() => {
+		const activeConnectionIds = new Set(connectionIds);
+
 		// Check if global controller is online
-		if (connectionIds.has(controllerConnectionId)) {
+		if (activeConnectionIds.has(controllerConnectionId)) {
 			return;
 		}
 
 		// Select new host, sorting by connection id
 		kmClient
 			.transact([gameSessionStore], ([gameSessionState]) => {
-				const connectionIdsArray = Array.from(connectionIds);
+				const connectionIdsArray = Array.from(activeConnectionIds);
 				connectionIdsArray.sort();
 				gameSessionState.controllerConnectionId = connectionIdsArray[0] || '';
 			})
@@ -83,7 +86,7 @@ export function useGlobalController(): boolean {
 						return;
 					}
 
-					const gameDurationMs = gameConfigState.gameDuration * 60 * 1000;
+					const gameDurationMs = minutesToMs(gameConfigState.gameDuration);
 
 					// End the game if duration has elapsed
 					if (serverTime - gameSessionState.startTimestamp > gameDurationMs) {

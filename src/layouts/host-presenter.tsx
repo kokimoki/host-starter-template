@@ -1,5 +1,5 @@
 import { Logo } from '@/components/logo';
-import { cn } from '@/utils/cn';
+import { cn } from '@kokimoki/react-components/utils';
 import * as React from 'react';
 
 interface LayoutProps {

@@ -1,0 +1,9 @@
+{
+	"startButton": "Start Game",
+	"stopButton": "Stop Game",
+	"online": "Online",
+	"offline": "Offline",
+	"loading": "Loading...",
+	"languageLabel": "Language",
+	"playerNameLabel": "Name:"
+}

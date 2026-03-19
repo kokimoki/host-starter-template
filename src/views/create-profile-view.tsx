@@ -30,12 +30,12 @@ export function CreateProfileView() {
 	return (
 		<div className="mx-auto w-full max-w-96 space-y-12">
 			<article className="prose text-center">
-				<Markdown>{t('ui:createProfileMd')}</Markdown>
+				<Markdown>{t('player:createProfileMd')}</Markdown>
 			</article>
 			<form onSubmit={handleSubmit} className="grid gap-4">
 				<input
 					type="text"
-					placeholder={t('ui:playerNamePlaceholder')}
+					placeholder={t('player:playerNamePlaceholder')}
 					value={name}
 					onChange={(e) => setName(e.target.value)}
 					disabled={isLoading}
@@ -52,10 +52,10 @@ export function CreateProfileView() {
 					{isLoading ? (
 						<>
 							<span className="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-b-2 border-white"></span>
-							{t('ui:loading')}
+							{t('common:loading')}
 						</>
 					) : (
-						t('ui:playerNameButton')
+						t('player:playerNameButton')
 					)}
 				</button>
 			</form>

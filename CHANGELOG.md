@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [1.1.2] - 2026-03-19
+
+### Added
+
+- `KmSelect` component integration for language selector
+- `KmTimeCountdown` and `KmProgressBar` on presenter screen
+- Improved JSDoc across hooks and actions
+
+### Changed
+
+- Update `@kokimoki/react-components` to `*`
+- Host controls use auto-save on blur instead of save/reset buttons
+- Moved timer display from host to presenter screen
+- Updated `languages.ts` to match `KmSelectOption` shape
+- Updated `AGENTS.md` with current patterns
+
+### Removed
+
+- `useStoreConnections` hooks
+- `saveButton` / `resetButton` i18n keys
+
 ## [1.1.1] - 2026-03-13
 
 ### Added

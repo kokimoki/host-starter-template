@@ -21,8 +21,8 @@ const App: React.FC = () => {
 	const { name, currentView } = useSnapshot(localPlayerStore.proxy);
 	const { started } = useSnapshot(gameSessionStore.proxy);
 
+	// Route player view based on game state
 	React.useEffect(() => {
-		// While game start, force view to 'shared-state', otherwise to 'lobby'
 		if (started) {
 			localPlayerActions.setCurrentView('game-state');
 		} else {

@@ -1,4 +1,5 @@
 import { HostControls } from '@/components/host/host-controls';
+import { withKmProviders } from '@/components/with-km-providers';
 import {
 	type ModeGuardProps,
 	withModeGuard
@@ -9,8 +10,8 @@ import { HostPresenterLayout } from '@/layouts';
 import { kmClient } from '@/services/km-client';
 import { gameSessionActions } from '@/state/actions/game-session-actions';
 import { gameSessionStore } from '@/state/stores/game-session-store';
-import { GameStateView } from '@/views/game-state-view';
 import { useSnapshot } from '@kokimoki/app';
+import { useKmModal } from '@kokimoki/react-components';
 import { CirclePlay, CircleStop, SquareArrowOutUpRight } from 'lucide-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -21,6 +22,7 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 	useGlobalController();
 
 	const { started } = useSnapshot(gameSessionStore.proxy);
+	const { openAlertDialog } = useKmModal();
 	const [buttonCooldown, setButtonCooldown] = React.useState(true);
 
 	// Button cooldown to prevent accidentally spamming start/stop
@@ -42,13 +44,19 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 		playerCode: clientContext.playerCode
 	});
 
+	const handleStopGame = () => {
+		openAlertDialog({
+			title: t('host:stopGameConfirmTitle'),
+			description: t('host:stopGameConfirmDescription'),
+			onConfirm: gameSessionActions.stopGame
+		});
+	};
+
 	return (
 		<HostPresenterLayout.Root>
 			<HostPresenterLayout.Header />
 			<HostPresenterLayout.Main>
 				<div className="space-y-4">
-					<GameStateView />
-
 					<HostControls />
 				</div>
 			</HostPresenterLayout.Main>
@@ -63,18 +71,18 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 							disabled={buttonCooldown}
 						>
 							<CirclePlay className="size-5" />
-							{t('ui:startButton')}
+							{t('common:startButton')}
 						</button>
 					)}
 					{started && (
 						<button
 							type="button"
 							className="km-btn-error"
-							onClick={gameSessionActions.stopGame}
+							onClick={handleStopGame}
 							disabled={buttonCooldown}
 						>
 							<CircleStop className="size-5" />
-							{t('ui:stopButton')}
+							{t('common:stopButton')}
 						</button>
 					)}
 
@@ -84,7 +92,7 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 						rel="noreferrer"
 						className="km-btn-secondary"
 					>
-						{t('ui:playerLinkLabel')}
+						{t('host:playerLinkLabel')}
 						<SquareArrowOutUpRight className="size-5" />
 					</a>
 
@@ -94,7 +102,7 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 						rel="noreferrer"
 						className="km-btn-secondary"
 					>
-						{t('ui:presenterLinkLabel')}
+						{t('host:presenterLinkLabel')}
 						<SquareArrowOutUpRight className="size-5" />
 					</a>
 				</div>
@@ -103,4 +111,4 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 	);
 }
 
-export default withModeGuard(App, 'host');
+export default withKmProviders(withModeGuard(App, 'host'));

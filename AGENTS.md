@@ -46,7 +46,8 @@ src/
     stores/       # Kokimoki stores (global + local)
   views/          # Page-level components
   types/          # TypeScript interfaces
-  utils/          # Utility functions (cn.ts, etc.)
+  utils/          # Utility functions
+  constants/      # Static constants and configuration data (e.g., languages.ts)
 ```
 
 ## State Management
@@ -93,17 +94,37 @@ Modes defined in `kokimoki.config.ts` via `deployCodes`. Access via `kmClient.cl
 
 ## Translations (i18n)
 
-**CRITICAL:** Never hardcode text. Add all strings to `src/i18n/en/common.json`.
+**CRITICAL:** Never hardcode text. Use domain-driven namespaces in `src/i18n/en/`.
+
+### Namespaces
+
+| Namespace   | File             | Purpose                                                        |
+| ----------- | ---------------- | -------------------------------------------------------------- |
+| `common`    | `common.json`    | Shared UI labels: buttons, status indicators, form labels      |
+| `host`      | `host.json`      | Host dashboard: game config, link labels, confirmation dialogs |
+| `player`    | `player.json`    | Player flows: profile creation, menu/help content, lobby       |
+| `presenter` | `presenter.json` | Presenter screen: connections, shared state descriptions       |
+| `meta`      | `meta.json`      | App metadata: title, description, OG tags                      |
 
 ```tsx
 import { useTranslation } from 'react-i18next';
 
 const { t } = useTranslation();
-return <button>{t('ui:startButton')}</button>;
+
+// Common namespace
+t('common:startButton');
+t('common:loading');
+
+// Domain-specific namespaces
+t('host:gameTitleLabel');
+t('player:createProfileMd');
+t('presenter:connectionsMd');
+t('meta:title');
 ```
 
-- Use `Md` suffix for Markdown content (e.g., `welcomeMessageMd`)
+- Use `Md` suffix for Markdown content (e.g., `gameLobbyMd`)
 - Render Markdown with `react-markdown` + `prose` class
+- Place keys in the namespace matching the mode/domain that uses them
 
 ## Timers & Links
 
@@ -111,13 +132,17 @@ return <button>{t('ui:startButton')}</button>;
 // Synced timer
 const serverTime = useServerTimer();
 
+// Game timer (composes server time via useServerTimer + stores)
+const { remainingMs, elapsedMs, totalMs, isRunning } = useGameTimer();
+
 // Generate join links
 const playerLink = kmClient.generateLink(kmClient.clientContext.playerCode, { mode: 'player' });
 
 // UI components from @kokimoki/react-components
-<KmProgressBar currentValue={elapsedMs} maxValue={durationMs} />
-<KmQrCode value={playerLink} />
-<KmCopyButton text={playerLink} />
+<KmTimeCountdown ms={remainingMs} display="ms" partClassName="tabular-nums" />
+<KmProgressBar currentValue={elapsedMs} maxValue={totalMs} />
+<KmQrCode data={playerLink} />
+<KmSelect options={languages} value={currentLang} onValueChange={changeLanguage} loading={isTranslating} />
 ```
 
 ## Global Controller
@@ -141,13 +166,13 @@ const isHost = kmClient.clientContext.mode === 'host';
   isHost && <button onClick={gameSessionActions.startGame}>Start</button>;
 }
 
-// Player view routing
+// Player view routing via local store
 const { currentView } = useSnapshot(localPlayerStore.proxy);
 {
   currentView === 'lobby' && <LobbyView />;
 }
 {
-  currentView === 'game' && <GameView />;
+  currentView === 'game-state' && <GameStateView />;
 }
 ```
 
@@ -161,7 +186,7 @@ Tailwind CSS with theme customization in `src/global.css`:
 }
 ```
 
-Use `cn()` utility for conditional classes.
+Use `cn()` from `@kokimoki/react-components/utils` utility for conditional classes.
 
 ## Skills
 

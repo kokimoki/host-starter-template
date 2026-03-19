@@ -23,7 +23,11 @@ export interface UseDynamicStoreResult<T extends object> {
 }
 
 /**
- * Hook to manage dynamic Kokimoki stores with connection state
+ * Hook to manage dynamic Kokimoki stores with connection state.
+ *
+ * This hook is not used in the starter template but demonstrates dynamic store
+ * lifecycle management for room-based patterns. Use it when you need isolated
+ * state per room/group (e.g., team channels, breakout rooms).
  *
  * @param roomName The unique name of the Kokimoki store (room)
  * @param initialState  The initial state for the Kokimoki store

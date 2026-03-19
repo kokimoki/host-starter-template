@@ -7,15 +7,15 @@ import type { ComponentType } from 'react';
 
 /**
  * HOC that wraps a component with all Kokimoki shared providers.
- * Providers included: KmAudioProvider, KmConfettiProvider, KmModalProvider
+ * Includes: KmAudioPlayerProvider, KmConfettiProvider, KmModalProvider.
  *
- * Example component demonstrating how to wrap components with providers.
- * Modify or replace with your own implementation.
- *
- * @param Component The component to be wrapped with Kokimoki providers.
+ * @param Component - The component to wrap with providers.
+ * @returns A new component wrapped with all Kokimoki providers.
  *
  * @example
+ * ```tsx
  * export default withKmProviders(App);
+ * ```
  */
 export function withKmProviders<P extends object>(Component: ComponentType<P>) {
 	const displayName = Component.displayName || Component.name || 'Component';
