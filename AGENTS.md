@@ -122,6 +122,7 @@ t('presenter:connectionsMd');
 t('meta:title');
 ```
 
+- The namespaces above are defaults — create additional namespaces as needed (e.g., `quiz.json`, `leaderboard.json`) for distinct feature domains
 - Use `Md` suffix for Markdown content (e.g., `gameLobbyMd`)
 - Render Markdown with `react-markdown` + `prose` class
 - Place keys in the namespace matching the mode/domain that uses them
@@ -190,4 +191,4 @@ Use `cn()` from `@kokimoki/react-components/utils` utility for conditional class
 
 ## Skills
 
-Use relevant skills from `./skills` directory.
+Use relevant skills located in `.claude/skills/` directory for common tasks.
