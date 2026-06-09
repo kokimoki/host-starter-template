@@ -58,6 +58,7 @@ export function useDynamicStore<T extends object>(
 	const entry = kokimokiStores.get(roomName)!;
 	const store = entry.store as KokimokiStore<T>;
 
+	// eslint-disable-next-line react-hooks/immutability
 	useEffect(() => {
 		// Cancel any pending cleanup (handles React Strict Mode double-mounting)
 		if (entry.cleanupTimeout) {
@@ -71,6 +72,7 @@ export function useDynamicStore<T extends object>(
 		// Join store if not already joined
 		if (!entry.joined) {
 			entry.joined = true;
+			// eslint-disable-next-line react-hooks/set-state-in-effect
 			setConnection({
 				connecting: true,
 				connected: false

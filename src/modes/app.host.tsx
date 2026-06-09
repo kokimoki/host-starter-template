@@ -23,17 +23,36 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 
 	const { started } = useSnapshot(gameSessionStore.proxy);
 	const { openAlertDialog } = useKmModal();
-	const [buttonCooldown, setButtonCooldown] = React.useState(true);
+	const [buttonCooldown, setButtonCooldown] = React.useState(false);
+	const cooldownTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(
+		null
+	);
+
+	React.useEffect(() => {
+		return () => {
+			if (cooldownTimeoutRef.current) {
+				clearTimeout(cooldownTimeoutRef.current);
+			}
+		};
+	}, []);
 
 	// Button cooldown to prevent accidentally spamming start/stop
-	React.useEffect(() => {
-		setButtonCooldown(true);
-		const timeout = setTimeout(() => {
-			setButtonCooldown(false);
-		}, 1000);
+	const startButtonCooldown = () => {
+		if (cooldownTimeoutRef.current) {
+			clearTimeout(cooldownTimeoutRef.current);
+		}
 
-		return () => clearTimeout(timeout);
-	}, [started]);
+		setButtonCooldown(true);
+		cooldownTimeoutRef.current = setTimeout(() => {
+			setButtonCooldown(false);
+			cooldownTimeoutRef.current = null;
+		}, 1000);
+	};
+
+	const handleStartGame = () => {
+		startButtonCooldown();
+		gameSessionActions.startGame();
+	};
 
 	const playerLink = kmClient.generateLink(clientContext.playerCode, {
 		mode: 'player'
@@ -45,6 +64,7 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 	});
 
 	const handleStopGame = () => {
+		startButtonCooldown();
 		openAlertDialog({
 			title: t('host:stopGameConfirmTitle'),
 			description: t('host:stopGameConfirmDescription'),
@@ -67,7 +87,7 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 						<button
 							type="button"
 							className="km-btn-primary"
-							onClick={gameSessionActions.startGame}
+							onClick={handleStartGame}
 							disabled={buttonCooldown}
 						>
 							<CirclePlay className="size-5" />

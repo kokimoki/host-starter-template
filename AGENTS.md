@@ -1,102 +1,97 @@
-# AGENTS.md
+# Repository Guidelines
 
-## Project Overview
+## Kokimoki Docs
 
-Uses Kokimoki SDK with three display modes:
+Always check the Kokimoki SDK documentation before changing SDK usage. Start with the relevant package `llms.txt` file:
 
-- **Host** (`src/modes/app.host.tsx`) - Desktop control panel for game management
-- **Player** (`src/modes/app.player.tsx`) - Mobile-first interactive gameplay
-- **Presenter** (`src/modes/app.presenter.tsx`) - Large screen display (TV/projector)
+- `node_modules/@kokimoki/app/llms.txt` — runtime SDK: client, stores, transactions, snapshots, dynamic stores, server time, AI, storage, i18n, leaderboard.
+- `node_modules/@kokimoki/kit/llms.txt` — Vite plugin, deploy codes, dev view, store schemas, i18n config.
+- `node_modules/@kokimoki/react-components/llms.txt` — `Km*` UI components, providers, hooks, and utilities.
 
-Kokimoki SDK docs:
-
-- [@kokimoki/app](node_modules/@kokimoki/app/llms.txt) — core SDK docs
-- [@kokimoki/kit](node_modules/@kokimoki/kit/llms.txt) — Vite plugin & dev tools
-- [@kokimoki/react-components](node_modules/@kokimoki/react-components/dist/llms.txt) — UI components
-
-## Commands
-
-- `npm install` - Install dependencies (Node v22+)
-- `npm run dev` - Development server with HMR
-- `npm run build` - TypeScript check + production build
-- `npm run lint` - ESLint
-- `npm run format` - Prettier
-
-## Code Style
-
-- **Named exports only** - `export const Component` or `export function hook`
-- **Use `@/` path alias** - `import { View } from '@/views/view'`
-- **Filenames**: `kebab-case` everywhere except `src/utils/` and `src/hooks/` (use `camelCase`)
-- **Always check `@kokimoki/react-components`** for existing UI components before creating new ones
-- **Prefer `lucide-react`** icons over custom SVGs
+Use the detailed `docs/` files referenced by each `llms.txt` when implementing or changing that area.
 
 ## Project Structure
+
+This Kokimoki app has three display modes:
+
+- `src/modes/app.host.tsx` — desktop host control panel.
+- `src/modes/app.player.tsx` — mobile-first player experience.
+- `src/modes/app.presenter.tsx` — large-screen presenter display.
 
 ```
 src/
   components/     # Reusable UI components
   hooks/          # Custom React hooks
-  i18n/           # Translation files (add ALL user-facing text here)
+  i18n/           # Translation files; add all user-facing text here
   layouts/        # PlayerLayout, HostPresenterLayout compound components
   modes/          # Entry points: app.host.tsx, app.player.tsx, app.presenter.tsx
   services/       # kmClient instance
   state/
     actions/      # Store mutation functions
     schemas/      # Zod schemas for stores
-    stores/       # Kokimoki stores (global + local)
+    stores/       # Kokimoki stores: global, local, and dynamic patterns
   views/          # Page-level components
   types/          # TypeScript interfaces
   utils/          # Utility functions
-  constants/      # Static constants and configuration data (e.g., languages.ts)
+  constants/      # Static constants and configuration data
 ```
 
-## State Management
+## Development Commands
 
-### Stores
+Use scripts from `package.json`:
 
-- **Global stores** (`kmClient.store`) - Synced across all clients
-- **Local stores** (`kmClient.localStore`) - Device-only, not synced
-- **Dynamic stores** (`useDynamicStore` hook) - Room-based isolated state
+- `npm install` — install dependencies; Node 22+ required.
+- `npm run dev` — start Vite dev server with Kokimoki dev view.
+- `npm run build` — run lint, typecheck, and production build.
+- `npm run lint` — run ESLint.
+- `npm run format` — run Prettier.
 
-### Key Files
+Before handoff, run `npm run build` when code changes are substantial. For focused edits, at least run the relevant check if feasible.
 
-- `src/state/stores/` - Store definitions with JSDoc
-- `src/state/actions/` - Mutation functions
-- `src/state/schemas/` - Zod schemas (import `z` from `@kokimoki/app`)
-- `kokimoki.config.ts` - Register stores with schemas
+## Coding Rules
 
-### Transactions
+- Use named exports only: `export const Component` or `export function hook`.
+- Use the `@/` path alias for source imports.
+- Use `kebab-case` filenames except in `src/hooks/` and `src/utils/`, where `camelCase` is allowed.
+- Check `@kokimoki/react-components` before creating custom UI components.
+- Prefer `lucide-react` icons over custom SVGs.
+- Use `cn()` from `@kokimoki/react-components/utils` for conditional classes.
+- Tailwind CSS theme customization lives in `src/global.css`.
+- Keep unrelated refactors out of feature changes.
 
-```typescript
-// Single store
-await kmClient.transact([gameSessionStore], ([state]) => {
-  state.started = true;
-  state.startTimestamp = kmClient.serverTimestamp();
-});
+## State & Actions
 
-// Multi-store atomic update
-await kmClient.transact(
-  [localPlayerStore, playersStore],
-  ([local, players]) => {
-    local.name = name;
-    players.players[kmClient.id] = { name };
-  }
-);
-```
+- Use `kmClient.store()` for synced global state.
+- Use `kmClient.localStore()` for device-only state such as current player profile, UI preferences, and draft inputs.
+- Use the `useDynamicStore` hook with `kmClient.join()` / `kmClient.leave()` for room, team, or group isolation.
+- Register store schemas in `kokimoki.config.ts`.
+- Put mutation logic in `src/state/actions/`.
+- Use `kmClient.transact()` for all store writes.
+- Use `useSnapshot(store.proxy)` in React components.
+- Use `snapshot(store.proxy)` outside components; do not read `store.proxy.field` directly in actions or handlers.
+- Use `kmClient.serverTimestamp()` for timers, scoring, and ordering logic.
+
+## Global Controller
+
+Use `useGlobalController()` for logic that should run on one device only, such as timers, role assignment, physics, or other singleton coordination. See `src/hooks/useGlobalController.ts`.
 
 ## Modes & Layouts
 
-Modes defined in `kokimoki.config.ts` via `deployCodes`. Access via `kmClient.clientContext.mode`.
+Modes are defined in `kokimoki.config.ts` via `deployCodes`. Read the active mode from `kmClient.clientContext.mode`.
 
-- **Player**: Mobile-first → `PlayerLayout` compound component
-- **Host**: Desktop control → `HostPresenterLayout` compound component
-- **Presenter**: Large screen → `HostPresenterLayout` compound component
+- Player mode should use `PlayerLayout`.
+- Host and presenter modes should use `HostPresenterLayout`.
+- Generate player and presenter links with `kmClient.generateLink()` from the relevant deploy code in `clientContext`.
+
+## Timers & Links
+
+- Use `kmClient.serverTimestamp()` when storing start times or event times that must be consistent across clients.
+- Use `useServerTimer()` for synced ticking time, and `useGameTimer()` for game countdown/progress state.
+- Use `kmClient.generateLink()` with `clientContext.playerCode` / `clientContext.presenterCode` for mode links, and use `KmQrCode` for join QR codes.
 
 ## Translations (i18n)
 
-**CRITICAL:** Never hardcode text. Use domain-driven namespaces in `src/i18n/en/`.
-
-### Namespaces
+Do not hardcode user-facing text. Use domain-driven namespaces in `src/i18n/en/`, and keep namespaces small enough that each file has a clear owner and purpose.
 
 | Namespace   | File             | Purpose                                                        |
 | ----------- | ---------------- | -------------------------------------------------------------- |
@@ -106,89 +101,10 @@ Modes defined in `kokimoki.config.ts` via `deployCodes`. Access via `kmClient.cl
 | `presenter` | `presenter.json` | Presenter screen: connections, shared state descriptions       |
 | `meta`      | `meta.json`      | App metadata: title, description, OG tags                      |
 
-```tsx
-import { useTranslation } from 'react-i18next';
+Create additional domain namespaces when a feature grows beyond these defaults.
 
-const { t } = useTranslation();
-
-// Common namespace
-t('common:startButton');
-t('common:loading');
-
-// Domain-specific namespaces
-t('host:gameTitleLabel');
-t('player:createProfileMd');
-t('presenter:connectionsMd');
-t('meta:title');
-```
-
-- The namespaces above are defaults — create additional namespaces as needed (e.g., `quiz.json`, `leaderboard.json`) for distinct feature domains
-- Use `Md` suffix for Markdown content (e.g., `gameLobbyMd`)
-- Render Markdown with `react-markdown` + `prose` class
-- Place keys in the namespace matching the mode/domain that uses them
-
-## Timers & Links
-
-```tsx
-// Synced timer
-const serverTime = useServerTimer();
-
-// Game timer (composes server time via useServerTimer + stores)
-const { remainingMs, elapsedMs, totalMs, isRunning } = useGameTimer();
-
-// Generate join links
-const playerLink = kmClient.generateLink(kmClient.clientContext.playerCode, { mode: 'player' });
-
-// UI components from @kokimoki/react-components
-<KmTimeCountdown ms={remainingMs} display="ms" partClassName="tabular-nums" />
-<KmProgressBar currentValue={elapsedMs} maxValue={totalMs} />
-<KmQrCode data={playerLink} />
-<KmSelect options={languages} value={currentLang} onValueChange={changeLanguage} loading={isTranslating} />
-```
-
-## Global Controller
-
-`useGlobalController()` hook maintains a single controller for logic that should run on ONE device only (timers, role assignment, physics). See `src/hooks/useGlobalController.ts`.
-
-## Common Patterns
-
-```tsx
-// Wait for game start
-const { started } = useSnapshot(gameSessionStore.proxy);
-if (!started) return <WaitingView />;
-
-// Player name entry flow
-const { name } = useSnapshot(localPlayerStore.proxy);
-if (!name) return <CreateProfileView />;
-
-// Host-only UI
-const isHost = kmClient.clientContext.mode === 'host';
-{
-  isHost && <button onClick={gameSessionActions.startGame}>Start</button>;
-}
-
-// Player view routing via local store
-const { currentView } = useSnapshot(localPlayerStore.proxy);
-{
-  currentView === 'lobby' && <LobbyView />;
-}
-{
-  currentView === 'game-state' && <GameStateView />;
-}
-```
-
-## Styling
-
-Tailwind CSS with theme customization in `src/global.css`:
-
-```css
-@theme {
-  --color-brand-primary: #3b82f6;
-}
-```
-
-Use `cn()` from `@kokimoki/react-components/utils` utility for conditional classes.
+Use an `Md` suffix for Markdown translation keys and render them with `react-markdown`.
 
 ## Skills
 
-Use relevant skills located in `.claude/skills/` directory for common tasks.
+Use relevant skills located in `.agents/skills/`.
