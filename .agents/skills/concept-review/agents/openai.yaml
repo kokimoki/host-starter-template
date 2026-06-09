@@ -1,0 +1,4 @@
+interface:
+  display_name: "Concept Review"
+  short_description: "Review Kokimoki apps against the checklist"
+  default_prompt: "Use $concept-review to review this Kokimoki app and write REVIEW.md."
