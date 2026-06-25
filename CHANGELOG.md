@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Updated `@kokimoki/app` to `3.1.7`.
+- Updated `@kokimoki/app` to `3.1.8`.
 
 ## [1.1.3] - 2026-06-09
 
