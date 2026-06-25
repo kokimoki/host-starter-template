@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.4] - 2026-06-25
+
+### Changed
+
+- Updated `@kokimoki/app` to `3.1.7`.
+
 ## [1.1.3] - 2026-06-09
 
 ### Added

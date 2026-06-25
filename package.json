@@ -16,7 +16,7 @@
 		"format": "prettier --write ."
 	},
 	"dependencies": {
-		"@kokimoki/app": "^3.1.6",
+		"@kokimoki/app": "^3.1.7",
 		"@kokimoki/react-components": "^1.1.0",
 		"i18next": "^25.8.0",
 		"lucide-react": "^0.562.0",
