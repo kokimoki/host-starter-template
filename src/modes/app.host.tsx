@@ -23,7 +23,7 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 	useGlobalController();
 
 	const { started } = useSnapshot(gameSessionStore.proxy);
-	const { openAlertDialog } = useKmModal();
+	const { openAlertDialog, closeModal } = useKmModal();
 	const [buttonCooldown, setButtonCooldown] = React.useState(false);
 	const cooldownTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(
 		null
@@ -69,7 +69,23 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 		openAlertDialog({
 			title: t('host:stopGameConfirmTitle'),
 			description: t('host:stopGameConfirmDescription'),
-			onConfirm: gameSessionActions.stopGame
+			showActions: false,
+			content: (
+				<div className="flex justify-end gap-3">
+					<Button variant="secondary" onClick={closeModal}>
+						{t('host:stopGameCancelButton')}
+					</Button>
+					<Button
+						variant="error"
+						onClick={() => {
+							gameSessionActions.stopGame();
+							closeModal();
+						}}
+					>
+						{t('host:stopGameConfirmButton')}
+					</Button>
+				</div>
+			)
 		});
 	};
 
