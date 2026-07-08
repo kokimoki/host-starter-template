@@ -1,4 +1,5 @@
 import { Button } from '@/components/button';
+import { Input } from '@/components/input';
 import { localPlayerActions } from '@/state/actions/local-player-actions';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -34,16 +35,15 @@ export function CreateProfileView() {
 				<Markdown>{t('player:createProfileMd')}</Markdown>
 			</article>
 			<form onSubmit={handleSubmit} className="grid gap-4">
-				<input
-					type="text"
-					placeholder={t('player:playerNamePlaceholder')}
-					value={name}
-					onChange={(e) => setName(e.target.value)}
-					disabled={isLoading}
-					autoFocus
-					maxLength={50}
-					className="km-input"
-				/>
+			<Input
+				type="text"
+				placeholder={t('player:playerNamePlaceholder')}
+				value={name}
+				onChange={(e) => setName(e.target.value)}
+				disabled={isLoading}
+				autoFocus
+				maxLength={50}
+			/>
 
 			<Button
 				type="submit"
