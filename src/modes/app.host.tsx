@@ -93,7 +93,7 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 		<HostPresenterLayout.Root>
 			<HostPresenterLayout.Header />
 			<HostPresenterLayout.Main>
-				<div className="space-y-4">
+				<div className="space-y-6">
 					<HostControls />
 				</div>
 			</HostPresenterLayout.Main>

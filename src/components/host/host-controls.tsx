@@ -1,6 +1,6 @@
-import { Button } from '@/components/button';
 import { Input } from '@/components/input';
 import { Select } from '@/components/select';
+import { Toggle } from '@/components/toggle';
 import { useLanguage } from '@/hooks/useLanguage';
 import { kmClient } from '@/services/km-client';
 import { gameConfigActions } from '@/state/actions/game-config-actions';
@@ -112,12 +112,12 @@ export function HostControls() {
 				disabled={isDisabled}
 			/>
 
-			<Button
-				variant={showPresenterQr ? 'neutral' : 'secondary'}
-				onClick={gameConfigActions.togglePresenterQr}
-			>
-				{t('host:togglePresenterQrButton')}
-			</Button>
+			<Toggle
+				checked={showPresenterQr}
+				onCheckedChange={() => gameConfigActions.togglePresenterQr()}
+				label={t('host:togglePresenterQrButton')}
+				disabled={isDisabled}
+			/>
 		</>
 	);
 }

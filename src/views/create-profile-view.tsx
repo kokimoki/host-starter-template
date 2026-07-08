@@ -35,31 +35,32 @@ export function CreateProfileView() {
 				<Markdown>{t('player:createProfileMd')}</Markdown>
 			</article>
 			<form onSubmit={handleSubmit} className="grid gap-4">
-			<Input
-				type="text"
-				placeholder={t('player:playerNamePlaceholder')}
-				value={name}
-				onChange={(e) => setName(e.target.value)}
-				disabled={isLoading}
-				autoFocus
-				maxLength={50}
-			/>
+				<Input
+					type="text"
+					placeholder={t('player:playerNamePlaceholder')}
+					value={name}
+					onChange={(e) => setName(e.target.value)}
+					disabled={isLoading}
+					autoFocus
+					maxLength={50}
+					label={t('player:playerNameLabel')}
+				/>
 
-			<Button
-				type="submit"
-				variant="primary"
-				className="w-full"
-				disabled={!name.trim() || isLoading}
-			>
-				{isLoading ? (
-					<>
-						<span className="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-b-2 border-white"></span>
-						{t('common:loading')}
-					</>
-				) : (
-					t('player:playerNameButton')
-				)}
-			</Button>
+				<Button
+					type="submit"
+					variant="primary"
+					className="w-full"
+					disabled={!name.trim() || isLoading}
+				>
+					{isLoading ? (
+						<>
+							<span className="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-b-2 border-white"></span>
+							{t('common:loading')}
+						</>
+					) : (
+						t('player:playerNameButton')
+					)}
+				</Button>
 			</form>
 		</div>
 	);

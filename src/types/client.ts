@@ -14,6 +14,4 @@ export interface PlayerClientContext {
 }
 
 export type ClientContext =
-	| HostClientContext
-	| PresenterClientContext
-	| PlayerClientContext;
+	HostClientContext | PresenterClientContext | PlayerClientContext;
