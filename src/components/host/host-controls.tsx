@@ -1,3 +1,4 @@
+import { Button } from '@/components/button';
 import { useLanguage } from '@/hooks/useLanguage';
 import { kmClient } from '@/services/km-client';
 import { gameConfigActions } from '@/state/actions/game-config-actions';
@@ -125,13 +126,12 @@ export function HostControls() {
 				disabled={isDisabled}
 			/>
 
-			<button
-				type="button"
-				className={showPresenterQr ? 'km-btn-neutral' : 'km-btn-secondary'}
+			<Button
+				variant={showPresenterQr ? 'neutral' : 'secondary'}
 				onClick={gameConfigActions.togglePresenterQr}
 			>
 				{t('host:togglePresenterQrButton')}
-			</button>
+			</Button>
 		</>
 	);
 }

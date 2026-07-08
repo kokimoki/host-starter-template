@@ -1,3 +1,4 @@
+import { Button } from '@/components/button';
 import { HostControls } from '@/components/host/host-controls';
 import { withKmProviders } from '@/components/with-km-providers';
 import {
@@ -84,47 +85,39 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 			<HostPresenterLayout.Footer>
 				<div className="inline-flex flex-wrap gap-4">
 					{!started && (
-						<button
-							type="button"
-							className="km-btn-primary"
+						<Button
+							variant="primary"
 							onClick={handleStartGame}
 							disabled={buttonCooldown}
 						>
 							<CirclePlay className="size-5" />
 							{t('common:startButton')}
-						</button>
+						</Button>
 					)}
 					{started && (
-						<button
-							type="button"
-							className="km-btn-error"
+						<Button
+							variant="error"
 							onClick={handleStopGame}
 							disabled={buttonCooldown}
 						>
 							<CircleStop className="size-5" />
 							{t('common:stopButton')}
-						</button>
+						</Button>
 					)}
 
-					<a
-						href={playerLink}
-						target="_blank"
-						rel="noreferrer"
-						className="km-btn-secondary"
-					>
-						{t('host:playerLinkLabel')}
-						<SquareArrowOutUpRight className="size-5" />
-					</a>
+					<Button asChild variant="secondary">
+						<a href={playerLink} target="_blank" rel="noreferrer">
+							{t('host:playerLinkLabel')}
+							<SquareArrowOutUpRight className="size-5" />
+						</a>
+					</Button>
 
-					<a
-						href={presenterLink}
-						target="_blank"
-						rel="noreferrer"
-						className="km-btn-secondary"
-					>
-						{t('host:presenterLinkLabel')}
-						<SquareArrowOutUpRight className="size-5" />
-					</a>
+					<Button asChild variant="secondary">
+						<a href={presenterLink} target="_blank" rel="noreferrer">
+							{t('host:presenterLinkLabel')}
+							<SquareArrowOutUpRight className="size-5" />
+						</a>
+					</Button>
 				</div>
 			</HostPresenterLayout.Footer>
 		</HostPresenterLayout.Root>

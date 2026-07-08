@@ -1,3 +1,4 @@
+import { Button } from '@/components/button';
 import { localPlayerActions } from '@/state/actions/local-player-actions';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -44,20 +45,21 @@ export function CreateProfileView() {
 					className="km-input"
 				/>
 
-				<button
-					type="submit"
-					className="km-btn-primary w-full"
-					disabled={!name.trim() || isLoading}
-				>
-					{isLoading ? (
-						<>
-							<span className="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-b-2 border-white"></span>
-							{t('common:loading')}
-						</>
-					) : (
-						t('player:playerNameButton')
-					)}
-				</button>
+			<Button
+				type="submit"
+				variant="primary"
+				className="w-full"
+				disabled={!name.trim() || isLoading}
+			>
+				{isLoading ? (
+					<>
+						<span className="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-b-2 border-white"></span>
+						{t('common:loading')}
+					</>
+				) : (
+					t('player:playerNameButton')
+				)}
+			</Button>
 			</form>
 		</div>
 	);
