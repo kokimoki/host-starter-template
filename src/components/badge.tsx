@@ -15,7 +15,11 @@ const variantClass: Record<BadgeVariant, string> = {
 	error: 'bg-red-100 text-red-900'
 };
 
-export function Badge({ className, variant = 'neutral', ...props }: BadgeProps) {
+export function Badge({
+	className,
+	variant = 'neutral',
+	...props
+}: BadgeProps) {
 	return (
 		<span
 			className={cn(

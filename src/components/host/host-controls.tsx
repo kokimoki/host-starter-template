@@ -1,3 +1,4 @@
+import { MediaControls } from '@/components/host/media-controls';
 import { Input } from '@/components/input';
 import { Select } from '@/components/select';
 import { Toggle } from '@/components/toggle';
@@ -118,6 +119,8 @@ export function HostControls() {
 				label={t('host:togglePresenterQrButton')}
 				disabled={isDisabled}
 			/>
+
+			<MediaControls />
 		</>
 	);
 }

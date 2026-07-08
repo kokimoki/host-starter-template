@@ -8,5 +8,9 @@
 	"stopGameConfirmTitle": "Stop Game",
 	"stopGameConfirmDescription": "Are you sure you want to stop the game? This action cannot be undone.",
 	"stopGameConfirmButton": "Stop",
-	"stopGameCancelButton": "Cancel"
+	"stopGameCancelButton": "Cancel",
+	"mediaDefaultBadge": "Default",
+	"logoUploadLabel": "Logo",
+	"faviconUploadLabel": "Favicon",
+	"ogImageUploadLabel": "Social share image"
 }

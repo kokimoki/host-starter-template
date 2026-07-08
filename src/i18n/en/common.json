@@ -5,5 +5,11 @@
 	"offline": "Offline",
 	"loading": "Loading...",
 	"languageLabel": "Language",
-	"playerNameLabel": "Name:"
+	"playerNameLabel": "Name:",
+	"uploadButton": "Upload",
+	"uploading": "Uploading...",
+	"resetButton": "Reset",
+	"uploadErrorType": "Please choose an image file.",
+	"uploadErrorSize": "File is too large.",
+	"uploadErrorGeneric": "Upload failed. Please try again."
 }
