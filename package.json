@@ -1,7 +1,7 @@
 {
 	"name": "@kokimoki/host-starter",
 	"private": true,
-	"version": "1.1.5",
+	"version": "1.1.6",
 	"type": "module",
 	"description": "A starter template for building a host-based games using Kokimoki SDK",
 	"engines": {
@@ -16,7 +16,7 @@
 		"format": "prettier --write ."
 	},
 	"dependencies": {
-		"@kokimoki/app": "^3.1.9",
+		"@kokimoki/app": "^3.2.0",
 		"@kokimoki/react-components": "^1.1.0",
 		"i18next": "^25.8.0",
 		"lucide-react": "^0.562.0",
@@ -26,7 +26,7 @@
 		"react-markdown": "^10.1.0"
 	},
 	"devDependencies": {
-		"@kokimoki/kit": "^1.8.3",
+		"@kokimoki/kit": "^1.8.4",
 		"@tailwindcss/typography": "^0.5.20",
 		"@tailwindcss/vite": "^4.3.0",
 		"@types/node": "^25.9.2",
