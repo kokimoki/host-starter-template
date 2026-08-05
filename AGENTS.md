@@ -59,6 +59,13 @@ Before handoff, run `npm run build` when code changes are substantial. For focus
 - Tailwind CSS theme customization lives in `src/global.css`.
 - Keep unrelated refactors out of feature changes.
 
+## UI Components
+
+- Put primitives in `src/components/ui/{name}/` as `index.tsx` + `variants.ts`.
+- `variants.ts` holds `tv()` recipes and constants only (no component exports); `index.tsx` exports the component only. Required by ESLint `react-refresh/only-export-components`.
+- Use `tv` (tailwind-variants), not `cva`. Reuse existing recipes via `extend` or `cn()`; import from `./variants`, not `./index`.
+- Pass styles to unstyled `@kokimoki/react-components` primitives via their `classNames` slot record or per-part `className`.
+
 ## State & Actions
 
 - Use `kmClient.store()` for synced global state.

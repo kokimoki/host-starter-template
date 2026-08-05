@@ -1,8 +1,12 @@
-import { inputClassName } from '@/components/input';
-import { Label } from '@/components/label';
-import { KmSelect, type KmSelectOption } from '@kokimoki/react-components';
+import { Label } from '@/components/ui/label';
+import {
+	KmSelect,
+	type KmSelectClassNames,
+	type KmSelectOption
+} from '@kokimoki/react-components';
 import { cn } from '@kokimoki/react-components/utils';
 import * as React from 'react';
+import { selectClassNames, selectTriggerVariants } from './variants';
 
 type SelectProps = {
 	label?: string;
@@ -13,18 +17,20 @@ export function Select({
 	label,
 	id,
 	options,
-	triggerClassName,
+	classNames,
 	...props
 }: SelectProps) {
+	const mergedClassNames: KmSelectClassNames = {
+		...selectClassNames,
+		...classNames,
+		trigger: cn(selectTriggerVariants(), classNames?.trigger)
+	};
+
 	const select = (
 		<KmSelect
 			id={id}
 			options={options}
-			triggerClassName={cn(
-				'h-auto shadow-none focus:ring-offset-0',
-				inputClassName,
-				triggerClassName
-			)}
+			classNames={mergedClassNames}
 			{...props}
 		/>
 	);

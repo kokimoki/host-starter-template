@@ -1,7 +1,7 @@
 import { MediaControls } from '@/components/host/media-controls';
-import { Input } from '@/components/input';
-import { Select } from '@/components/select';
-import { Toggle } from '@/components/toggle';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
+import { Toggle } from '@/components/ui/toggle';
 import { useLanguage } from '@/hooks/useLanguage';
 import { kmClient } from '@/services/km-client';
 import { gameConfigActions } from '@/state/actions/game-config-actions';

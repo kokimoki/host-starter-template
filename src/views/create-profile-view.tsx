@@ -1,5 +1,5 @@
-import { Button } from '@/components/button';
-import { Input } from '@/components/input';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { localPlayerActions } from '@/state/actions/local-player-actions';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';

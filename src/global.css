@@ -3,10 +3,7 @@
 
 /* Imports */
 @import 'tailwindcss';
-
-/* Importing styles from the React component library */
-@import '@kokimoki/react-components/styles.css';
-@source '../node_modules/@kokimoki/react-components';
+@import 'tw-animate-css';
 
 @plugin '@tailwindcss/typography';
 

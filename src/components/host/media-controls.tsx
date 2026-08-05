@@ -1,4 +1,4 @@
-import { ImageUploadControl } from '@/components/image-upload';
+import { ImageUploadControl } from '@/components/ui/image-upload';
 import { getAssetPath, kmClient, kmEnv } from '@/services/km-client';
 import { gameConfigActions } from '@/state/actions/game-config-actions';
 import { gameConfigStore } from '@/state/stores/game-config-store';

@@ -1,5 +1,6 @@
-import { Button } from '@/components/button';
 import { HostControls } from '@/components/host/host-controls';
+import { Button } from '@/components/ui/button';
+import { alertDialogClassNames } from '@/components/ui/modal/variants';
 import { withKmProviders } from '@/components/with-km-providers';
 import {
 	type ModeGuardProps,
@@ -70,6 +71,7 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 			title: t('host:stopGameConfirmTitle'),
 			description: t('host:stopGameConfirmDescription'),
 			showActions: false,
+			classNames: alertDialogClassNames,
 			content: (
 				<div className="flex justify-end gap-3">
 					<Button variant="secondary" onClick={closeModal}>

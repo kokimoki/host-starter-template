@@ -1,4 +1,4 @@
-import { Badge } from '@/components/badge';
+import { Badge } from '@/components/ui/badge';
 import { usePlayersWithOnlineStatus } from '@/hooks/usePlayersWithOnlineStatus';
 import { kmClient } from '@/services/km-client';
 import { cn } from '@kokimoki/react-components/utils';

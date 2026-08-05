@@ -1,11 +1,13 @@
-import { Button } from '@/components/button';
-import { Label } from '@/components/label';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
 import { cn } from '@kokimoki/react-components/utils';
 import { Loader2, RotateCcw, Upload } from 'lucide-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { imageUploadVariants, type ImageUploadVariantProps } from './variants';
 
-interface ImageUploadControlProps {
+interface ImageUploadControlProps extends ImageUploadVariantProps {
+	/** Unique id for the file input */
 	id: string;
 	/** Label shown above the control */
 	label: string;
@@ -43,7 +45,8 @@ export function ImageUploadControl({
 	onUpload,
 	onReset,
 	disabled = false,
-	previewClassName
+	previewClassName,
+	...variantProps
 }: ImageUploadControlProps) {
 	const { t } = useTranslation();
 	const inputRef = React.useRef<HTMLInputElement>(null);
@@ -117,47 +120,35 @@ export function ImageUploadControl({
 
 	const displaySrc = previewSrc ?? (isCustom && value ? value : fallbackSrc);
 	const showFallbackBadge = !isCustom && !previewSrc;
+	const slots = imageUploadVariants({
+		busy: disabled || uploading,
+		...variantProps
+	});
 
 	return (
 		<div>
-			<div className="flex flex-col gap-0.5">
+			<div className={slots.labelRow()}>
 				<Label htmlFor={id}>{label}</Label>
-				{recommendedHint && (
-					<p className="mb-2 text-xs text-slate-500">{recommendedHint}</p>
-				)}
+				{recommendedHint && <p className={slots.hint()}>{recommendedHint}</p>}
 			</div>
 
-			<div
-				className={cn(
-					'flex max-w-96 flex-col gap-3 rounded-xl border border-slate-300 bg-slate-50 p-3',
-					(disabled || uploading) && 'opacity-60'
-				)}
-			>
-				<div
-					className={cn(
-						'relative flex items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-white',
-						previewClassName ?? 'h-24 w-full'
-					)}
-				>
-					<img
-						src={displaySrc}
-						alt={label}
-						className="h-full w-full object-contain"
-					/>
+			<div className={slots.root()}>
+				<div className={cn(slots.preview(), previewClassName ?? 'h-24 w-full')}>
+					<img src={displaySrc} alt={label} className={slots.previewImage()} />
 					{showFallbackBadge && (
-						<span className="pointer-events-none absolute right-1 bottom-1 rounded bg-slate-200/80 px-1.5 py-0.5 text-[10px] font-medium text-slate-500">
+						<span className={slots.fallbackBadge()}>
 							{t('host:mediaDefaultBadge')}
 						</span>
 					)}
 				</div>
 
-				<div className="flex flex-wrap items-center gap-2">
+				<div className={slots.actions()}>
 					<input
 						ref={inputRef}
 						id={id}
 						type="file"
 						accept={accept}
-						className="sr-only"
+						className={slots.fileInput()}
 						disabled={disabled || uploading}
 						onChange={(e) => {
 							const file = e.target.files?.[0];
@@ -195,7 +186,7 @@ export function ImageUploadControl({
 					)}
 				</div>
 
-				{error && <p className="text-xs font-medium text-red-500">{error}</p>}
+				{error && <p className={slots.error()}>{error}</p>}
 			</div>
 		</div>
 	);
