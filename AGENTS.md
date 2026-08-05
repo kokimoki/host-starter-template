@@ -6,7 +6,7 @@ Always check the Kokimoki SDK documentation before changing SDK usage. Start wit
 
 - `node_modules/@kokimoki/app/llms.txt` — runtime SDK: client, stores, transactions, snapshots, dynamic stores, server time, AI, storage, i18n, leaderboard.
 - `node_modules/@kokimoki/kit/llms.txt` — Vite plugin, deploy codes, dev view, store schemas, i18n config.
-- `node_modules/@kokimoki/react-components/llms.txt` — `Km*` UI components, providers, hooks, and utilities.
+- `node_modules/@kokimoki/react-components/llms.txt` — `Km*` Unstyled UI components, providers, hooks, and utilities.
 
 Use the detailed `docs/` files referenced by each `llms.txt` when implementing or changing that area.
 
@@ -59,12 +59,14 @@ Before handoff, run `npm run build` when code changes are substantial. For focus
 - Tailwind CSS theme customization lives in `src/global.css`.
 - Keep unrelated refactors out of feature changes.
 
-## UI Components
+## Design Principles
 
-- Put primitives in `src/components/ui/{name}/` as `index.tsx` + `variants.ts`.
-- `variants.ts` holds `tv()` recipes and constants only (no component exports); `index.tsx` exports the component only. Required by ESLint `react-refresh/only-export-components`.
-- Use `tv` (tailwind-variants), not `cva`. Reuse existing recipes via `extend` or `cn()`; import from `./variants`, not `./index`.
-- Pass styles to unstyled `@kokimoki/react-components` primitives via their `classNames` slot record or per-part `className`.
+- UI primitives are flat files in `src/components/ui/{name}.tsx`.
+- Use `cva` for single-element variants, `tv` with `slots` for multi-part components, and plain `cn()` class strings for components without variants.
+- Use a single **shared semantic variant vocabulary**:
+  - variants: `primary` | `secondary` | `tertiary` | `outline` | `ghost` | `danger` (default `primary`);
+  - sizes: `sm` | `md` | `lg` (default `md`).
+- Style the unstyled `@kokimoki/react-components` primitives via their `classNames` slot record or per-part `className`.
 
 ## State & Actions
 
@@ -111,7 +113,3 @@ Do not hardcode user-facing text. Use domain-driven namespaces in `src/i18n/en/`
 Create additional domain namespaces when a feature grows beyond these defaults.
 
 Use an `Md` suffix for Markdown translation keys and render them with `react-markdown`.
-
-## Skills
-
-Use relevant skills located in `.agents/skills/`.

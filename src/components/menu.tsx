@@ -1,4 +1,3 @@
-import { drawerClassNames } from '@/components/ui/modal/variants';
 import { useKmModal } from '@kokimoki/react-components';
 import { HelpCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -14,7 +13,6 @@ export function PlayerMenu() {
 
 	const handleOpenHelp = () => {
 		openDrawer({
-			classNames: drawerClassNames,
 			content: (
 				<div className="max-h-full w-full overflow-y-auto">
 					<div className="container mx-auto px-4 py-16">

@@ -1,6 +1,5 @@
 import { cn } from '@kokimoki/react-components/utils';
 import * as React from 'react';
-import { labelVariants } from './variants';
 
 export function Label({
 	className,
@@ -10,7 +9,7 @@ export function Label({
 	return (
 		<label
 			htmlFor={htmlFor}
-			className={cn(labelVariants(), className)}
+			className={cn('mb-2 inline-flex text-sm font-semibold', className)}
 			{...props}
 		/>
 	);

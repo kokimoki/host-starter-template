@@ -1,9 +1,11 @@
 import { cn } from '@kokimoki/react-components/utils';
 import * as React from 'react';
-import {
-	timeCountdownVariants,
-	type TimeCountdownClassNames
-} from './variants';
+
+export interface TimeCountdownClassNames {
+	base?: string;
+	part?: string;
+	separator?: string;
+}
 
 export interface TimeCountdownProps {
 	ms: number;
@@ -39,18 +41,15 @@ export function TimeCountdown({
 	display = 'hms',
 	classNames
 }: TimeCountdownProps) {
-	const slots = timeCountdownVariants();
 	const { parts, separators } = format(ms, display);
 
 	return (
-		<span className={cn(slots.base(), classNames?.base)}>
+		<span className={cn('inline-flex items-baseline', classNames?.base)}>
 			{parts.map((part, i) => (
 				<React.Fragment key={i}>
-					<span className={cn(slots.part(), classNames?.part)}>{part}</span>
+					<span className={cn(classNames?.part)}>{part}</span>
 					{i < separators.length && (
-						<span className={cn(slots.separator(), classNames?.separator)}>
-							{separators[i]}
-						</span>
+						<span className={cn(classNames?.separator)}>{separators[i]}</span>
 					)}
 				</React.Fragment>
 			))}

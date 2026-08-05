@@ -46,7 +46,7 @@ export function ConnectionsView({ children }: ConnectionViewProps) {
 						<li key={player.id} className="py-6">
 							<div className="flex items-center justify-between">
 								<span className="font-semibold">{player.name}</span>
-								<Badge variant={player.isOnline ? 'success' : 'neutral'}>
+								<Badge variant={player.isOnline ? 'primary' : 'ghost'}>
 									{player.isOnline ? t('common:online') : t('common:offline')}
 								</Badge>
 							</div>
