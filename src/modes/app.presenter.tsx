@@ -34,20 +34,10 @@ function App({ clientContext }: ModeGuardProps<'presenter'>) {
 				<div className="w-full space-y-8">
 					{isRunning && (
 						<div className="flex flex-col items-center gap-2">
-							<TimeCountdown
-								ms={remainingMs}
-								display="ms"
-								classNames={{
-									base: 'font-sans text-6xl font-extrabold lg:text-8xl',
-									part: 'tabular-nums',
-									separator: 'text-slate-400'
-								}}
-							/>
-							<Progress
-								currentValue={elapsedMs}
-								maxValue={totalMs}
-								classNames={{ root: 'w-full max-w-md' }}
-							/>
+							<TimeCountdown ms={remainingMs} display="ms" size="xl" />
+							<div className="mt-2 w-full max-w-md">
+								<Progress currentValue={elapsedMs} maxValue={totalMs} />
+							</div>
 						</div>
 					)}
 

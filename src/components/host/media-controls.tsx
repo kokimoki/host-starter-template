@@ -46,7 +46,7 @@ export function MediaControls() {
 				onUpload={(file) => gameConfigActions.uploadLogo(file)}
 				onReset={() => gameConfigActions.resetLogo()}
 				disabled={isDisabled}
-				previewClassName="h-20 w-32"
+				preview="wide"
 			/>
 
 			<ImageUploadControl
@@ -61,7 +61,7 @@ export function MediaControls() {
 				onUpload={(file) => gameConfigActions.uploadFavicon(file)}
 				onReset={() => gameConfigActions.resetFavicon()}
 				disabled={isDisabled}
-				previewClassName="h-16 w-16"
+				preview="square"
 			/>
 
 			<ImageUploadControl
@@ -75,7 +75,7 @@ export function MediaControls() {
 				onUpload={(file) => gameConfigActions.uploadOgImage(file)}
 				onReset={() => gameConfigActions.resetOgImage()}
 				disabled={isDisabled}
-				previewClassName="aspect-[1.91/1] w-full"
+				preview="wide"
 			/>
 		</div>
 	);

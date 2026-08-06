@@ -18,20 +18,10 @@ export function GameStateView() {
 			<article className="prose">
 				{isRunning && (
 					<div className="mb-8">
-						<TimeCountdown
-							ms={remainingMs}
-							display="ms"
-							classNames={{
-								base: 'font-sans text-4xl font-extrabold',
-								part: 'tabular-nums',
-								separator: 'text-slate-400'
-							}}
-						/>
-						<Progress
-							currentValue={elapsedMs}
-							maxValue={totalMs}
-							classNames={{ root: 'mt-2' }}
-						/>
+						<TimeCountdown ms={remainingMs} display="ms" size="lg" />
+						<div className="mt-2">
+							<Progress currentValue={elapsedMs} maxValue={totalMs} />
+						</div>
 					</div>
 				)}
 

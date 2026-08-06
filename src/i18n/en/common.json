@@ -5,6 +5,7 @@
 	"offline": "Offline",
 	"loading": "Loading...",
 	"languageLabel": "Language",
+	"selectPlaceholder": "Select an option…",
 	"playerNameLabel": "Name:",
 	"uploadButton": "Upload",
 	"uploading": "Uploading...",

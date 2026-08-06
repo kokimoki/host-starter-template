@@ -1,4 +1,3 @@
-import { cn } from '@kokimoki/react-components/utils';
 import { tv, type VariantProps } from 'tailwind-variants';
 
 const progressVariants = tv({
@@ -36,35 +35,42 @@ const progressVariants = tv({
 	}
 });
 
-export interface ProgressClassNames {
-	root?: string;
-	indicator?: string;
-}
-
 export interface ProgressProps extends VariantProps<typeof progressVariants> {
+	/** Current value. Clamped to `[0, maxValue]` for the fill ratio. */
 	currentValue: number;
+	/** Value representing 100% width. When `<= 0`, the bar is empty. */
 	maxValue: number;
-	classNames?: ProgressClassNames;
 }
 
+/**
+ * Deterministic progress bar: an absolutely-positioned fill (`indicator`)
+ * translated within a fixed track (`root`) based on `currentValue / maxValue`.
+ * Variants are driven by an inline `tv` multi-slot recipe (`size`,
+ * `variant`, `duration`).
+ *
+ * Variants follow the shared semantic vocabulary:
+ * `primary` (default) | `secondary` | `tertiary` | `outline` | `ghost` | `danger`;
+ * sizes `sm` | `md` (default) | `lg`; durations `fast` | `normal` (default) | `slow`.
+ *
+ * @example
+ * ```tsx
+ * <Progress currentValue={3} maxValue={10} variant="secondary" size="lg" />
+ * ```
+ */
 export function Progress({
 	currentValue,
 	maxValue,
 	size,
 	variant,
-	duration,
-	classNames
+	duration
 }: ProgressProps) {
 	const ratio = maxValue > 0 ? Math.min(currentValue / maxValue, 1) : 0;
 	const slots = progressVariants({ size, variant, duration });
 
 	return (
-		<div
-			className={cn(slots.root(), classNames?.root)}
-			style={{ transform: 'translateZ(0)' }}
-		>
+		<div className={slots.root()} style={{ transform: 'translateZ(0)' }}>
 			<div
-				className={cn(slots.indicator(), classNames?.indicator)}
+				className={slots.indicator()}
 				style={{ transform: `translateX(-${(1 - ratio) * 100}%)` }}
 			/>
 		</div>

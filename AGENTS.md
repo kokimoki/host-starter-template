@@ -62,7 +62,11 @@ Before handoff, run `npm run build` when code changes are substantial. For focus
 ## Design Principles
 
 - UI primitives are flat files in `src/components/ui/{name}.tsx`.
-- Use `cva` for single-element variants, `tv` with `slots` for multi-part components, and plain `cn()` class strings for components without variants.
+- Choose the styling tool by component shape:
+  - `cva` from `class-variance-authority` for **single-element** components (e.g. `badge`, `button`, `input`, `label`).
+  - `tv` with `slots` from `tailwind-variants` for **multi-part** components that render multiple elements from one recipe (e.g. `select`, `progress`, `toggle`).
+  - plain `cn()` class strings for components without variants.
+- `cva`/`tv` pattern: define the recipe at module scope; export `VariantProps<typeof xVariants>` for type-safe props; use `slots` + `defaultVariants`; call each slot as a function (`slots.base()`) so variants merge without collisions.
 - Use a single **shared semantic variant vocabulary**:
   - variants: `primary` | `secondary` | `tertiary` | `outline` | `ghost` | `danger` (default `primary`);
   - sizes: `sm` | `md` | `lg` (default `md`).

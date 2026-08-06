@@ -49,7 +49,7 @@ export function CreateProfileView() {
 				<Button
 					type="submit"
 					variant="primary"
-					className="w-full"
+					fullWidth
 					disabled={!name.trim() || isLoading}
 				>
 					{isLoading ? (

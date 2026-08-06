@@ -1,11 +1,34 @@
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { cn } from '@kokimoki/react-components/utils';
 import { Loader2, RotateCcw, Upload } from 'lucide-react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { tv, type VariantProps } from 'tailwind-variants';
 
-export interface ImageUploadControlProps {
+const imageUploadVariants = tv({
+	slots: {
+		root: 'flex max-w-96 flex-col gap-3 rounded-xl border border-slate-300 bg-slate-50 p-3',
+		preview:
+			'relative flex items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-white',
+		error: 'text-xs font-medium text-red-500'
+	},
+	variants: {
+		busy: {
+			true: { root: 'opacity-60' }
+		},
+		preview: {
+			square: { preview: 'aspect-square size-24' },
+			wide: { preview: 'aspect-[1.91/1] w-full' }
+		}
+	},
+	defaultVariants: {
+		preview: 'square'
+	}
+});
+
+export interface ImageUploadControlProps extends VariantProps<
+	typeof imageUploadVariants
+> {
 	/** Unique id for the file input */
 	id: string;
 	/** Label shown above the control */
@@ -28,8 +51,6 @@ export interface ImageUploadControlProps {
 	/** Called when the user resets to the default */
 	onReset: () => Promise<void>;
 	disabled?: boolean;
-	/** Tailwind classes controlling the preview box size/ratio */
-	previewClassName?: string;
 }
 
 export function ImageUploadControl({
@@ -44,7 +65,7 @@ export function ImageUploadControl({
 	onUpload,
 	onReset,
 	disabled = false,
-	previewClassName
+	preview = 'square'
 }: ImageUploadControlProps) {
 	const { t } = useTranslation();
 	const inputRef = React.useRef<HTMLInputElement>(null);
@@ -118,7 +139,7 @@ export function ImageUploadControl({
 
 	const displaySrc = previewSrc ?? (isCustom && value ? value : fallbackSrc);
 	const showFallbackBadge = !isCustom && !previewSrc;
-	const busy = disabled || uploading;
+	const slots = imageUploadVariants({ busy: disabled || uploading, preview });
 
 	return (
 		<div>
@@ -129,18 +150,8 @@ export function ImageUploadControl({
 				)}
 			</div>
 
-			<div
-				className={cn(
-					'flex max-w-96 flex-col gap-3 rounded-xl border border-slate-300 bg-slate-50 p-3',
-					{ 'opacity-60': busy }
-				)}
-			>
-				<div
-					className={cn(
-						'relative flex items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-white',
-						previewClassName ?? 'h-24 w-full'
-					)}
-				>
+			<div className={slots.root()}>
+				<div className={slots.preview()}>
 					<img
 						src={displaySrc}
 						alt={label}
@@ -160,7 +171,7 @@ export function ImageUploadControl({
 						type="file"
 						accept={accept}
 						className="sr-only"
-						disabled={busy}
+						disabled={disabled || uploading}
 						onChange={(e) => {
 							const file = e.target.files?.[0];
 							if (file) {
@@ -170,10 +181,9 @@ export function ImageUploadControl({
 					/>
 					<Button
 						variant="secondary"
-						type="button"
-						disabled={busy}
+						size="sm"
+						disabled={disabled || uploading}
 						onClick={() => inputRef.current?.click()}
-						className="px-3 py-2 text-sm"
 					>
 						{uploading ? (
 							<Loader2 className="size-4 animate-spin" />
@@ -186,10 +196,9 @@ export function ImageUploadControl({
 					{isCustom && (
 						<Button
 							variant="secondary"
-							type="button"
-							disabled={busy}
+							size="sm"
+							disabled={disabled || uploading}
 							onClick={handleReset}
-							className="px-3 py-2 text-sm"
 						>
 							<RotateCcw className="size-4" />
 							{t('common:resetButton')}
@@ -197,7 +206,7 @@ export function ImageUploadControl({
 					)}
 				</div>
 
-				{error && <p className="text-xs font-medium text-red-500">{error}</p>}
+				{error && <p className={slots.error()}>{error}</p>}
 			</div>
 		</div>
 	);
