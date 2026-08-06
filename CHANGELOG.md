@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added `size` variants and `fullWidth` prop to `Button`.
+
+### Changed
+
+- Adopted `cva`/`tv` variant styling for UI primitives (`badge`, `button`, `input`, `label`, `progress`, `select`, `toggle`, `time-countdown`, `image-upload`).
+- Replaced `KmSelect` with a Radix-based `Select` component for the language selector, adding `@radix-ui/react-select` dependency.
+- Extracted hardcoded elements into reusable components across host media uploads and views.
+- Updated `KmModalProvider` usage to the unified `classNames` slot API.
+
 ## [1.1.6] - 2026-07-31
 
 ### Changed
