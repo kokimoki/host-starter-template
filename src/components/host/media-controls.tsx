@@ -39,7 +39,7 @@ export function MediaControls() {
 			<ImageUploadControl
 				id="logo-upload"
 				label={t('host:logoUploadLabel')}
-				recommendedHint="png, svg, webp"
+				recommendedHint={t('host:logoUploadHint')}
 				value={logoUrl}
 				fallbackSrc={logoFallback}
 				accept="image/png,image/svg+xml,image/webp,image/jpeg"
@@ -52,7 +52,7 @@ export function MediaControls() {
 			<ImageUploadControl
 				id="favicon-upload"
 				label={t('host:faviconUploadLabel')}
-				recommendedHint="256x256, png, svg, webp"
+				recommendedHint={t('host:faviconUploadHint')}
 				value={favicon}
 				defaultUrl={kmEnv.defaultAppMeta?.favicon}
 				fallbackSrc={faviconFallback}
@@ -67,7 +67,7 @@ export function MediaControls() {
 			<ImageUploadControl
 				id="og-image-upload"
 				label={t('host:ogImageUploadLabel')}
-				recommendedHint="1200x630px, png, svg, webp"
+				recommendedHint={t('host:ogImageUploadHint')}
 				value={ogImage}
 				defaultUrl={kmEnv.defaultAppMeta?.ogImage}
 				fallbackSrc={ogImageFallback}

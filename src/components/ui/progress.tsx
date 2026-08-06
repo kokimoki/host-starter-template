@@ -64,7 +64,8 @@ export function Progress({
 	variant,
 	duration
 }: ProgressProps) {
-	const ratio = maxValue > 0 ? Math.min(currentValue / maxValue, 1) : 0;
+	const ratio =
+		maxValue > 0 ? Math.min(Math.max(currentValue, 0) / maxValue, 1) : 0;
 	const slots = progressVariants({ size, variant, duration });
 
 	return (

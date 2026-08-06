@@ -11,6 +11,9 @@
 	"stopGameCancelButton": "Cancel",
 	"mediaDefaultBadge": "Default",
 	"logoUploadLabel": "Logo",
+	"logoUploadHint": "png, svg, webp",
 	"faviconUploadLabel": "Favicon",
-	"ogImageUploadLabel": "Social share image"
+	"faviconUploadHint": "256x256, png, svg, webp",
+	"ogImageUploadLabel": "Social share image",
+	"ogImageUploadHint": "1200x630px, png, svg, webp"
 }

@@ -35,6 +35,7 @@ export interface TimeCountdownProps extends VariantProps<
 function format(ms: number, display: 'hms' | 'ms' | 's') {
 	const totalSeconds = Math.max(0, Math.floor(ms / 1000));
 	const hours = Math.floor(totalSeconds / 3600);
+	const totalMinutes = Math.floor(totalSeconds / 60);
 	const minutes = Math.floor((totalSeconds % 3600) / 60);
 	const seconds = totalSeconds % 60;
 
@@ -45,7 +46,7 @@ function format(ms: number, display: 'hms' | 'ms' | 's') {
 	}
 	if (display === 'ms') {
 		return {
-			parts: [pad(minutes), pad(seconds)],
+			parts: [pad(totalMinutes), pad(seconds)],
 			separators: [':']
 		};
 	}

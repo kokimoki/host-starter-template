@@ -106,6 +106,7 @@ export function Select({
 	size
 }: SelectProps) {
 	const { t } = useTranslation();
+	const generatedId = React.useId();
 	const [internalValue, setInternalValue] = React.useState(defaultValue);
 	const currentValue = value ?? internalValue;
 	const selectedOption = options.find((opt) => opt.value === currentValue);
@@ -118,6 +119,7 @@ export function Select({
 
 	const slots = selectVariants({ size });
 	const resolvedPlaceholder = placeholder ?? t('common:selectPlaceholder');
+	const selectId = label ? (id ?? generatedId) : id;
 
 	const select = (
 		<div className={slots.root()}>
@@ -130,7 +132,7 @@ export function Select({
 				name={name}
 			>
 				<SelectPrimitive.Trigger
-					id={id}
+					id={selectId}
 					className={cn(
 						slots.trigger(),
 						hasError && 'border-red-500 focus:ring-red-500'
@@ -208,7 +210,7 @@ export function Select({
 
 	return (
 		<div>
-			<Label htmlFor={id}>{label}</Label>
+			<Label htmlFor={selectId}>{label}</Label>
 			{select}
 		</div>
 	);

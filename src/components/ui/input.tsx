@@ -52,9 +52,12 @@ export function Input({
 	size,
 	...props
 }: InputProps) {
+	const generatedId = React.useId();
+	const inputId = label ? (id ?? generatedId) : id;
+
 	const input = (
 		<input
-			id={id}
+			id={inputId}
 			className={cn(inputVariants({ variant, size }), className)}
 			{...props}
 		/>
@@ -66,7 +69,7 @@ export function Input({
 
 	return (
 		<div>
-			<Label htmlFor={id}>{label}</Label>
+			<Label htmlFor={inputId}>{label}</Label>
 			{input}
 		</div>
 	);
