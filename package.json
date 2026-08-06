@@ -17,7 +17,7 @@
 	},
 	"dependencies": {
 		"@kokimoki/app": "^3.2.0",
-		"@kokimoki/react-components": "^1.1.0",
+		"@kokimoki/react-components": "^2.0.0",
 		"@radix-ui/react-select": "^2.3.7",
 		"@radix-ui/react-slot": "^1.2.3",
 		"class-variance-authority": "^0.7.1",
