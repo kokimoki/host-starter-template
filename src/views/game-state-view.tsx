@@ -1,5 +1,6 @@
+import { Progress } from '@/components/ui/progress';
+import { TimeCountdown } from '@/components/ui/time-countdown';
 import { useGameTimer } from '@/hooks/useGameTimer';
-import { KmProgressBar, KmTimeCountdown } from '@kokimoki/react-components';
 import { useTranslation } from 'react-i18next';
 import Markdown from 'react-markdown';
 
@@ -17,18 +18,10 @@ export function GameStateView() {
 			<article className="prose">
 				{isRunning && (
 					<div className="mb-8">
-						<KmTimeCountdown
-							ms={remainingMs}
-							display="ms"
-							className="font-sans text-4xl font-extrabold"
-							partClassName="tabular-nums"
-							separatorClassName="text-slate-400"
-						/>
-						<KmProgressBar
-							currentValue={elapsedMs}
-							maxValue={totalMs}
-							containerClassName="mt-2"
-						/>
+						<TimeCountdown ms={remainingMs} display="ms" size="lg" />
+						<div className="mt-2">
+							<Progress currentValue={elapsedMs} maxValue={totalMs} />
+						</div>
 					</div>
 				)}
 

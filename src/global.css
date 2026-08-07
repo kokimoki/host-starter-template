@@ -3,10 +3,7 @@
 
 /* Imports */
 @import 'tailwindcss';
-
-/* Importing styles from the React component library */
-@import '@kokimoki/react-components/styles.css';
-@source '../node_modules/@kokimoki/react-components';
+@import 'tw-animate-css';
 
 @plugin '@tailwindcss/typography';
 
@@ -38,31 +35,4 @@
 html,
 body {
 	@apply overscroll-none text-slate-900;
-}
-
-.km-input {
-	@apply w-full max-w-96 rounded-xl border border-slate-300 bg-slate-50 px-5 py-3 transition-colors focus:ring-2 focus:ring-blue-500 focus:outline-none disabled:opacity-50;
-}
-
-.km-btn-primary,
-.km-btn-secondary,
-.km-btn-error,
-.km-btn-neutral {
-	@apply inline-flex items-center justify-center gap-3 rounded-xl px-5 py-3 font-medium transition-colors not-disabled:cursor-pointer disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-500 disabled:opacity-50;
-}
-
-.km-btn-primary {
-	@apply not-disabled:bg-blue-500 not-disabled:text-white not-disabled:hover:bg-blue-600;
-}
-
-.km-btn-secondary {
-	@apply not-disabled:bg-blue-100 not-disabled:text-blue-950 not-disabled:hover:bg-blue-200;
-}
-
-.km-btn-error {
-	@apply not-disabled:bg-red-500 not-disabled:text-white not-disabled:hover:bg-red-600;
-}
-
-.km-btn-neutral {
-	@apply not-disabled:bg-slate-600 not-disabled:text-white not-disabled:hover:bg-slate-700;
 }

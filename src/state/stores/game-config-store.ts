@@ -5,7 +5,8 @@ export type { GameConfigState };
 
 const initialState: GameConfigState = {
 	gameDuration: 10,
-	showPresenterQr: true
+	showPresenterQr: true,
+	logoUrl: null
 };
 
 /**

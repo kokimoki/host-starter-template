@@ -1,3 +1,5 @@
+import { Progress } from '@/components/ui/progress';
+import { TimeCountdown } from '@/components/ui/time-countdown';
 import {
 	withModeGuard,
 	type ModeGuardProps
@@ -10,11 +12,7 @@ import { kmClient } from '@/services/km-client';
 import { gameConfigStore } from '@/state/stores/game-config-store';
 import { ConnectionsView } from '@/views/connections-view';
 import { useSnapshot } from '@kokimoki/app';
-import {
-	KmProgressBar,
-	KmQrCode,
-	KmTimeCountdown
-} from '@kokimoki/react-components';
+import { KmQrCode } from '@kokimoki/react-components';
 import { cn } from '@kokimoki/react-components/utils';
 
 function App({ clientContext }: ModeGuardProps<'presenter'>) {
@@ -36,18 +34,10 @@ function App({ clientContext }: ModeGuardProps<'presenter'>) {
 				<div className="w-full space-y-8">
 					{isRunning && (
 						<div className="flex flex-col items-center gap-2">
-							<KmTimeCountdown
-								ms={remainingMs}
-								display="ms"
-								className="font-sans text-6xl font-extrabold lg:text-8xl"
-								partClassName="tabular-nums"
-								separatorClassName="text-slate-400"
-							/>
-							<KmProgressBar
-								currentValue={elapsedMs}
-								maxValue={totalMs}
-								containerClassName="w-full max-w-md"
-							/>
+							<TimeCountdown ms={remainingMs} display="ms" size="xl" />
+							<div className="mt-2 w-full max-w-md">
+								<Progress currentValue={elapsedMs} maxValue={totalMs} />
+							</div>
 						</div>
 					)}
 
@@ -55,7 +45,12 @@ function App({ clientContext }: ModeGuardProps<'presenter'>) {
 						<KmQrCode
 							data={playerLink}
 							size={200}
-							className={cn({ invisible: !showPresenterQr })}
+							classNames={{
+								base: cn(
+									'relative rounded-xl border border-slate-100 bg-white p-4 shadow-lg',
+									{ invisible: !showPresenterQr }
+								)
+							}}
 						/>
 					</ConnectionsView>
 				</div>

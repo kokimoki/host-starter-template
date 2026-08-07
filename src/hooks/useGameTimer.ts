@@ -14,7 +14,7 @@ import { useSnapshot } from '@kokimoki/app';
  * ```tsx
  * const { remainingMs, elapsedMs, totalMs, isRunning } = useGameTimer();
  *
- * <KmProgressBar currentValue={elapsedMs} maxValue={totalMs} />
+ * <Progress currentValue={elapsedMs} maxValue={totalMs} />
  * <span>{Math.ceil(remainingMs / 1000)}s left</span>
  * ```
  */

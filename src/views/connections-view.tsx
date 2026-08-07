@@ -1,3 +1,4 @@
+import { Badge } from '@/components/ui/badge';
 import { usePlayersWithOnlineStatus } from '@/hooks/usePlayersWithOnlineStatus';
 import { kmClient } from '@/services/km-client';
 import { cn } from '@kokimoki/react-components/utils';
@@ -45,16 +46,9 @@ export function ConnectionsView({ children }: ConnectionViewProps) {
 						<li key={player.id} className="py-6">
 							<div className="flex items-center justify-between">
 								<span className="font-semibold">{player.name}</span>
-								<span
-									className={cn(
-										'inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium',
-										player.isOnline
-											? 'bg-green-100 text-green-900'
-											: 'text-slate-400 italic'
-									)}
-								>
+								<Badge variant={player.isOnline ? 'primary' : 'ghost'}>
 									{player.isOnline ? t('common:online') : t('common:offline')}
-								</span>
+								</Badge>
 							</div>
 						</li>
 					))}

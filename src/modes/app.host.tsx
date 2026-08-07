@@ -1,4 +1,5 @@
 import { HostControls } from '@/components/host/host-controls';
+import { Button } from '@/components/ui/button';
 import { withKmProviders } from '@/components/with-km-providers';
 import {
 	type ModeGuardProps,
@@ -22,7 +23,7 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 	useGlobalController();
 
 	const { started } = useSnapshot(gameSessionStore.proxy);
-	const { openAlertDialog } = useKmModal();
+	const { openAlertDialog, closeModal } = useKmModal();
 	const [buttonCooldown, setButtonCooldown] = React.useState(false);
 	const cooldownTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(
 		null
@@ -68,7 +69,23 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 		openAlertDialog({
 			title: t('host:stopGameConfirmTitle'),
 			description: t('host:stopGameConfirmDescription'),
-			onConfirm: gameSessionActions.stopGame
+			showActions: false,
+			content: (
+				<div className="flex justify-end gap-3">
+					<Button variant="secondary" onClick={closeModal}>
+						{t('host:stopGameCancelButton')}
+					</Button>
+					<Button
+						variant="danger"
+						onClick={() => {
+							gameSessionActions.stopGame();
+							closeModal();
+						}}
+					>
+						{t('host:stopGameConfirmButton')}
+					</Button>
+				</div>
+			)
 		});
 	};
 
@@ -76,7 +93,7 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 		<HostPresenterLayout.Root>
 			<HostPresenterLayout.Header />
 			<HostPresenterLayout.Main>
-				<div className="space-y-4">
+				<div className="space-y-6">
 					<HostControls />
 				</div>
 			</HostPresenterLayout.Main>
@@ -84,47 +101,39 @@ function App({ clientContext }: ModeGuardProps<'host'>) {
 			<HostPresenterLayout.Footer>
 				<div className="inline-flex flex-wrap gap-4">
 					{!started && (
-						<button
-							type="button"
-							className="km-btn-primary"
+						<Button
+							variant="primary"
 							onClick={handleStartGame}
 							disabled={buttonCooldown}
 						>
 							<CirclePlay className="size-5" />
 							{t('common:startButton')}
-						</button>
+						</Button>
 					)}
 					{started && (
-						<button
-							type="button"
-							className="km-btn-error"
+						<Button
+							variant="danger"
 							onClick={handleStopGame}
 							disabled={buttonCooldown}
 						>
 							<CircleStop className="size-5" />
 							{t('common:stopButton')}
-						</button>
+						</Button>
 					)}
 
-					<a
-						href={playerLink}
-						target="_blank"
-						rel="noreferrer"
-						className="km-btn-secondary"
-					>
-						{t('host:playerLinkLabel')}
-						<SquareArrowOutUpRight className="size-5" />
-					</a>
+					<Button asChild variant="secondary">
+						<a href={playerLink} target="_blank" rel="noreferrer">
+							{t('host:playerLinkLabel')}
+							<SquareArrowOutUpRight className="size-5" />
+						</a>
+					</Button>
 
-					<a
-						href={presenterLink}
-						target="_blank"
-						rel="noreferrer"
-						className="km-btn-secondary"
-					>
-						{t('host:presenterLinkLabel')}
-						<SquareArrowOutUpRight className="size-5" />
-					</a>
+					<Button asChild variant="secondary">
+						<a href={presenterLink} target="_blank" rel="noreferrer">
+							{t('host:presenterLinkLabel')}
+							<SquareArrowOutUpRight className="size-5" />
+						</a>
+					</Button>
 				</div>
 			</HostPresenterLayout.Footer>
 		</HostPresenterLayout.Root>
